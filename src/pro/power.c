@@ -30,18 +30,17 @@ void VS_VSIM(int vsno, double voltage, double Smax, double Smin, double Mmax, do
 
 
 void PowerSequence()
-{/*
+{
     PowerSeqHandle	power_seq = UTL_GetPowerSeqHandle();
-    UTL_AddPowerSeqUnit    ( power_seq, 1,               );   //set VS pin as the 1st group of power sequence
-    UTL_AddPowerSeqUnit    ( power_seq,  ,               );   //set all VI and VT as the 2nd group of power sequence
-    UTL_AddPowerSeqUnit    ( power_seq,  ,               );   //
-                                                              //set other pins as the 3rd group of power sequence
-    UTL_SetPowerSeqWaitTime( power_seq, 1,               );   //set the waiting time of the 1st group as 50ms
-    UTL_SetPowerSeqWaitTime( power_seq,  ,               );   //set the waiting time of the 2nd group as 50ms
-                                                              //set the waiting time of the 3rd group as 50ms
-                                                              //send the above power sequence setting to tester
+    UTL_AddPowerSeqUnit    ( power_seq, 1, UT_UNIT_VSALL);  //set VS pin as the 1st group of power sequence
+    UTL_AddPowerSeqUnit    ( power_seq, 2, UT_UNIT_VIALL);
+    UTL_AddPowerSeqUnit    ( power_seq, 2, UT_UNIT_VTALL);   //set all VI and VT as the 2nd group of power sequence
+    UTL_AddPowerSeqUnit    ( power_seq, 3, UT_UNIT_OTHERS); //set other pins as the 3rd group of power sequence
+    UTL_SetPowerSeqWaitTime( power_seq, 1, 50.00 MS);   //set the waiting time of the 1st group as 50ms
+    UTL_SetPowerSeqWaitTime( power_seq, 2, 50.00 MS);   //set the waiting time of the 2nd group as 50ms
+    UTL_SetPowerSeqWaitTime( power_seq, 3, 50.00 MS);   //set the waiting time of the 3rd group as 50ms
+    UTL_SendPowerSeq       ( power_seq);                //send the above power sequence setting to tester
     UTL_DeleteHandle       ( power_seq);
-*/
 }
 
 

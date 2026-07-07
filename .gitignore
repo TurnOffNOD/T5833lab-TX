@@ -1,0 +1,5 @@
+# ignore the make output
+*.d
+*.mpa
+*.exe
+*.o

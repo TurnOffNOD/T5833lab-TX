@@ -1,0 +1,63 @@
+################################################################################
+# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+# DEALINGS IN THE SOFTWARE.                                                    #
+################################################################################
+PAT	                =                                    \
+                          PatOutLeak.mpa                     \
+                          PatReadId.mpa           	     \
+                          PatCaOdt.mpa              	     \
+                          PatDqOdt.mpa                       \
+                          PatOutStr.mpa                      \
+                          PatOutVref.mpa                     \
+                          PatIdd0.mpa                        \
+                          PatIdd2p.mpa                       \
+                          PatIdd2ps.mpa                      \
+                          PatIdd2n.mpa                       \
+                          PatIdd2ns.mpa                      \
+                          PatIdd3p.mpa                       \
+                          PatIdd3ps.mpa                      \
+                          PatIdd3n.mpa                       \
+                          PatIdd3ns.mpa                      \
+                          PatIdd4r.mpa                       \
+                          PatIdd4w.mpa                       \
+                          PatIdd5.mpa                        \
+                          PatIdd5ab.mpa                      \
+                          PatIdd5pb.mpa                      \
+                          PatIdd6.mpa                        \
+                          PatMarch_533.mpa                   \
+                          PatMarchAFMC_533.mpa               \
+                          PatMarchAFMA_533.mpa               \
+                          PatMarchDBM_533.mpa                \
+                          PatMarchRDBI_533.mpa               \
+                          PatMarchWDBI_533.mpa               \
+                          PatMarchDBI_533.mpa                \
+                          PatMarchDM_533.mpa                 \
+                          PatMarch_1066.mpa                  \
+                          PatMarch_1600.mpa                  \
+                          PatMarch_2133.mpa                  \
+                          PatRcd20BankIntRow1st.mpa          \
+                          PatRcd24BankIntRow1st.mpa          \
+
+
+TRANS                   = trans
+TRANSOPT                = 
+TARGET                  = ${PAT}          
+DFILES                  = ${PAT:.mpa=.d}  
+SRC                     = ${PAT:.mpa=.asc}
+all:                    ${TARGET}
+clean:
+			@${RM} *.mpa *.d
+%.mpa:%.asc
+			${TRANS} ${TRANSOPT} $<
+			cp *.mpa ../../test
+%.d:%.asc
+			-@grep "^\s*\(PRO\|MPAT\|SUBR\|SCRAM\)[[:blank:]]"  $< | sed 's/\(PRO\|MPA\|SUB\|SCR\)[TRAM]*\s\+\([A-Za-z0-9_]\+\).*/\2.\L\1: \\/' > $@
+			-@echo "$<\\" >> $@
+			-@grep INSERT $<|sed s'/\s*INSERT\s\([A-Za-z0-9_]\+\).*/\1.asc \\/' >> $@
+			-@echo "" >> $@
+-include                ${DFILES}

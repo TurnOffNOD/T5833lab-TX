@@ -1,0 +1,54 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Tim.h"
+#include "tim.h"
+
+//      ################################ Timing Condition ################################
+void    TimCont( Test_t *test) { }
+void    TimFunc( Test_t *test) {
+        static Tim_t    *tim = NULL;
+        if ( tim == NULL ) {
+                tim = (Tim_t *)malloc( sizeof(Tim_t) );
+                tim->handle = UTL_GetTgHandle();
+                tim->tCK   = NAN;
+        }
+        if ( (tim->tCK != test->tCK) || ( tim->tDQSDQI != test->tDQSDQI) || (tim->tDQSDQO != test->tDQSDQO) ) {
+                RATE    ( tim, 1,         test->tCK                  );
+                BCLK1   ( tim, 1, 0.500 * test->tCK                  ); // Clock
+                CCLK1   ( tim, 1, 1.000 * test->tCK                  ); // Clock
+                BCLK2   ( tim, 1, 0.000 * test->tCK                  ); // Clock enable 
+                BCLK3   ( tim, 1, 0.000 * test->tCK                  ); // ODT 
+                BCLK4   ( tim, 1, 0.000 * test->tCK                  ); // Reset
+                BCLK5   ( tim, 1, 0.000 * test->tCK                  ); // Chip Select
+                BCLK6   ( tim, 1, 0.000 * test->tCK                  ); // Command/Address
+                BCLK7   ( tim, 1, 0.250 * test->tCK + test->tDQSDQI  ); // DQ
+                CCLK7   ( tim, 1, 0.750 * test->tCK + test->tDQSDQI  ); // DQ
+                BCLK8   ( tim, 1, 0.500 * test->tCK                  ); // DQS
+                CCLK8   ( tim, 1, 1.000 * test->tCK                  ); // DQS
+                DREL1   ( tim, 1, 0.250 * test->tCK + test->tDQSDQI  ); // DQ
+                DRET1   ( tim, 1, 0.250 * test->tCK + test->tDQSDQI  ); // DQ
+                DREL2   ( tim, 1, 0.500 * test->tCK                  ); // DQS
+                DRET2   ( tim, 1, 0.500 * test->tCK                  ); // DQS
+                STRB1   ( tim, 1, 0.750 * test->tCK + test->tDQSDQO  ); // DQ
+                STRB2   ( tim, 1, 1.250 * test->tCK + test->tDQSDQO  ); // DQ
+                STRB3   ( tim, 1, 0.750 * test->tCK + test->tDQSDQO  ); // DQS
+                STRB4   ( tim, 1, 1.250 * test->tCK + test->tDQSDQO  ); // DQS
+        }
+
+	tim->tCK     = test->tCK;
+	tim->tDQSDQI = test->tDQSDQI;
+	tim->tDQSDQO = test->tDQSDQO;
+
+        UTL_SendTg( tim->handle);
+}
+

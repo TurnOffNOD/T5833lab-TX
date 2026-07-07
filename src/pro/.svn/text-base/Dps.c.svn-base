@@ -1,0 +1,63 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Dps.h"
+#include "dps.h"
+#include "Pin.h"
+
+typedef	struct	Dps {
+	double	VDD1 ;
+	double	VDD2 ;
+	double	VDDQ ;
+	dps_t	*vdd1 ;
+	dps_t	*vdd2 ;
+	dps_t	*vddq ;
+} Dps_t;
+
+void	DpsSend( Dps_t *dps) {
+	dpsSend( dps->vdd1 );
+	dpsSend( dps->vdd2 );
+	dpsSend( dps->vddq );
+}
+
+void	DpsOpen( Test_t *test) {
+        static Dps_t *dps = NULL;
+        if ( dps == NULL ) {
+                dps = (Dps_t *)malloc( sizeof(Dps_t));
+		dps->VDD1 	= NAN;
+		dps->VDD2 	= NAN;
+		dps->VDDQ 	= NAN;
+		dps->vdd1 	= DPS( VDD1 , OPEN);
+		dps->vdd2 	= DPS( VDD2 , OPEN);
+		dps->vddq 	= DPS( VDDQ , OPEN);
+	}
+	DpsSend( dps);
+}
+void	DpsFunc( Test_t *test) {
+        static Dps_t *dps = NULL;
+        if ( dps == NULL ) {
+                dps = (Dps_t *)malloc( sizeof(Dps_t));
+		dps->VDD1 	= NAN;
+		dps->VDD2 	= NAN;
+		dps->VDDQ 	= NAN;
+	}
+	if ( dps->VDD1  != test->VDD1 ) dps->vdd1    = DPS( VDD1 , VSIM( test->VDD1 ), R(6.000 V), M(400.0 mA), C2, Clamp( 400.0 mA, -200.0 mA )  );
+	if ( dps->VDD2  != test->VDD2 ) dps->vdd2    = DPS( VDD2 , VSIM( test->VDD2 ), R(6.000 V), M(400.0 mA), C2, Clamp( 400.0 mA, -200.0 mA )  );
+	if ( dps->VDDQ  != test->VDDQ ) dps->vddq    = DPS( VDDQ , VSIM( test->VDDQ ), R(6.000 V), M(400.0 mA), C2, Clamp( 400.0 mA, -200.0 mA )  );
+	dps->VDD1 	= test->VDD1 ;
+	dps->VDD2 	= test->VDD2 ;
+	dps->VDDQ 	= test->VDDQ ;
+	DpsSend( dps);
+	PCON( VDD1 , UT_ON);
+	PCON( VDD2 , UT_ON);
+	PCON( VDDQ , UT_ON);
+}

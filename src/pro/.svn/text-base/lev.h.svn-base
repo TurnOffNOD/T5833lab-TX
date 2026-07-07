@@ -1,0 +1,68 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef ___lev_H
+#define ___lev_H
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+	typedef	struct	Lev {
+		double		VDDQ ;
+		ViHandle	in1  ;
+		ViHandle	in2  ;
+		ViHandle	in3  ;
+		ViHandle	in4  ;
+		ViHandle	in5  ;
+		ViHandle	in6  ;
+		ViHandle	in7  ;
+		ViHandle	in8  ;
+		VoHandle	out1 ;
+		VoHandle	out2 ;
+		VtHandle	vt1  ;
+		VtHandle	vt2  ;
+	} Lev_t;
+
+	inline	Lev_t	*levInit(void) {
+		Lev_t	*lev = (Lev_t *)malloc( sizeof(Lev_t));
+		lev->VDDQ   = NAN;
+		lev->in1    = UTL_GetViHandle();
+		lev->in2    = UTL_GetViHandle();
+		lev->in3    = UTL_GetViHandle();
+		lev->in4    = UTL_GetViHandle();
+		lev->in5    = UTL_GetViHandle();
+		lev->in6    = UTL_GetViHandle();
+		lev->in7    = UTL_GetViHandle();
+		lev->in8    = UTL_GetViHandle();
+		lev->out1   = UTL_GetVoHandle();
+		lev->out2   = UTL_GetVoHandle();
+		lev->vt1    = UTL_GetVtHandle();
+		lev->vt2    = UTL_GetVtHandle();
+		return	lev;
+	}
+
+	inline	void	levSend( Lev_t *lev) {
+		UTL_SendVi( lev->in1 , 1); 
+		UTL_SendVi( lev->in2 , 2); 
+		UTL_SendVi( lev->in3 , 3); 
+		UTL_SendVi( lev->in4 , 4); 
+		UTL_SendVi( lev->in5 , 5); 
+		UTL_SendVi( lev->in6 , 6); 
+		UTL_SendVi( lev->in7 , 7); 
+		UTL_SendVi( lev->in8 , 8); 
+		UTL_SendVo( lev->out1, 1); 
+		UTL_SendVo( lev->out2, 2); 
+		UTL_SendVt( lev->vt1 , 1); 
+		UTL_SendVt( lev->vt2 , 2); 
+	}
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+#endif // ___lev_H

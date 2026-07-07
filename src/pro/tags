@@ -1,0 +1,177 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ACT11	../pat/patSdef.asc	/^	SDEF ACT11  = CA0,   ,   ,   ,   ,   ,   ,;;XASV    ; Activate-1/
+ACT12	../pat/patSdef.asc	/^	SDEF ACT12  =    ,   ,   ,   ,   ,   ,   ,;;        ; Activate-1/
+ACT21	../pat/patSdef.asc	/^	SDEF ACT21  = CA0,CA1,   ,   ,   ,   ,   ,;;        ; Activate-2/
+ACT22	../pat/patSdef.asc	/^	SDEF ACT22  =    ,   ,   ,   ,   ,   ,   ,;;        ; Activate-2/
+BA0	../pat/patSdef.asc	/^	SDEF BA0    =      C17/
+BA1	../pat/patSdef.asc	/^	SDEF BA1    =          C18/
+BA2	../pat/patSdef.asc	/^	SDEF BA2    =              C19/
+BANK00	../pat/patSdef.asc	/^	SDEF BANK00 =         ,   ,                     ;/
+BANK01	../pat/patSdef.asc	/^	SDEF BANK01 =      BA0,   ,                     ;/
+BANK02	../pat/patSdef.asc	/^	SDEF BANK02 =         ,BA1,                     ;/
+BANK03	../pat/patSdef.asc	/^	SDEF BANK03 =      BA0,BA1,                     ;/
+BANK04	../pat/patSdef.asc	/^	SDEF BANK04 =         ,   ,BA2                  ;/
+BANK05	../pat/patSdef.asc	/^	SDEF BANK05 =      BA0,   ,BA2                  ;/
+BANK06	../pat/patSdef.asc	/^	SDEF BANK06 =         ,BA1,BA2                  ;/
+BANK07	../pat/patSdef.asc	/^	SDEF BANK07 =      BA0,BA1,BA2                  ;/
+BANK_XA	../pat/patSdef.asc	/^	SDEF BANK_XA=      B<BH      /
+BANK_XB	../pat/patSdef.asc	/^	SDEF BANK_XB=      B<BD1      /
+BANK_XC	../pat/patSdef.asc	/^	SDEF BANK_XC=      B<BD2      /
+BANK_XD	../pat/patSdef.asc	/^	SDEF BANK_XD=      B<BD3      /
+BANK_XE	../pat/patSdef.asc	/^	SDEF BANK_XE=      B<BD4      /
+BANK_XF	../pat/patSdef.asc	/^	SDEF BANK_XF=      B<BD5      /
+BANK_XG	../pat/patSdef.asc	/^	SDEF BANK_XG=      B<BD6      /
+BANK_XH	../pat/patSdef.asc	/^	SDEF BANK_XH=      B<BD7      /
+BANK_YA	../pat/patSdef.asc	/^	SDEF BANK_YA=            N_1<NH_1  N_2<NH_2/
+BANK_YB	../pat/patSdef.asc	/^	SDEF BANK_YB=            N_1<ND1_1 N_2<ND1_2/
+BANK_YC	../pat/patSdef.asc	/^	SDEF BANK_YC=            N_1<ND2_1 N_2<ND2_2/
+BANK_YD	../pat/patSdef.asc	/^	SDEF BANK_YD=            N_1<ND3_1 N_2<ND3_2/
+BANK_YE	../pat/patSdef.asc	/^	SDEF BANK_YE=            N_1<ND4_1 N_2<ND4_2/
+BANK_YF	../pat/patSdef.asc	/^	SDEF BANK_YF=            N_1<ND5_1 N_2<ND5_2/
+BANK_YG	../pat/patSdef.asc	/^	SDEF BANK_YG=            N_1<ND6_1 N_2<ND6_2/
+BANK_YH	../pat/patSdef.asc	/^	SDEF BANK_YH=            N_1<ND7_1 N_2<ND7_2/
+CA0	../pat/patSdef.asc	/^	SDEF CA0    = C4/
+CA1	../pat/patSdef.asc	/^	SDEF CA1    = C5/
+CA2	../pat/patSdef.asc	/^	SDEF CA2    = C6/
+CA3	../pat/patSdef.asc	/^	SDEF CA3    = C7/
+CA4	../pat/patSdef.asc	/^	SDEF CA4    = C8/
+CA5	../pat/patSdef.asc	/^	SDEF CA5    = C9/
+CAS21	../pat/patSdef.asc	/^	SDEF CAS21  =    ,CA1,   ,   ,CA4,   ,   ,        ; CAS2                  jinl/
+CAS22	../pat/patSdef.asc	/^	SDEF CAS22  =    ,   ,   ,   ,   ,   ,   ,        ; CAS2/
+CC	../pat/patSdef.asc	/^	SDEF CC =	\/D1	\/D2/
+CKE0L	../pat/patSdef.asc	/^	SDEF CKE0L  = C14/
+CKE1L	../pat/patSdef.asc	/^	SDEF CKE1L  = C15/
+CKE2L	../pat/patSdef.asc	/^	SDEF CKE2L  = C16/
+CKEL	../pat/patSdef.asc	/^	SDEF CKEL   = CKE0L CKE1L CKE2L/
+CKSTP	../pat/patSdef.asc	/^	SDEF CKSTP  = C29		; Clock Stop/
+CS0	../pat/patSdef.asc	/^	SDEF CS0    = C10/
+CS1	../pat/patSdef.asc	/^	SDEF CS1    = C11/
+CS2	../pat/patSdef.asc	/^	SDEF CS2    = C12/
+CT	../pat/patSdef.asc	/^	SDEF CT =	\/D1			C24/
+DC_ISVM	pmu.c	/^void DC_ISVM(double DCSource, $/;"	f
+DC_VSIM	pmu.c	/^void DC_VSIM(double DCSource, $/;"	f
+DES	../pat/patSdef.asc	/^	SDEF DES    =    ,   ,   ,   ,   ,   ,   ,        ;/
+DQSHL	../pat/patSdef.asc	/^	SDEF DQSHL  = C22/
+DQSLL	../pat/patSdef.asc	/^	SDEF DQSLL  =/
+DQSR	../pat/patSdef.asc	/^	SDEF DQSR   = C21/
+DQSW	../pat/patSdef.asc	/^	SDEF DQSW   = C20/
+DefinePinList	pinlist.c	/^void DefinePinList()$/;"	f
+ENSIG1	../pat/patSdef.asc	/^	SDEF ENSIG1 = C30/
+ENSIG2	../pat/patSdef.asc	/^	SDEF ENSIG2 = C31/
+IDD3P	../pat/PatIdd3p.asc	/^IDD3P:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,               ,    ,     ,             ;/
+IDD3PS	../pat/PatIdd3ps.asc	/^IDD3PS:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;/
+LOOP	../pat/PatMarch_533.asc	/^LOOP:		JSR WR                             :    ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,    ,     , ,TP1<TPH1 ,   ,   ,    ,     ,             ; write 0/
+LOOP1	../pat/PatMarch_533.asc	/^LOOP1:		NOP                              I :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   0  /
+LP0	../pat/PatIdd3p.asc	/^LP0:		NOP				 I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   /
+LevFunc	level.c	/^void LevFunc(double VDD1, double VDD2, double VDDQ)$/;"	f
+MPC1	../pat/patSdef.asc	/^	SDEF MPC1   =    ,   ,   ,   ,   ,   ,   ,        ; Multi Purpose Command/
+MPC2	../pat/patSdef.asc	/^	SDEF MPC2   =    ,   ,   ,   ,   ,   ,   ,        ; Multi Purpose Command/
+MRR11	../pat/patSdef.asc	/^	SDEF MRR11  =    ,CA1,CA2,CA3,   ,   ,   ,        ; Mode Register Read/
+MRR12	../pat/patSdef.asc	/^	SDEF MRR12  =    ,   ,   ,   ,   ,   ,   ,        ; Mode Register Read/
+MRW11	../pat/patSdef.asc	/^	SDEF MRW11  =    ,CA1,CA2,   ,   ,   ,   ,        ; Mode Register Write1/
+MRW12	../pat/patSdef.asc	/^	SDEF MRW12  =    ,   ,   ,   ,   ,   ,   ,        ; Mode Register Write1/
+MRW21	../pat/patSdef.asc	/^	SDEF MRW21  =    ,CA1,CA2,   ,CA4,   ,   ,        ; Mode Register Write2/
+MRW22	../pat/patSdef.asc	/^	SDEF MRW22  =    ,   ,   ,   ,   ,   ,   ,        ; Mode Register Write2/
+MWRA1	../pat/patSdef.asc	/^	SDEF MWRA1  =    ,   ,CA2,CA3,   ,   ,   ,;;XALD(8) ; MaskWrite + Auto Precharge(Masked Write support BL16 only)/
+MWRA2	../pat/patSdef.asc	/^	SDEF MWRA2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; MaskWrite + Auto Precharge(Masked Write support BL16 only)/
+MWR_1	../pat/patSdef.asc	/^	SDEF MWR_1  =    ,   ,CA2,CA3,   ,   ,   ,;;XALD(8) ; MaskWrite                 (Masked Write support BL16 only)/
+MWR_2	../pat/patSdef.asc	/^	SDEF MWR_2  =    ,   ,   ,   ,   ,   ,   ,;;        ; MaskWrite                 (Masked Write support BL16 only)/
+MeasPin	pmu.c	/^void MeasPin(char *pinlist, double wait_time)$/;"	f
+ODTCA	../pat/patSdef.asc	/^	SDEF ODTCA  = C3/
+PFUNC	pinfmt.c	/^void PFUNC(double wl, double rl)$/;"	f
+PIN_	common.c	/^PinHandle PIN_ = -1;$/;"	v
+POWERUP	../pat/patPowerUp.asc	/^POWERUP:	IDXI8     80000                    :   ,     ,CKEL,     ,   ,   ,RESET ,      ,    ,        ,     ,      ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,            ; tINIT1=200us(min)/
+PREA1	../pat/patSdef.asc	/^	SDEF PREA1  =    ,   ,   ,   ,CA4,CA5,   ,        ; Precharge(All Bank)/
+PREA2	../pat/patSdef.asc	/^	SDEF PREA2  =    ,   ,   ,   ,   ,   ,   ,        ; Precharge(All Bank)/
+PRE_1	../pat/patSdef.asc	/^	SDEF PRE_1  =    ,   ,   ,   ,CA4,   ,   ,        ; Precharge(Per Bank)/
+PRE_2	../pat/patSdef.asc	/^	SDEF PRE_2  =    ,   ,   ,   ,   ,   ,   ,        ; Precharge(Per Bank)/
+PatBurstWR	../pat/PatBurstWR.asc	/^MPAT	PatBurstWR<4WAY>/
+PatIdd3p	../pat/PatIdd3p.asc	/^MPAT	PatIdd3p<4WAY>/
+PatIdd3ps	../pat/PatIdd3ps.asc	/^MPAT	PatIdd3ps<4WAY>/
+PatMarch_533	../pat/PatMarch_533.asc	/^MPAT	PatMarch_533<4WAY>/
+Pinfmt_AllHigh	pinfmt.c	/^void Pinfmt_AllHigh()$/;"	f
+Pinfmt_AllLow	pinfmt.c	/^void Pinfmt_AllLow()$/;"	f
+Pinfmt_AllOpen	pinfmt.c	/^void Pinfmt_AllOpen()$/;"	f
+PowerOff	power.c	/^void PowerOff()$/;"	f
+PowerOn	power.c	/^void PowerOn() $/;"	f
+PowerSequence	power.c	/^void PowerSequence()$/;"	f
+R1	../pat/patSdef.asc	/^	SDEF R1	=	/
+R2	../pat/patSdef.asc	/^	SDEF R2	=	/
+R3	../pat/patSdef.asc	/^	SDEF R3 =	/
+R4	../pat/patSdef.asc	/^	SDEF R4 =/
+R5	../pat/patSdef.asc	/^	SDEF R5 =/
+R6	../pat/patSdef.asc	/^	SDEF R6 =	/
+R7	../pat/patSdef.asc	/^	SDEF R7 = 	/
+R8	../pat/patSdef.asc	/^	SDEF R8 =	/
+RD	../pat/PatMarch_533.asc	/^RD:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+RDAL1	../pat/patSdef.asc	/^	SDEF RDAL1  =    ,CA1,   ,   ,   ,CA5,   ,;;XALD(16); Read(BL32) + Auto Precharge/
+RDAL2	../pat/patSdef.asc	/^	SDEF RDAL2  =    ,   ,   ,   ,   ,CA5,   ,        ; Read(BL32) + Auto Precharge/
+RDAS1	../pat/patSdef.asc	/^	SDEF RDAS1  =    ,CA1,   ,   ,   ,   ,   ,;;XALD(8) ; Read(BL16) + Auto Precharge/
+RDAS2	../pat/patSdef.asc	/^	SDEF RDAS2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; Read(BL16) + Auto Precharge/
+RD_1	../pat/PatMarch_533.asc	/^RD_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+RD_2	../pat/PatMarch_533.asc	/^RD_2:		NOP                              I :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RD_L1,       ,Y<YC,        ,DQSR,DQSHL,R,         ,\/D1,   ,    ,BST  ,             ;   2   /
+RD_L1	../pat/patSdef.asc	/^	SDEF RD_L1  =    ,CA1,   ,   ,   ,CA5,   ,;;XALD(16); Read(BL32)/
+RD_L2	../pat/patSdef.asc	/^	SDEF RD_L2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Read(BL32)/
+RD_S1	../pat/patSdef.asc	/^	SDEF RD_S1  =    ,CA1,   ,   ,   ,   ,   ,;;XALD(8) ; Read(BL16)/
+RD_S2	../pat/patSdef.asc	/^	SDEF RD_S2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Read(BL16)/
+REF	../pat/patRefresh1.asc	/^REF:		NOP                               I    ,     ,    ,     ,CS0,   ,REFA1 ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;/
+REF1	../pat/patSdef.asc	/^	SDEF REF1   =    ,   ,   ,CA3,   ,   ,   ,        ; Refresh(Per Bank)/
+REF2	../pat/patSdef.asc	/^	SDEF REF2   =    ,   ,   ,   ,   ,   ,   ,        ; Refresh(Per Bank)/
+REFA1	../pat/patSdef.asc	/^	SDEF REFA1  =    ,   ,   ,CA3,   ,CA5,   ,        ; Refresh(All Bank)/
+REFA2	../pat/patSdef.asc	/^	SDEF REFA2  =    ,   ,   ,   ,   ,   ,   ,        ; Refresh(All Bank)/
+RESET	../pat/patSdef.asc	/^	SDEF RESET  = C13/
+RTW	../pat/PatMarch_533.asc	/^RTW:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+RTW_1	../pat/PatMarch_533.asc	/^RTW_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+RTW_2	../pat/PatMarch_533.asc	/^RTW_2:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2/
+RegFunc	Reg.c	/^void	RegFunc(int MR01,int MR02,int MR03,int MR04, $/;"	f
+SRE1	../pat/patSdef.asc	/^	SDEF SRE1   =    ,   ,   ,CA3,CA4,   ,   ,        ; Self Refresh Entry/
+SRE2	../pat/patSdef.asc	/^	SDEF SRE2   =    ,   ,   ,   ,   ,   ,   ,        ; Self Refresh Entry/
+SRX1	../pat/patSdef.asc	/^	SDEF SRX1   =    ,   ,CA2,   ,CA4,   ,   ,        ; Self Refresh Exit/
+SRX2	../pat/patSdef.asc	/^	SDEF SRX2   =    ,   ,   ,   ,   ,   ,   ,        ; Self Refresh Exit/
+SetRegValue	Reg.c	/^void	SetRegValue(RadioButton reg, USlider value)$/;"	f
+TC	../pat/patSdef.asc	/^	SDEF TC =		\/D2	C23/
+TFUNC	timing.c	/^void TFUNC(double rate, double tDQSCK, double tDQSQ)$/;"	f
+TT	../pat/patSdef.asc	/^	SDEF TT =			C23	C24/
+UBMAP0	../pat/patSdef.asc	/^	SDEF UBMAP0 = C26/
+UBMAP1	../pat/patSdef.asc	/^	SDEF UBMAP1 = C27/
+UBMAP2	../pat/patSdef.asc	/^	SDEF UBMAP2 = C28/
+UBMEN	../pat/patSdef.asc	/^	SDEF UBMEN  = C25/
+VIN_Set	level.c	/^void VIN_Set(double vihigh, double vilow, int vino)$/;"	f
+VOUT_Set	level.c	/^void VOUT_Set(double vohigh, double volow, int vono)$/;"	f
+VS_VSIM	power.c	/^void VS_VSIM(int vsno, double voltage, double Smax, double Smin, double Mmax, double Mmin, double Cmax, double Cmin, double hlimit, double llimit)$/;"	f
+VT_Set	level.c	/^void VT_Set(double vt, int vtno)$/;"	f
+WR	../pat/PatMarch_533.asc	/^WR:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+WRAL1	../pat/patSdef.asc	/^	SDEF WRAL1  =    ,   ,CA2,   ,   ,CA5,   ,;;XALD(16); Write(BL32) + Auto Precharge/
+WRAL2	../pat/patSdef.asc	/^	SDEF WRAL2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; Write(BL32) + Auto Precharge/
+WRAS1	../pat/patSdef.asc	/^	SDEF WRAS1  =    ,   ,CA2,   ,   ,   ,   ,;;XALD(8) ; Write(BL16) + Auto Precharge/
+WRAS2	../pat/patSdef.asc	/^	SDEF WRAS2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; Write(BL16) + Auto Precharge/
+WRTRD	../pat/PatMarch_533.asc	/^WRTRD:		NOP                                :    ,     ,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<0    ,     ,BANK_YA,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;/
+WR_1	../pat/PatMarch_533.asc	/^WR_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+WR_2	../pat/PatMarch_533.asc	/^WR_2:		NOP                              I :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WR_L1,       ,Y<YC,        ,DQSW,DQSHL,W,         ,\/D1,   ,    ,BST  ,             ;   2   /
+WR_L1	../pat/patSdef.asc	/^	SDEF WR_L1  =    ,   ,CA2,   ,   ,CA5,   ,;;XALD(16); Write(BL32)/
+WR_L2	../pat/patSdef.asc	/^	SDEF WR_L2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Write(BL32)/
+WR_S1	../pat/patSdef.asc	/^	SDEF WR_S1  =    ,   ,CA2,   ,   ,   ,   ,;;XALD(8) ; Write(BL16)/
+WR_S2	../pat/patSdef.asc	/^	SDEF WR_S2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Write(BL16)/
+WTR	../pat/PatMarch_533.asc	/^WTR:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+WTR_1	../pat/PatMarch_533.asc	/^WTR_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+WTR_2	../pat/PatMarch_533.asc	/^WTR_2:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2/
+ZQCAL1	../pat/patSdef.asc	/^	SDEF ZQCAL1 =    ,   ,   ,   ,   ,CA5,   ,        ; ZQCal Start/
+ZQCAL2	../pat/patSdef.asc	/^	SDEF ZQCAL2 = CA0,CA1,CA2,CA3,   ,   ,   ,        ; ZQCal Start/
+ZQLAT1	../pat/patSdef.asc	/^	SDEF ZQLAT1 =    ,   ,   ,   ,   ,CA5,   ,        ; ZQCal Latch/
+ZQLAT2	../pat/patSdef.asc	/^	SDEF ZQLAT2 = CA0,   ,   ,   ,CA4,   ,   ,        ; ZQCal Latch/
+main	main.c	/^int main(int argc, char **argv)$/;"	f
+patPowerUp	../pat/patPowerUp.asc	/^;################################################################################/
+patRefresh	../pat/patRefresh.asc	/^;################################################################################/
+patSdef	../pat/patSdef.asc	/^;################################################################################/
+runtest_pattern	common.c	/^void runtest_pattern( char *patfile)$/;"	f
+start_pattern	common.c	/^void start_pattern( char *patfile)$/;"	f
+start_pattern_nowait	common.c	/^void start_pattern_nowait(char *patfile)$/;"	f
+t_533Mbps_BurstWR	testitem.c	/^void t_533Mbps_BurstWR()$/;"	f
+t_Contact	testitem.c	/^void t_Contact()$/;"	f
+t_IDD3P1	testitem.c	/^void t_IDD3P1()$/;"	f
+t_Leakage	testitem.c	/^void t_Leakage()$/;"	f

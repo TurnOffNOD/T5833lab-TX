@@ -1,0 +1,92 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatIdd4w<4WAY>
+	MODE MUX TP2INV REFRESHB
+	RDX	10
+	REGISTER
+		DRE1	= W             ; 
+		DRE2	= C20           ; 
+		CPE1	= R             ; 
+		CPE2	= C21           ; 
+		D4B	= #010          ; Col++ for BST  
+		TPH1_1	= #FF		;
+		TPH2_1	= #F0		;
+		TPH1_2	= #03		;
+		TPH2_2	= #0F		;
+		ISP	= REF           ; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,            ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                              T      ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+LOOP:		JSR IDD4W                               ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		STPS
+;################################ Bank Interleave Burst Write      ################################
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ;
+IDD4W:		NOP                                :    ,     ,    ,     ,   ,   ,      ,BANK_XC,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP1_1<TPH1_1 TP2_1<TPH2_1,TP1_2<TPH1_2,TP2_2<TPH2_2    ,     ,D4<D4B       ;	BA[2:0] = 010b
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		NOP                              I :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	BA[2:0] = 010b
+		                                   :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  0                 
+	        NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1    nRCD = 28 nCK
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4    
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5    
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8   
+	        NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 10   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 11   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 12   
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 13   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 14   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 15   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 16    
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 17
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 18
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 19
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 20
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 21
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 22
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,       ,   ,   ,    ,     ,      ,ENSIG2; 23
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2; 24
+LOOP1:		NOP                              I :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WR_L1,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,   ,   ,    ,BST  ,ENSIG1,ENSIG2; 25
+		                                   :    ,CYP8 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WR_L2,BANK02 ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,/D1,/D2,    ,     ,ENSIG1,ENSIG2; 26
+		                                   :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,   ,   ,    ,     ,ENSIG1,ENSIG2; 27
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,/D1,/D2,    ,     ,ENSIG1,ENSIG2; <28> 
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,   ,   ,    ,     ,ENSIG1,ENSIG2;      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,/D1,/D2,    ,     ,ENSIG1,ENSIG2;      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,   ,   ,    ,     ,ENSIG1,ENSIG2;      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,D<TP_2 ,/D1,/D2,    ,     ,ENSIG1,ENSIG2;       
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,/D1,/D2,    ,BST  ,ENSIG1,ENSIG2;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,   ,   ,    ,     ,ENSIG1,ENSIG2;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,/D1,/D2,    ,     ,ENSIG1,ENSIG2;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,   ,   ,    ,     ,ENSIG1,ENSIG2;      
+		JMP LOOP1                        I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,/D1,/D2,    ,     ,ENSIG1,ENSIG2;      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_2 ,   ,   ,	  ,ENSIG1,ENSIG2;      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,        ,DQSW,DQSHL,W,D<TP_1 ,/D1,/D2,	  ,ENSIG1,ENSIG2;      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,DES  ,       ,Y<YC,YC<YC-D4,DQSW,DQSHL,W,D<TP_1 ,   ,   ,          ,ENSIG1,ENSIG2;       
+		RTN				   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2;       	
+                    				   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSLL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2;       	 
+                    				   :
+                    				   :
+
+	INSERT patPowerUp 
+	INSERT patRefresh 
+END                       

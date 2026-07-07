@@ -1,0 +1,143 @@
+ACT11	patSdef.asc	/^	SDEF ACT11  = CA0,   ,   ,   ,   ,   ,   ,;;XASV    ; Activate-1/
+ACT12	patSdef.asc	/^	SDEF ACT12  =    ,   ,   ,   ,   ,   ,   ,;;        ; Activate-1/
+ACT21	patSdef.asc	/^	SDEF ACT21  = CA0,CA1,   ,   ,   ,   ,   ,;;        ; Activate-2/
+ACT22	patSdef.asc	/^	SDEF ACT22  =    ,   ,   ,   ,   ,   ,   ,;;        ; Activate-2/
+BA0	patSdef.asc	/^	SDEF BA0    =      C17/
+BA1	patSdef.asc	/^	SDEF BA1    =          C18/
+BA2	patSdef.asc	/^	SDEF BA2    =              C19/
+BANK00	patSdef.asc	/^	SDEF BANK00 =         ,   ,                     ;/
+BANK01	patSdef.asc	/^	SDEF BANK01 =      BA0,   ,                     ;/
+BANK02	patSdef.asc	/^	SDEF BANK02 =         ,BA1,                     ;/
+BANK03	patSdef.asc	/^	SDEF BANK03 =      BA0,BA1,                     ;/
+BANK04	patSdef.asc	/^	SDEF BANK04 =         ,   ,BA2                  ;/
+BANK05	patSdef.asc	/^	SDEF BANK05 =      BA0,   ,BA2                  ;/
+BANK06	patSdef.asc	/^	SDEF BANK06 =         ,BA1,BA2                  ;/
+BANK07	patSdef.asc	/^	SDEF BANK07 =      BA0,BA1,BA2                  ;/
+BANK_XA	patSdef.asc	/^	SDEF BANK_XA=      B<BH      /
+BANK_XB	patSdef.asc	/^	SDEF BANK_XB=      B<BD1      /
+BANK_XC	patSdef.asc	/^	SDEF BANK_XC=      B<BD2      /
+BANK_XD	patSdef.asc	/^	SDEF BANK_XD=      B<BD3      /
+BANK_XE	patSdef.asc	/^	SDEF BANK_XE=      B<BD4      /
+BANK_XF	patSdef.asc	/^	SDEF BANK_XF=      B<BD5      /
+BANK_XG	patSdef.asc	/^	SDEF BANK_XG=      B<BD6      /
+BANK_XH	patSdef.asc	/^	SDEF BANK_XH=      B<BD7      /
+BANK_YA	patSdef.asc	/^	SDEF BANK_YA=            N_1<NH_1  N_2<NH_2/
+BANK_YB	patSdef.asc	/^	SDEF BANK_YB=            N_1<ND1_1 N_2<ND1_2/
+BANK_YC	patSdef.asc	/^	SDEF BANK_YC=            N_1<ND2_1 N_2<ND2_2/
+BANK_YD	patSdef.asc	/^	SDEF BANK_YD=            N_1<ND3_1 N_2<ND3_2/
+BANK_YE	patSdef.asc	/^	SDEF BANK_YE=            N_1<ND4_1 N_2<ND4_2/
+BANK_YF	patSdef.asc	/^	SDEF BANK_YF=            N_1<ND5_1 N_2<ND5_2/
+BANK_YG	patSdef.asc	/^	SDEF BANK_YG=            N_1<ND6_1 N_2<ND6_2/
+BANK_YH	patSdef.asc	/^	SDEF BANK_YH=            N_1<ND7_1 N_2<ND7_2/
+CA0	patSdef.asc	/^	SDEF CA0    = C4/
+CA1	patSdef.asc	/^	SDEF CA1    = C5/
+CA2	patSdef.asc	/^	SDEF CA2    = C6/
+CA3	patSdef.asc	/^	SDEF CA3    = C7/
+CA4	patSdef.asc	/^	SDEF CA4    = C8/
+CA5	patSdef.asc	/^	SDEF CA5    = C9/
+CAS21	patSdef.asc	/^	SDEF CAS21  =    ,CA1,   ,   ,CA4,   ,   ,        ; CAS2                  jinl/
+CAS22	patSdef.asc	/^	SDEF CAS22  =    ,   ,   ,   ,   ,   ,   ,        ; CAS2/
+CC	patSdef.asc	/^	SDEF CC =	\/D1	\/D2/
+CKE0L	patSdef.asc	/^	SDEF CKE0L  = C14/
+CKE1L	patSdef.asc	/^	SDEF CKE1L  = C15/
+CKE2L	patSdef.asc	/^	SDEF CKE2L  = C16/
+CKEL	patSdef.asc	/^	SDEF CKEL   = CKE0L CKE1L CKE2L/
+CKSTP	patSdef.asc	/^	SDEF CKSTP  = C29		; Clock Stop/
+CS0	patSdef.asc	/^	SDEF CS0    = C10/
+CS1	patSdef.asc	/^	SDEF CS1    = C11/
+CS2	patSdef.asc	/^	SDEF CS2    = C12/
+CT	patSdef.asc	/^	SDEF CT =	\/D1			C24/
+DES	patSdef.asc	/^	SDEF DES    =    ,   ,   ,   ,   ,   ,   ,        ;/
+DQSHL	patSdef.asc	/^	SDEF DQSHL  = C22/
+DQSLL	patSdef.asc	/^	SDEF DQSLL  =/
+DQSR	patSdef.asc	/^	SDEF DQSR   = C21/
+DQSW	patSdef.asc	/^	SDEF DQSW   = C20/
+ENSIG1	patSdef.asc	/^	SDEF ENSIG1 = C30/
+ENSIG2	patSdef.asc	/^	SDEF ENSIG2 = C31/
+IDD3P	PatIdd3p.asc	/^IDD3P:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;/
+IDD3PS	PatIdd3ps.asc	/^IDD3PS:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;/
+LOOP	PatBurstWR.asc	/^LOOP:		JSR WR                             :    ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,    ,     , ,TP1<TPH1 ,   ,   ,    ,     ,             ; /
+LOOP1	PatMarch_533.asc	/^LOOP1:		NOP                              I :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   0  /
+LP0	PatIdd3p.asc	/^LP0:		NOP				 I :    ,CYP7 ,CKEL,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   /
+MPC1	patSdef.asc	/^	SDEF MPC1   =    ,   ,   ,   ,   ,   ,   ,        ; Multi Purpose Command/
+MPC2	patSdef.asc	/^	SDEF MPC2   =    ,   ,   ,   ,   ,   ,   ,        ; Multi Purpose Command/
+MRR11	patSdef.asc	/^	SDEF MRR11  =    ,CA1,CA2,CA3,   ,   ,   ,        ; Mode Register Read/
+MRR12	patSdef.asc	/^	SDEF MRR12  =    ,   ,   ,   ,   ,   ,   ,        ; Mode Register Read/
+MRW11	patSdef.asc	/^	SDEF MRW11  =    ,CA1,CA2,   ,   ,   ,   ,        ; Mode Register Write1/
+MRW12	patSdef.asc	/^	SDEF MRW12  =    ,   ,   ,   ,   ,   ,   ,        ; Mode Register Write1/
+MRW21	patSdef.asc	/^	SDEF MRW21  =    ,CA1,CA2,   ,CA4,   ,   ,        ; Mode Register Write2/
+MRW22	patSdef.asc	/^	SDEF MRW22  =    ,   ,   ,   ,   ,   ,   ,        ; Mode Register Write2/
+MWRA1	patSdef.asc	/^	SDEF MWRA1  =    ,   ,CA2,CA3,   ,   ,   ,;;XALD(8) ; MaskWrite + Auto Precharge(Masked Write support BL16 only)/
+MWRA2	patSdef.asc	/^	SDEF MWRA2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; MaskWrite + Auto Precharge(Masked Write support BL16 only)/
+MWR_1	patSdef.asc	/^	SDEF MWR_1  =    ,   ,CA2,CA3,   ,   ,   ,;;XALD(8) ; MaskWrite                 (Masked Write support BL16 only)/
+MWR_2	patSdef.asc	/^	SDEF MWR_2  =    ,   ,   ,   ,   ,   ,   ,;;        ; MaskWrite                 (Masked Write support BL16 only)/
+ODTCA	patSdef.asc	/^	SDEF ODTCA  = C3/
+POWERUP	patPowerUp.asc	/^POWERUP:	IDXI8     80000                    :   ,     ,CKEL,     ,   ,   ,RESET ,      ,    ,        ,     ,      ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,            ; tINIT1=200us(min)/
+PREA1	patSdef.asc	/^	SDEF PREA1  =    ,   ,   ,   ,CA4,CA5,   ,        ; Precharge(All Bank)/
+PREA2	patSdef.asc	/^	SDEF PREA2  =    ,   ,   ,   ,   ,   ,   ,        ; Precharge(All Bank)/
+PRE_1	patSdef.asc	/^	SDEF PRE_1  =    ,   ,   ,   ,CA4,   ,   ,        ; Precharge(Per Bank)/
+PRE_2	patSdef.asc	/^	SDEF PRE_2  =    ,   ,   ,   ,   ,   ,   ,        ; Precharge(Per Bank)/
+PatBurstWR	PatBurstWR.asc	/^MPAT	PatBurstWR<4WAY>/
+PatIdd3p	PatIdd3p.asc	/^MPAT	PatIdd3p<4WAY>/
+PatIdd3ps	PatIdd3ps.asc	/^MPAT	PatIdd3ps<4WAY>/
+PatMarch_533	PatMarch_533.asc	/^MPAT	PatMarch_533<4WAY>/
+R1	patSdef.asc	/^	SDEF R1	=	CA0	CA1	CA2	CA3	CA4	CA5/
+R2	patSdef.asc	/^	SDEF R2	=		CA1		CA3		CA5/
+R3	patSdef.asc	/^	SDEF R3 =		CA1		CA3		CA5/
+R4	patSdef.asc	/^	SDEF R4 =/
+R5	patSdef.asc	/^	SDEF R5 =/
+R6	patSdef.asc	/^	SDEF R6 =	CA0		CA2		CA4/
+R7	patSdef.asc	/^	SDEF R7 = 	CA0		CA2		CA4/
+R8	patSdef.asc	/^	SDEF R8 =	CA0	CA1	CA2	CA3	CA4	CA5/
+RD	PatBurstWR.asc	/^RD:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC-D4,    ,     , ,         ,   ,   ,    ,     ,             ;/
+RDAL1	patSdef.asc	/^	SDEF RDAL1  =    ,CA1,   ,   ,   ,CA5,   ,;;XALD(16); Read(BL32) + Auto Precharge/
+RDAL2	patSdef.asc	/^	SDEF RDAL2  =    ,   ,   ,   ,   ,CA5,   ,        ; Read(BL32) + Auto Precharge/
+RDAS1	patSdef.asc	/^	SDEF RDAS1  =    ,CA1,   ,   ,   ,   ,   ,;;XALD(8) ; Read(BL16) + Auto Precharge/
+RDAS2	patSdef.asc	/^	SDEF RDAS2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; Read(BL16) + Auto Precharge/
+RD_1	PatBurstWR.asc	/^RD_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+RD_2	PatBurstWR.asc	/^RD_2:		NOP                              I :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RD_L1,       ,Y<YC,        ,DQSR,DQSHL,R,         ,\/D1,   ,    ,BST  ,             ;   2   /
+RD_L1	patSdef.asc	/^	SDEF RD_L1  =    ,CA1,   ,   ,   ,CA5,   ,;;XALD(16); Read(BL32)/
+RD_L2	patSdef.asc	/^	SDEF RD_L2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Read(BL32)/
+RD_S1	patSdef.asc	/^	SDEF RD_S1  =    ,CA1,   ,   ,   ,   ,   ,;;XALD(8) ; Read(BL16)/
+RD_S2	patSdef.asc	/^	SDEF RD_S2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Read(BL16)/
+REF	patRefresh.asc	/^REF:		NOP                                :    ,CYP7 ,    ,     ,CS0,   ,REFA1 ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;/
+REF1	patSdef.asc	/^	SDEF REF1   =    ,   ,   ,CA3,   ,   ,   ,        ; Refresh(Per Bank)/
+REF2	patSdef.asc	/^	SDEF REF2   =    ,   ,   ,   ,   ,   ,   ,        ; Refresh(Per Bank)/
+REFA1	patSdef.asc	/^	SDEF REFA1  =    ,   ,   ,CA3,   ,CA5,   ,        ; Refresh(All Bank)/
+REFA2	patSdef.asc	/^	SDEF REFA2  =    ,   ,   ,   ,   ,   ,   ,        ; Refresh(All Bank)/
+RESET	patSdef.asc	/^	SDEF RESET  = C13/
+RTW	PatMarch_533.asc	/^RTW:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+RTW_1	PatMarch_533.asc	/^RTW_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+RTW_2	PatMarch_533.asc	/^RTW_2:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2/
+SRE1	patSdef.asc	/^	SDEF SRE1   =    ,   ,   ,CA3,CA4,   ,   ,        ; Self Refresh Entry/
+SRE2	patSdef.asc	/^	SDEF SRE2   =    ,   ,   ,   ,   ,   ,   ,        ; Self Refresh Entry/
+SRX1	patSdef.asc	/^	SDEF SRX1   =    ,   ,CA2,   ,CA4,   ,   ,        ; Self Refresh Exit/
+SRX2	patSdef.asc	/^	SDEF SRX2   =    ,   ,   ,   ,   ,   ,   ,        ; Self Refresh Exit/
+TC	patSdef.asc	/^	SDEF TC =		\/D2	C23/
+TT	patSdef.asc	/^	SDEF TT =			C23	C24/
+UBMAP0	patSdef.asc	/^	SDEF UBMAP0 = C26/
+UBMAP1	patSdef.asc	/^	SDEF UBMAP1 = C27/
+UBMAP2	patSdef.asc	/^	SDEF UBMAP2 = C28/
+UBMEN	patSdef.asc	/^	SDEF UBMEN  = C25/
+WR	PatBurstWR.asc	/^WR:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+WRAL1	patSdef.asc	/^	SDEF WRAL1  =    ,   ,CA2,   ,   ,CA5,   ,;;XALD(16); Write(BL32) + Auto Precharge/
+WRAL2	patSdef.asc	/^	SDEF WRAL2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; Write(BL32) + Auto Precharge/
+WRAS1	patSdef.asc	/^	SDEF WRAS1  =    ,   ,CA2,   ,   ,   ,   ,;;XALD(8) ; Write(BL16) + Auto Precharge/
+WRAS2	patSdef.asc	/^	SDEF WRAS2  =    ,   ,   ,   ,   ,CA5,   ,;;        ; Write(BL16) + Auto Precharge/
+WRTRD	PatMarch_533.asc	/^WRTRD:		NOP                                :    ,     ,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<0    ,     ,BANK_YA,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;/
+WR_1	PatBurstWR.asc	/^WR_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+WR_2	PatBurstWR.asc	/^WR_2:		NOP                              I :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WR_L1,       ,Y<YC,        ,DQSW,DQSHL,W,         ,\/D1,   ,    ,BST  ,             ;   2   /
+WR_L1	patSdef.asc	/^	SDEF WR_L1  =    ,   ,CA2,   ,   ,CA5,   ,;;XALD(16); Write(BL32)/
+WR_L2	patSdef.asc	/^	SDEF WR_L2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Write(BL32)/
+WR_S1	patSdef.asc	/^	SDEF WR_S1  =    ,   ,CA2,   ,   ,   ,   ,;;XALD(8) ; Write(BL16)/
+WR_S2	patSdef.asc	/^	SDEF WR_S2  =    ,   ,   ,   ,   ,   ,   ,;;        ; Write(BL16)/
+WTR	PatBurstWR.asc	/^WTR:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
+WTR_1	PatBurstWR.asc	/^WTR_1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   /
+WTR_2	PatBurstWR.asc	/^WTR_2:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2/
+ZQCAL1	patSdef.asc	/^	SDEF ZQCAL1 =    ,   ,   ,   ,   ,CA5,   ,        ; ZQCal Start/
+ZQCAL2	patSdef.asc	/^	SDEF ZQCAL2 = CA0,CA1,CA2,CA3,   ,   ,   ,        ; ZQCal Start/
+ZQLAT1	patSdef.asc	/^	SDEF ZQLAT1 =    ,   ,   ,   ,   ,CA5,   ,        ; ZQCal Latch/
+ZQLAT2	patSdef.asc	/^	SDEF ZQLAT2 = CA0,   ,   ,   ,CA4,   ,   ,        ; ZQCal Latch/
+patPowerUp	patPowerUp.asc	/^;################################################################################/
+patRefresh	patRefresh.asc	/^;################################################################################/
+patSdef	patSdef.asc	/^;################################################################################/

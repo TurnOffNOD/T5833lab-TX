@@ -1,0 +1,60 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatIdd5<4WAY>
+	MODE MUX TP2INV REFRESHB
+	RDX	10
+	REGISTER
+		ISP	= REF	; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,            ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                              T      ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		JSR IDD5                               ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		STPS
+	
+	
+;################################ IDD2P Idle Power-down Standby Current      ################################
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ;
+IDD5:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;
+		                                   :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+LOOP:  		NOP				 I :    ,     ,    ,     ,   ,   ,      ,BANK_XA,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+						   :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+						   :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+						   :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+   		NOP				 I :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+						   :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+   						   :    ,CYP7 ,    ,     ,CS0,   ,REFA1 ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+   						   :    ,CYP8 ,    ,     ,   ,   ,REFA2 ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		IDXI1 #21                        I :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 	tRFCab = 180nS = 288 CK    
+				   		   :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       #21 = 33                         
+				   		   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       CA Switching: (33+2)*8 = 280     
+				   		   :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		IDXI1 #21			 I :    ,CYP7 ,    ,     ,   ,   ,R5    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+				   		   :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+				   		   :    ,CYP7 ,    ,     ,   ,   ,R7    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+				   		   :    ,CYP7 ,    ,     ,   ,   ,R8    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		NOP				 I :    ,CYP7 ,	   ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   	281
+		                                   :    ,CYP7 ,	   ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       282  
+		                                   :    ,CYP7 ,	   ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       283
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       284
+		JMP LOOP                         I :    ,CYP7 ,    ,     ,   ,   ,R5    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       285
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       286	
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R7    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;       287
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R8    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   	<288>
+	INSERT patPowerUp
+	INSERT patRefresh
+END

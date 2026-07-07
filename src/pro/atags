@@ -1,0 +1,165 @@
+#!/usr/bin/perl
+
+system ("rm -f tags");
+{
+        while ($_ = shift(@ARGV)) {
+                if    (/-act/)           { $ACTF  = shift(@ARGV); }
+                elsif (/\.asc$/)         { push (@ATLFILES, $_); }
+                elsif (/\.c$/ or /\.h$/) { push (@CFILE, "$_ "); }
+        }
+        ctags();
+        phatags();
+        foreach(@ATLFILES) {
+                atltags('FH00', $_);
+        }
+
+        foreach(@CTAGS){
+                push(@ATAGS, $_);
+        }
+        foreach(@PHATAGS){
+                push(@ATAGS, $_);
+        }
+        foreach(@ATLTAGS){
+                push(@ATAGS, $_);
+        }
+        @ATAGS = sort @ATAGS;
+
+
+        open (FH, ">tags");
+        foreach(@ATAGS) {
+                print FH "$_\n";
+        }
+        close(FH);
+        exit;
+}
+
+sub ctags
+{
+        $cfile = join(" ", @CFILE);
+        return if (not $cfile);
+
+        system "ctags $cfile";
+        open (FH, "tags");
+        while(<FH>){
+                chomp;
+                if (/^(\w+)(.*f)$/){
+                        $TAGDB{$1} = $2;
+                }
+                push(@CTAGS,$_);
+        }
+        close(FH);
+}
+
+
+sub phatags
+{
+        open (FH, $ACTF);
+        while(<FH>){
+                if (/^\s*(\w+)\s*::=\s*(\w+)\s*\(.*\)/) {
+                        $ACTION{$1} = $2;
+                }
+        }
+        close(FH);
+
+        while (($act, $func) = each(%ACTION)) {
+                push (@PHATAGS, $act.$TAGDB{$func});
+        }
+}
+
+sub atltags
+{
+        my ($FH,$fname) = @_;
+
+        $FH++;
+        $dir = $fname;
+        $dir =~ s{[^/]*$}{};
+        open($FH, $fname);
+        while(<$FH>){
+                chop;
+                $line_org = $_;
+                s/@.//g;
+                s/;.*$//;
+                if(/^\s*(\w+):/ or /^SUBR\s*(\w+)/ or /^MPAT\s*(\w+)/ or /^LIB\s*(\w+)/ or /^SCRAM\s*(\w+)/
+                or /^\s*SOCKET\s*(\w+)/ or /^\s*DMACRO\s*(\w+)/ or /^\s*PINLIST\s*(\w+)/
+                ){
+                        $label = $1;
+                        next if($hash{$label});
+                        $hash{$label}=1;
+                        $line_org =~ s{/}{\\/}g;
+                        $line = "$label\t$fname\t/^$line_org/";
+                        push(@ATLTAGS,$line);
+                }
+                elsif(/^\s*(LOGI.AL|INTEGER|CHAR|INTE|REAL|LOGI|STRING)\s*(.*)/) {
+                        $var = $2;
+                        next if($hash{$var});
+                        $hash{$var}=1;
+                        $var =~ s/[A-Z]\w+/$line = "$&\t$fname\t\/^$line_org\/"; push(@ATLTAGS, $line)/ge;
+                }
+                elsif(/^\s*(SDEF)(\[\d+\]|)\s*(\w+)/) {
+                        $label = $3;
+                        next if($hash{$label});
+                        $hash{$label}=1;
+                        $line_org =~ s{/}{\\/}g;
+                        $line = "$label\t$fname\t/^$line_org/";
+                        push(@ATLTAGS,$line);
+                }
+                elsif(/^\s*IDX(\d).*/) {
+                        $label = "JNI$1";
+                        $line = "$label\t$fname\t/^$line_org/";
+                        push(@ATLTAGS,$line);
+                }
+                elsif(/^\s*INSERT\s*(\S+)/){
+                        $label = $1;
+                        next if($hash{$label});
+                        $hash{$label}=1;
+                        $insf = $label;
+                        $insf =~ s/\./_/g;
+                        if (not open(INS,"$dir$insf.asc")) {
+                                $insf =~ tr/A-Z/a-z/;
+                                open(INS,"$dir$insf.asc");
+                        }
+                        $lineOne = <INS>;
+                        chop($lineOne);
+                        $label =~ s/\..*//;
+                        $line = "$label\t$dir$insf.asc\t/^$lineOne/";
+                        push(@ATLTAGS,$line);
+                        atltags($FH, "$dir$insf.asc");
+                }
+                elsif(/^\s*DO\s*(\w+)/){
+                        # $hash{$1} = 1;
+                }
+        }
+        close($FH);
+}
+
+sub klos
+{
+        open(OUTPUT, ">tags");
+        while($fname = shift(@ARGV))
+        {
+                ($ext) = $fname =~ /\.(\w+)$/;
+                next if ($ext eq "c");
+                open(INPUT, $fname);
+                while(<INPUT>){
+                        chop;
+                        if (/^\s*(SEQUENCE|LEVELS|DPSSET|PG_PATTERN|PG_SUBROUTINE|TEST)\s+(\w+)\s*/ or
+                                /^\s*(PINGROUP|COMMENT|CONSTANT|VARIABLE|EDGESET|PMUTEST)\s*(\w+)\s*/ ){
+                                $label = $2;
+                                s[/][\\/]g;
+                                #print "$_\n";
+                                $line = "$label\t$fname\t/^$_/";
+                                #$line =~ s/\[/\\\[/g;
+                                push(@output,$line);
+                        }
+                }
+                close(INPUT);
+        }
+        @sortlist = sort(@output);
+        foreach(@sortlist){
+                print OUTPUT "$_\n";
+        }
+        close(OUTPUT);
+
+        exec 'ctags -a -R';
+}
+

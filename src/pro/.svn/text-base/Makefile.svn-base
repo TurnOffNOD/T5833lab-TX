@@ -1,0 +1,67 @@
+################################################################################
+# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+# DEALINGS IN THE SOFTWARE.                                                    #
+################################################################################
+PRO                     = ProLp4.exe
+OBJ                     = Pin.o                              \
+                          Tim.o                              \
+                          Lev.o                              \
+                          Reg.o                              \
+                          Dps.o                              \
+                          Pmu.o                              \
+                          Fixed.o                            \
+                          Src.o                              \
+                          Ubm.o                              \
+                          Dbm.o                              \
+                          Fcm.o                              \
+                          Test.o                             \
+                          ProLp4.o
+
+EXEC                    =                                      
+
+CC                      = ${ATFSSITECC}
+LD                      = ${ATFSSITECC}
+CPPFLAGS                = -I${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSSYS}/include  \
+                          -I${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSDIAG}/include \
+                          -I${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSTBUS}/include \
+                          -I${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSATL}/include  \
+                          -I${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSVTC}/include  \
+
+#			  -DSHOW_TEST_NAME
+CFLAGS                    = ${ATFSSITECFLAGS} -Wall -O -fPIC -g -std=gnu99
+LDFLAGS                   = 
+LDLIBS                    = -L${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSSYS}/lib                \
+                          -L${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSDIAG}/${ATFSTMODEL}/lib \
+                          -L${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSTBUS}/lib               \
+                          -L${ATFSROOT}/${ATFSSITEARCH}/${ATFSSITEOS}/${ATFSVTC}/${ATFSTMODEL}/lib  \
+                          -latfssock                                    \
+                          -latfsmcicl                                   \
+                          -latfsvtc                                     \
+                          -latfstb                                      \
+                          -latfsrc                                      \
+                          -latfssc                                      \
+                          -latfshn                                      \
+                          -lnsl                                         \
+                          -lrt                                          \
+                          -ldl                                          \
+                          -lresolv                                      \
+                          -lm
+TARGET                  = ${PRO}    tags      
+DFILES                  = ${OBJ:.o=.d}  
+SRC                     = ${OBJ:.o=.c}
+all:                    ${TARGET}
+clean:
+			@${RM} *.exe *.o *.d
+tags:			*.c ../pat/*.asc
+			@./atags $^
+${PRO}:			${OBJ}
+			${LD} -m32 $^         -o $@ ${LDFLAGS} ${LDLIBS} -latfsntc
+			cp $@ ../../test
+%.d:%.c
+			@${CC} ${CPPFLAGS} -MM $< > $@
+-include                ${DFILES}

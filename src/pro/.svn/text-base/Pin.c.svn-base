@@ -1,0 +1,435 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include "Def.h"
+#include "Pin.h"
+#include "pin.h"
+
+void    DefinePinlist(void) {
+	pinset (RST_n    ,   15);
+	pinset (ODTCA_A  ,  293); pinset (ODTCA_B  ,  294); pinlist(ODTCA  ,ODTCA_A  ,ODTCA_B  );
+	pinset (CK_t_A   ,    8); pinset (CK_t_B   ,   72); pinlist(CK_t   ,CK_t_A   ,CK_t_B   );
+	pinset (CK_c_A   ,    7); pinset (CK_c_B   ,   71); pinlist(CK_c   ,CK_c_A   ,CK_c_B   );
+	pinset (CS0_A    ,    1); pinset (CS0_B    ,   65); pinlist(CS0    ,CS0_A    ,CS0_B    );
+	pinset (CS1_A    ,    2); pinset (CS1_B    ,   66); pinlist(CS1    ,CS1_A    ,CS1_B    );
+	pinset (CS2_A    ,    3); pinset (CS2_B    ,   67); pinlist(CS2    ,CS2_A    ,CS2_B    ); pinlist(CS     ,CS0                );
+
+	pinset (CKE0_A   ,    4); pinset (CKE0_B   ,   68); pinlist(CKE0   ,CKE0_A   ,CKE0_B   );
+	pinset (CKE1_A   ,    5); pinset (CKE1_B   ,   69); pinlist(CKE1   ,CKE1_A   ,CKE1_B   );
+	pinset (CKE2_A   ,    6); pinset (CKE2_B   ,   70); pinlist(CKE2   ,CKE2_A   ,CKE2_B   ); pinlist(CKE    ,CKE0               );
+
+	pinset (CA0_A    ,    9); pinset (CA0_B    ,   73); pinlist(CA0    ,CA0_A    ,CA0_B    );
+	pinset (CA1_A    ,   10); pinset (CA1_B    ,   74); pinlist(CA1    ,CA1_A    ,CA1_B    );
+	pinset (CA2_A    ,   11); pinset (CA2_B    ,   75); pinlist(CA2    ,CA2_A    ,CA2_B    );
+	pinset (CA3_A    ,   12); pinset (CA3_B    ,   76); pinlist(CA3    ,CA3_A    ,CA3_B    );
+	pinset (CA4_A    ,   13); pinset (CA4_B    ,   77); pinlist(CA4    ,CA4_A    ,CA4_B    );
+	pinset (CA5_A    ,   14); pinset (CA5_B    ,   78); pinlist(CA5    ,CA5_A    ,CA5_B    ); pinlist(CA     ,CA0     ,CA1,CA2,CA3,CA4,CA5);
+
+	pinset (DQS0_t_A ,   49); pinset (DQS0_t_B ,  113); pinlist(DQS0_t ,DQS0_t_A ,DQS0_t_B );
+	pinset (DQS0_c_A ,   51); pinset (DQS0_c_B ,  115); pinlist(DQS0_c ,DQS0_c_A ,DQS0_c_B );
+	pinset (DQ0_A    ,   33); pinset (DQ0_B    ,   97); pinlist(DQ0    ,DQ0_A    ,DQ0_B    );
+	pinset (DQ1_A    ,   34); pinset (DQ1_B    ,   98); pinlist(DQ1    ,DQ1_A    ,DQ1_B    );
+	pinset (DQ2_A    ,   35); pinset (DQ2_B    ,   99); pinlist(DQ2    ,DQ2_A    ,DQ2_B    );
+	pinset (DQ3_A    ,   36); pinset (DQ3_B    ,  100); pinlist(DQ3    ,DQ3_A    ,DQ3_B    );
+	pinset (DQ4_A    ,   37); pinset (DQ4_B    ,  101); pinlist(DQ4    ,DQ4_A    ,DQ4_B    );
+	pinset (DQ5_A    ,   38); pinset (DQ5_B    ,  102); pinlist(DQ5    ,DQ5_A    ,DQ5_B    );
+	pinset (DQ6_A    ,   39); pinset (DQ6_B    ,  103); pinlist(DQ6    ,DQ6_A    ,DQ6_B    );
+	pinset (DQ7_A    ,   40); pinset (DQ7_B    ,  104); pinlist(DQ7    ,DQ7_A    ,DQ7_B    );
+	pinset (DMI0_A   ,  289); pinset (DMI0_B   ,  291); pinlist(DMI0   ,DMI0_A   ,DMI0_B   );
+	pinset (DQS1_t_A ,   50); pinset (DQS1_t_B ,  114); pinlist(DQS1_t ,DQS1_t_A ,DQS1_t_B ); pinlist(DQS_t  ,DQS0_t  ,DQS1_t             );
+	pinset (DQS1_c_A ,   52); pinset (DQS1_c_B ,  116); pinlist(DQS1_c ,DQS1_c_A ,DQS1_c_B ); pinlist(DQS_c  ,DQS0_c  ,DQS1_c             );
+	pinset (DQ8_A    ,   41); pinset (DQ8_B    ,  105); pinlist(DQ8    ,DQ8_A    ,DQ8_B    );
+	pinset (DQ9_A    ,   42); pinset (DQ9_B    ,  106); pinlist(DQ9    ,DQ9_A    ,DQ9_B    );
+	pinset (DQ10_A   ,   43); pinset (DQ10_B   ,  107); pinlist(DQ10   ,DQ10_A   ,DQ10_B   );
+	pinset (DQ11_A   ,   44); pinset (DQ11_B   ,  108); pinlist(DQ11   ,DQ11_A   ,DQ11_B   );
+	pinset (DQ12_A   ,   45); pinset (DQ12_B   ,  109); pinlist(DQ12   ,DQ12_A   ,DQ12_B   );
+	pinset (DQ13_A   ,   46); pinset (DQ13_B   ,  110); pinlist(DQ13   ,DQ13_A   ,DQ13_B   );
+	pinset (DQ14_A   ,   47); pinset (DQ14_B   ,  111); pinlist(DQ14   ,DQ14_A   ,DQ14_B   );
+	pinset (DQ15_A   ,   48); pinset (DQ15_B   ,  112); pinlist(DQ15   ,DQ15_A   ,DQ15_B   );
+	pinset (DMI1_A   ,  290); pinset (DMI1_B   ,  292); pinlist(DMI1   ,DMI1_A   ,DMI1_B   ); pinlist(DMI    ,DMI0    ,DMI1    );
+
+	pinlist(Byte0    , DQ0_A , DQ1_A , DQ2_A , DQ3_A , DQ4_A , DQ5_A , DQ6_A , DQ7_A );
+	pinlist(Byte1    , DQ8_A , DQ9_A , DQ10_A, DQ11_A, DQ12_A, DQ13_A, DQ14_A, DQ15_A);
+	pinlist(Byte2    , DQ0_B , DQ1_B , DQ2_B , DQ3_B , DQ4_B , DQ5_B , DQ6_B , DQ7_B );
+	pinlist(Byte3    , DQ8_B , DQ9_B , DQ10_B, DQ11_B, DQ12_B, DQ13_B, DQ14_B, DQ15_B);
+
+	
+	pinlist(INPIN    , RST_n, CK_t, CK_c, CS, CKE, CA0, CA1, CA2, CA3, CA4, CA5,  ODTCA);
+	pinlist(DQ       , DQ0, DQ1, DQ2, DQ3, DQ4, DQ5, DQ6, DQ7, DQ8, DQ9, DQ10, DQ11, DQ12, DQ13, DQ14, DQ15);
+	pinlist(DQID     , DQ0_A, DQ1_A, DQ2_A, DQ3_A, DQ4_A, DQ5_A, DQ6_A, DQ7_A  );
+	pinlist(OUTPIN   , DQ , DMI, DQS_t, DQS_c);
+	pinlist(ALLPIN   , INPIN, OUTPIN);
+        vsset  (VDD1     ,   1 );
+        vsset  (VDD2     ,   2 );
+        vsset  (VDDQ     ,   3 );
+}
+void	PinOpen( Test_t *test) {
+        static Pin_t    *pin_group = NULL;
+	if ( pin_group == NULL ) {
+		pin_group		= (Pin_t *)malloc( sizeof(Pin_t));
+		pin_group->CK_t  	= pin( CK_t  , OPEN);
+		pin_group->CK_c  	= pin( CK_c  , OPEN);
+		pin_group->CA0   	= pin( CA0   , OPEN);
+		pin_group->CA1   	= pin( CA1   , OPEN);
+		pin_group->CA2   	= pin( CA2   , OPEN);
+		pin_group->CA3   	= pin( CA3   , OPEN);
+		pin_group->CA4   	= pin( CA4   , OPEN);
+		pin_group->CA5   	= pin( CA5   , OPEN);
+		pin_group->CS    	= pin( CS    , OPEN);
+		pin_group->CKE   	= pin( CKE   , OPEN);
+		pin_group->RST_n 	= pin( RST_n , OPEN);
+		pin_group->ODTCA 	= pin( ODTCA , OPEN);
+		pin_group->DQ0   	= pin( DQ0   , OPEN);
+		pin_group->DQ1   	= pin( DQ1   , OPEN);
+		pin_group->DQ2   	= pin( DQ2   , OPEN);
+		pin_group->DQ3   	= pin( DQ3   , OPEN);
+		pin_group->DQ4   	= pin( DQ4   , OPEN);
+		pin_group->DQ5   	= pin( DQ5   , OPEN);
+		pin_group->DQ6   	= pin( DQ6   , OPEN);
+		pin_group->DQ7   	= pin( DQ7   , OPEN);
+		pin_group->DMI   	= pin( DMI   , OPEN);
+		pin_group->DQS_t	= pin( DQS_t , OPEN);
+		pin_group->DQS_c	= pin( DQS_c , OPEN);
+	}
+//	pin_group->WL  = test->WL;
+//	pin_group->RL  = test->RL; 
+	PinSend( pin_group);
+}
+
+void	PinHigh( Test_t *test) {
+        static Pin_t    *pin_group = NULL;
+	if ( pin_group == NULL ) {
+		pin_group		= (Pin_t *)malloc( sizeof(Pin_t));
+		pin_group->CK_t  	= pin( CK_t  ,  IN1, FIXH);
+		pin_group->CK_c  	= pin( CK_c  ,  IN1, FIXH);
+		pin_group->CA0   	= pin( CA0   ,  IN1, FIXH);
+		pin_group->CA1   	= pin( CA1   ,  IN1, FIXH);
+		pin_group->CA2   	= pin( CA2   ,  IN1, FIXH);
+		pin_group->CA3   	= pin( CA3   ,  IN1, FIXH);
+		pin_group->CA4   	= pin( CA4   ,  IN1, FIXH);
+		pin_group->CA5   	= pin( CA5   ,  IN1, FIXH);
+		pin_group->CS    	= pin( CS    ,  IN1, FIXH);
+		pin_group->CKE   	= pin( CKE   ,  IN1, FIXH);
+		pin_group->RST_n 	= pin( RST_n ,  IN1, FIXH);
+		pin_group->ODTCA 	= pin( ODTCA ,  IN1, FIXH);
+		pin_group->DQ0   	= pin( DQ0   ,  IN1, FIXH);
+		pin_group->DQ1   	= pin( DQ1   ,  IN1, FIXH);
+		pin_group->DQ2   	= pin( DQ2   ,  IN1, FIXH);
+		pin_group->DQ3   	= pin( DQ3   ,  IN1, FIXH);
+		pin_group->DQ4   	= pin( DQ4   ,  IN1, FIXH);
+		pin_group->DQ5   	= pin( DQ5   ,  IN1, FIXH);
+		pin_group->DQ6   	= pin( DQ6   ,  IN1, FIXH);
+		pin_group->DQ7   	= pin( DQ7   ,  IN1, FIXH);
+		pin_group->DMI   	= pin( DMI   ,  IN1, FIXH);
+		pin_group->DQS_t	= pin( DQS_t ,  IN1, FIXH);
+		pin_group->DQS_c	= pin( DQS_c ,  IN1, FIXH);
+	}
+//	pin_group->WL  = test->WL;
+//	pin_group->RL  = test->RL; 
+	PinSend( pin_group);
+}
+
+void	PinLow ( Test_t *test) {
+        static Pin_t    *pin_group = NULL;
+	if ( pin_group == NULL ) {
+		pin_group		= (Pin_t *)malloc( sizeof(Pin_t));
+		pin_group->CK_t  	= pin( CK_t  ,  IN1, FIXL);
+		pin_group->CK_c  	= pin( CK_c  ,  IN1, FIXL);
+		pin_group->CA0   	= pin( CA0   ,  IN1, FIXL);
+		pin_group->CA1   	= pin( CA1   ,  IN1, FIXL);
+		pin_group->CA2   	= pin( CA2   ,  IN1, FIXL);
+		pin_group->CA3   	= pin( CA3   ,  IN1, FIXL);
+		pin_group->CA4   	= pin( CA4   ,  IN1, FIXL);
+		pin_group->CA5   	= pin( CA5   ,  IN1, FIXL);
+		pin_group->CS    	= pin( CS    ,  IN1, FIXL);
+		pin_group->CKE   	= pin( CKE   ,  IN1, FIXL);
+		pin_group->RST_n 	= pin( RST_n ,  IN1, FIXL);
+		pin_group->ODTCA 	= pin( ODTCA ,  IN1, FIXL);
+		pin_group->DQ0   	= pin( DQ0   ,  IN1, FIXL);
+		pin_group->DQ1   	= pin( DQ1   ,  IN1, FIXL);
+		pin_group->DQ2   	= pin( DQ2   ,  IN1, FIXL);
+		pin_group->DQ3   	= pin( DQ3   ,  IN1, FIXL);
+		pin_group->DQ4   	= pin( DQ4   ,  IN1, FIXL);
+		pin_group->DQ5   	= pin( DQ5   ,  IN1, FIXL);
+		pin_group->DQ6   	= pin( DQ6   ,  IN1, FIXL);
+		pin_group->DQ7   	= pin( DQ7   ,  IN1, FIXL);
+		pin_group->DMI   	= pin( DMI   ,  IN1, FIXL);
+		pin_group->DQS_t	= pin( DQS_t ,  IN1, FIXL);
+		pin_group->DQS_c	= pin( DQS_c ,  IN1, FIXL);
+	}
+//	pin_group->WL  = test->WL;
+//	pin_group->RL  = test->RL; 
+	PinSend( pin_group);
+}
+
+void	PinOutH( Test_t *test) {
+        static Pin_t    *pin_group = NULL;
+	if ( pin_group == NULL ) {
+		pin_group		= (Pin_t *)malloc( sizeof(Pin_t));
+		pin_group->CK_t  = pin( CK_t  , IN1,   RZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CK_c  = pin( CK_c  , IN1,  iRZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CKE   = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+		pin_group->ODTCA = pin( ODTCA , IN3,  NRZB, BCLK3, CCLK3, CYP1( C3  ), CYP2( C3  ), CYP3( C3  ), CYP4( C3  ), CYP5( C3  ), CYP6( C3  ), CYP7( C3  ), CYP8( C3  ), CYP9( C3  ), CYP10( C3  ), CYP11( C3  ), CYP12( C3  ), CYP13( C3  ), CYP14( C3  ), CYP15( C3  ) );
+		pin_group->RST_n = pin( RST_n , IN4, iNRZB, BCLK4, CCLK4, CYP1( C13 ), CYP2( C13 ), CYP3( C13 ), CYP4( C13 ), CYP5( C13 ), CYP6( C13 ), CYP7( C13 ), CYP8( C13 ), CYP9( C13 ), CYP10( C13 ), CYP11( C13 ), CYP12( C13 ), CYP13( C13 ), CYP14( C13 ), CYP15( C13 ) );
+		pin_group->CS    = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+		pin_group->CA0   = pin( CA0   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C4  ), CYP3( C17 ), CYP4( X17 ), CYP5( C4  ), CYP6( X0  ), CYP7( C4  ), CYP8( C17 ), CYP9( Y17 ), CYP10( C4  ), CYP11( FL  ), CYP12( C4  ), CYP13( X0  ), CYP14( C4  ), CYP15( Y0  ) );
+		pin_group->CA1   = pin( CA1   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C5  ), CYP3( C18 ), CYP4( X18 ), CYP5( C5  ), CYP6( X1  ), CYP7( C5  ), CYP8( C18 ), CYP9( Y18 ), CYP10( C5  ), CYP11( Y3  ), CYP12( C5  ), CYP13( X1  ), CYP14( C5  ), CYP15( Y1  ) );
+		pin_group->CA2   = pin( CA2   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X12 ), CYP3( C19 ), CYP4( X19 ), CYP5( X6  ), CYP6( X2  ), CYP7( C6  ), CYP8( C19 ), CYP9( Y19 ), CYP10( C6  ), CYP11( Y4  ), CYP12( C6  ), CYP13( X2  ), CYP14( C6  ), CYP15( Y2  ) );
+		pin_group->CA3   = pin( CA3   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X13 ), CYP3( FL  ), CYP4( FL  ), CYP5( X7  ), CYP6( X3  ), CYP7( C7  ), CYP8( FL  ), CYP9( FL  ), CYP10( C7  ), CYP11( Y5  ), CYP12( C7  ), CYP13( X3  ), CYP14( C7  ), CYP15( Y3  ) );
+		pin_group->CA4   = pin( CA4   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X14 ), CYP3( X10 ), CYP4( X10 ), CYP5( X8  ), CYP6( X4  ), CYP7( C8  ), CYP8( Y9  ), CYP9( Y9  ), CYP10( C8  ), CYP11( Y6  ), CYP12( C8  ), CYP13( X4  ), CYP14( C8  ), CYP15( Y4  ) );
+		pin_group->CA5   = pin( CA5   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X15 ), CYP3( X11 ), CYP4( X11 ), CYP5( X9  ), CYP6( X5  ), CYP7( C9  ), CYP8( C9  ), CYP9( C9  ), CYP10( Y8  ), CYP11( Y7  ), CYP12( Y6  ), CYP13( X5  ), CYP14( Y6  ), CYP15( Y5  ) );
+		pin_group->DQ0   	= pin( DQ0   ,  IN1, FIXH);
+		pin_group->DQ1   	= pin( DQ1   ,  IN1, FIXH);
+		pin_group->DQ2   	= pin( DQ2   ,  IN1, FIXH);
+		pin_group->DQ3   	= pin( DQ3   ,  IN1, FIXH);
+		pin_group->DQ4   	= pin( DQ4   ,  IN1, FIXH);
+		pin_group->DQ5   	= pin( DQ5   ,  IN1, FIXH);
+		pin_group->DQ6   	= pin( DQ6   ,  IN1, FIXH);
+		pin_group->DQ7   	= pin( DQ7   ,  IN1, FIXH);
+		pin_group->DMI   	= pin( DMI   ,  IN1, FIXH);
+		pin_group->DQS_t	= pin( DQS_t ,  IN1, FIXH);
+		pin_group->DQS_c	= pin( DQS_c ,  IN1, FIXH);
+	}
+	
+//	pin_group->WL  = test->WL;
+//	pin_group->RL  = test->RL; 
+	PinSend( pin_group);
+}
+void	PinOutL( Test_t *test) {
+        static Pin_t    *pin_group = NULL;
+	if ( pin_group == NULL ) {
+		pin_group		= (Pin_t *)malloc( sizeof(Pin_t));
+		pin_group->CK_t  = pin( CK_t  , IN1,   RZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CK_c  = pin( CK_c  , IN1,  iRZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CKE   = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+		pin_group->ODTCA = pin( ODTCA , IN3,  NRZB, BCLK3, CCLK3, CYP1( C3  ), CYP2( C3  ), CYP3( C3  ), CYP4( C3  ), CYP5( C3  ), CYP6( C3  ), CYP7( C3  ), CYP8( C3  ), CYP9( C3  ), CYP10( C3  ), CYP11( C3  ), CYP12( C3  ), CYP13( C3  ), CYP14( C3  ), CYP15( C3  ) );
+		pin_group->RST_n = pin( RST_n , IN4, iNRZB, BCLK4, CCLK4, CYP1( C13 ), CYP2( C13 ), CYP3( C13 ), CYP4( C13 ), CYP5( C13 ), CYP6( C13 ), CYP7( C13 ), CYP8( C13 ), CYP9( C13 ), CYP10( C13 ), CYP11( C13 ), CYP12( C13 ), CYP13( C13 ), CYP14( C13 ), CYP15( C13 ) );
+		pin_group->CS    = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+		pin_group->CA0   = pin( CA0   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C4  ), CYP3( C17 ), CYP4( X17 ), CYP5( C4  ), CYP6( X0  ), CYP7( C4  ), CYP8( C17 ), CYP9( Y17 ), CYP10( C4  ), CYP11( FL  ), CYP12( C4  ), CYP13( X0  ), CYP14( C4  ), CYP15( Y0  ) );
+		pin_group->CA1   = pin( CA1   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C5  ), CYP3( C18 ), CYP4( X18 ), CYP5( C5  ), CYP6( X1  ), CYP7( C5  ), CYP8( C18 ), CYP9( Y18 ), CYP10( C5  ), CYP11( Y3  ), CYP12( C5  ), CYP13( X1  ), CYP14( C5  ), CYP15( Y1  ) );
+		pin_group->CA2   = pin( CA2   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X12 ), CYP3( C19 ), CYP4( X19 ), CYP5( X6  ), CYP6( X2  ), CYP7( C6  ), CYP8( C19 ), CYP9( Y19 ), CYP10( C6  ), CYP11( Y4  ), CYP12( C6  ), CYP13( X2  ), CYP14( C6  ), CYP15( Y2  ) );
+		pin_group->CA3   = pin( CA3   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X13 ), CYP3( FL  ), CYP4( FL  ), CYP5( X7  ), CYP6( X3  ), CYP7( C7  ), CYP8( FL  ), CYP9( FL  ), CYP10( C7  ), CYP11( Y5  ), CYP12( C7  ), CYP13( X3  ), CYP14( C7  ), CYP15( Y3  ) );
+		pin_group->CA4   = pin( CA4   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X14 ), CYP3( X10 ), CYP4( X10 ), CYP5( X8  ), CYP6( X4  ), CYP7( C8  ), CYP8( Y9  ), CYP9( Y9  ), CYP10( C8  ), CYP11( Y6  ), CYP12( C8  ), CYP13( X4  ), CYP14( C8  ), CYP15( Y4  ) );
+		pin_group->CA5   = pin( CA5   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X15 ), CYP3( X11 ), CYP4( X11 ), CYP5( X9  ), CYP6( X5  ), CYP7( C9  ), CYP8( C9  ), CYP9( C9  ), CYP10( Y8  ), CYP11( Y7  ), CYP12( Y6  ), CYP13( X5  ), CYP14( Y6  ), CYP15( Y5  ) );
+		pin_group->DQ0   	= pin( DQ0   ,  IN1, FIXL);
+		pin_group->DQ1   	= pin( DQ1   ,  IN1, FIXL);
+		pin_group->DQ2   	= pin( DQ2   ,  IN1, FIXL);
+		pin_group->DQ3   	= pin( DQ3   ,  IN1, FIXL);
+		pin_group->DQ4   	= pin( DQ4   ,  IN1, FIXL);
+		pin_group->DQ5   	= pin( DQ5   ,  IN1, FIXL);
+		pin_group->DQ6   	= pin( DQ6   ,  IN1, FIXL);
+		pin_group->DQ7   	= pin( DQ7   ,  IN1, FIXL);
+		pin_group->DMI   	= pin( DMI   ,  IN1, FIXL);
+		pin_group->DQS_t	= pin( DQS_t ,  IN1, FIXL);
+		pin_group->DQS_c	= pin( DQS_c ,  IN1, FIXL);
+	}
+	
+//	pin_group->WL  = test->WL;
+//	pin_group->RL  = test->RL; 
+	PinSend( pin_group);
+}
+
+void	PinFunc( Test_t *test) {
+//	+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+
+//	| CMD  | DES  |ACT1-1|ACT1-2|ACT2-1|ACT2-2|WR 1-1|WR 1-2|MWR1-1|MWR1-2|RD 1-1|RD 1-2|PRE1-1|PRE1-2|REF1-1|REF1-2|CAS2-1|CAS2-2|MRW1-1|MRW1-2|MRW2-1|MRW2-2|MRR1-1|MRR1-2|MPC -1|MPC -2| SRE-1| SRE-2| SRX-1| SRX-2|
+//	+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+
+//	| CS   | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  | High | Low  |
+//	+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+
+//	| CA0  | ---  | High | BA0  | High | ROW0 | Low  | BA0  | Low  | BA0  | Low  | BA0  | Low  | BA0  | Low  | BA0  | Low  | COL2 | Low  | MA0  | Low  | OP0  | Low  | MA0  | Low  | OP0  | Low  | ---  | Low  | ---  |
+//	| CA1  | ---  | Low  | BA1  | High | ROW1 | Low  | BA1  | Low  | BA1  | High | BA1  | Low  | BA1  | Low  | BA1  | High | COL3 | High | MA1  | High | OP1  | High | MA1  | Low  | OP1  | Low  | ---  | Low  | ---  |
+//	| CA2  | ---  | ROW12| BA2  | ROW6 | ROW2 | High | BA2  | High | BA2  | Low  | BA2  | Low  | BA2  | Low  | BA2  | Low  | COL4 | High | MA2  | High | OP2  | High | MA2  | Low  | OP2  | Low  | ---  | High | ---  |
+//	| CA3  | ---  | ROW13| ---  | ROW7 | ROW3 | Low  | Low  | High | Low  | Low  | Low  | Low  | ---  | High | ---  | Low  | COL5 | Low  | MA3  | Low  | OP3  | High | MA3  | Low  | OP3  | High | ---  | Low  | ---  |
+//	| CA4  | ---  | ROW14| ROW10| ROW8 | ROW4 | Low  | COL9 | Low  | COL9 | Low  | COL9 | High | ---  | Low  | ---  | High | COL6 | Low  | MA4  | High | OP4  | Low  | MA4  | Low  | OP4  | High | ---  | High | ---  | MR0-MR5...Y0-Y5 MR0-MR5...Y0-Y5
+//	| CA5  | ---  | ROW15| ROW11| ROW9 | ROW5 | BL   | AP   | Low  | AP   | BL   | AP   | AB   | ---  | AB   | ---  | COL8 | COL7 | OP7  | MA5  | OP6  | OP5  | ---  | MA5  | OP6  | OP5  | ---  | ---  | ---  | ---  | OP0-OP7...X0-X7 OP0-OP7...X0-X7
+//	+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+
+//	| CYP  | CYP1 | CYP2 | CYP3 | CYP5 | CYP6 | CYP7 | CYP8 | CYP7 | CYP8 | CYP7 | CYP8 | CYP7 | CYP8 | CYP7 | CYP8 | CYP10| CYP11| CYP12| CYP13| CYP14| CYP15| CYP12| CYP13| CYP14| CYP15| CYP7 | CYP1 | CYP7 | CYP1 |
+//	|      |      |      | CYP4 |      |      |      | CYP9 |      | CYP9 |      | CYP9 |      | CYP9 |      | CYP9 |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
+//	+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+------+
+	double	WL =  test->WL+4;
+	double	RL =  test->RL+3;
+	static	Pin_t	*pin_group	= NULL;
+	
+	if ( pin_group == NULL ) {
+		pin_group	= (Pin_t *)malloc( sizeof(Pin_t));
+//	                                                                +------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+--------------+-------------+-------------+-------------+-------------+
+//                                                                      |  CYP1      | CYP2       | CYP3       | CYP4       | CYP5       | CYP6       | CYP7       | CYP8       | CYP9       | CYP10      | CYP11        | CYP12       | CYP13       | CYP14       |CYP15        |
+//	                                                                +------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+--------------+-------------+-------------+-------------+-------------+
+//                                                                      |  DES       | ACT1-1     |ACT1-2      | ACT1-2     | ACT2-1     | ACT2-2     | WR1-1      | WR1-2      | WR1-2      |CAS2-1      |CAS2-2        | MRW1-1      | MRW1-2      | MRW2-1      |MRW2-2       |
+//                                                                      |            |            |            |            |            |            | RD1-1      | RD1-2      | RD1-2      |            |              | MRR1-1      | MRR1-2      | MPC-1       |MPC-2        |
+//                                                                      |            |            |            |            |            |            | PRE1-1     | PRE1-2     | PRE1-2     |            |              |             |             |             |             |
+//                                                                      |            |            |            |            |            |            | REF1-1     | REF1-2     | REF1-2     |            |              |             |             |             |             |
+//                                                                      |            |            |            |            |            |            | MWR1-1     | MWR1-2     | MWR1-2     |            |              |             |             |             |             |
+//                                                                      | SRE-2      |            |            |            |            |            | SRE-1      |            |            |            |              |             |             |             |             |
+//                                                                      | SRX-2      |            |            |            |            |            | SRX-1      |            |            |            |              |             |             |             |             |
+//	                                                                +------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+--------------+-------------+-------------+-------------+-------------+
+
+		pin_group->CK_t  = pin( CK_t  , IN1,   RZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CK_c  = pin( CK_c  , IN1,  iRZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+//		pin_group->CKE0  = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+//		pin_group->CKE1  = pin( CKE1  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C15 ), CYP2( C15 ), CYP3( C15 ), CYP4( C15 ), CYP5( C15 ), CYP6( C15 ), CYP7( C15 ), CYP8( C15 ), CYP9( C15 ), CYP10( C15 ), CYP11( C15 ), CYP12( C15 ), CYP13( C15 ), CYP14( C15 ), CYP15( C15 ) );
+//		pin_group->CKE2  = pin( CKE2  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C16 ), CYP2( C16 ), CYP3( C16 ), CYP4( C16 ), CYP5( C16 ), CYP6( C16 ), CYP7( C16 ), CYP8( C16 ), CYP9( C16 ), CYP10( C16 ), CYP11( C16 ), CYP12( C16 ), CYP13( C16 ), CYP14( C16 ), CYP15( C16 ) );
+		pin_group->CKE   = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+		pin_group->ODTCA = pin( ODTCA , IN3,  NRZB, BCLK3, CCLK3, CYP1( C3  ), CYP2( C3  ), CYP3( C3  ), CYP4( C3  ), CYP5( C3  ), CYP6( C3  ), CYP7( C3  ), CYP8( C3  ), CYP9( C3  ), CYP10( C3  ), CYP11( C3  ), CYP12( C3  ), CYP13( C3  ), CYP14( C3  ), CYP15( C3  ) );
+		pin_group->RST_n = pin( RST_n , IN4, iNRZB, BCLK4, CCLK4, CYP1( C13 ), CYP2( C13 ), CYP3( C13 ), CYP4( C13 ), CYP5( C13 ), CYP6( C13 ), CYP7( C13 ), CYP8( C13 ), CYP9( C13 ), CYP10( C13 ), CYP11( C13 ), CYP12( C13 ), CYP13( C13 ), CYP14( C13 ), CYP15( C13 ) );
+//		pin_group->CS0   = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+//		pin_group->CS1   = pin( CS1   , IN5,  NRZB, BCLK5, CCLK3, CYP1( FL  ), CYP2( C11 ), CYP3( FL  ), CYP4( FL  ), CYP5( C11 ), CYP6( FL  ), CYP7( C11 ), CYP8( FL  ), CYP9( FL  ), CYP10( C11 ), CYP11( FL  ), CYP12( C11 ), CYP13( FL  ), CYP14( C11 ), CYP15( FL  ) );
+//		pin_group->CS2   = pin( CS2   , IN5,  NRZB, BCLK5, CCLK3, CYP1( FL  ), CYP2( C12 ), CYP3( FL  ), CYP4( FL  ), CYP5( C12 ), CYP6( FL  ), CYP7( C12 ), CYP8( FL  ), CYP9( FL  ), CYP10( C12 ), CYP11( FL  ), CYP12( C12 ), CYP13( FL  ), CYP14( C12 ), CYP15( FL  ) );
+		pin_group->CS    = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+		pin_group->CA0   = pin( CA0   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C4  ), CYP3( C17 ), CYP4( X17 ), CYP5( C4  ), CYP6( X0  ), CYP7( C4  ), CYP8( C17 ), CYP9( Y17 ), CYP10( C4  ), CYP11( FL  ), CYP12( C4  ), CYP13( X0  ), CYP14( C4  ), CYP15( Y0  ) );
+		pin_group->CA1   = pin( CA1   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C5  ), CYP3( C18 ), CYP4( X18 ), CYP5( C5  ), CYP6( X1  ), CYP7( C5  ), CYP8( C18 ), CYP9( Y18 ), CYP10( C5  ), CYP11( Y3  ), CYP12( C5  ), CYP13( X1  ), CYP14( C5  ), CYP15( Y1  ) );
+		pin_group->CA2   = pin( CA2   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X12 ), CYP3( C19 ), CYP4( X19 ), CYP5( X6  ), CYP6( X2  ), CYP7( C6  ), CYP8( C19 ), CYP9( Y19 ), CYP10( C6  ), CYP11( Y4  ), CYP12( C6  ), CYP13( X2  ), CYP14( C6  ), CYP15( Y2  ) );
+		pin_group->CA3   = pin( CA3   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X13 ), CYP3( FL  ), CYP4( FL  ), CYP5( X7  ), CYP6( X3  ), CYP7( C7  ), CYP8( FL  ), CYP9( FL  ), CYP10( C7  ), CYP11( Y5  ), CYP12( C7  ), CYP13( X3  ), CYP14( C7  ), CYP15( Y3  ) );
+		pin_group->CA4   = pin( CA4   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X14 ), CYP3( X10 ), CYP4( X10 ), CYP5( X8  ), CYP6( X4  ), CYP7( C8  ), CYP8( Y9  ), CYP9( Y9  ), CYP10( C8  ), CYP11( Y6  ), CYP12( C8  ), CYP13( X4  ), CYP14( C8  ), CYP15( Y4  ) );
+		pin_group->CA5   = pin( CA5   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X15 ), CYP3( X11 ), CYP4( X11 ), CYP5( X9  ), CYP6( X5  ), CYP7( C9  ), CYP8( C9  ), CYP9( C9  ), CYP10( Y8  ), CYP11( Y7  ), CYP12( Y7  ), CYP13( X5  ), CYP14( Y6  ), CYP15( Y5  ) );
+		pin_group->DQ0   = pin( DQ0   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D0 , SD0 ), CYP2( D0 , SD0 ), CYP3( D0 , SD0 ), CYP4( D0 , SD0 ), CYP5( D0 , SD0 ), CYP6( D0 , SD0 ), CYP7( D0 , SD0 ), CYP8( D0 , SD0 ), CYP9( D0 , SD0 ), CYP10( D0 , SD0 ), CYP11( D0 , SD0 ), CYP12( D0 , SD0 ), CYP13( D0 , SD0 ), CYP14( D0 , SD0 ), CYP15( D0 , SD0 ), CYP16( D0 , SD0 ) );
+		pin_group->DQ1   = pin( DQ1   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D1 , SD1 ), CYP2( D1 , SD1 ), CYP3( D1 , SD1 ), CYP4( D1 , SD1 ), CYP5( D1 , SD1 ), CYP6( D1 , SD1 ), CYP7( D1 , SD1 ), CYP8( D1 , SD1 ), CYP9( D1 , SD1 ), CYP10( D1 , SD1 ), CYP11( D1 , SD1 ), CYP12( D1 , SD1 ), CYP13( D1 , SD1 ), CYP14( D1 , SD1 ), CYP15( D1 , SD1 ), CYP16( D1 , SD1 ) );
+		pin_group->DQ2   = pin( DQ2   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D2 , SD2 ), CYP2( D2 , SD2 ), CYP3( D2 , SD2 ), CYP4( D2 , SD2 ), CYP5( D2 , SD2 ), CYP6( D2 , SD2 ), CYP7( D2 , SD2 ), CYP8( D2 , SD2 ), CYP9( D2 , SD2 ), CYP10( D2 , SD2 ), CYP11( D2 , SD2 ), CYP12( D2 , SD2 ), CYP13( D2 , SD2 ), CYP14( D2 , SD2 ), CYP15( D2 , SD2 ), CYP16( D2 , SD2 ) );
+		pin_group->DQ3   = pin( DQ3   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D3 , SD3 ), CYP2( D3 , SD3 ), CYP3( D3 , SD3 ), CYP4( D3 , SD3 ), CYP5( D3 , SD3 ), CYP6( D3 , SD3 ), CYP7( D3 , SD3 ), CYP8( D3 , SD3 ), CYP9( D3 , SD3 ), CYP10( D3 , SD3 ), CYP11( D3 , SD3 ), CYP12( D3 , SD3 ), CYP13( D3 , SD3 ), CYP14( D3 , SD3 ), CYP15( D3 , SD3 ), CYP16( D3 , SD3 ) );
+		pin_group->DQ4   = pin( DQ4   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D4 , SD4 ), CYP2( D4 , SD4 ), CYP3( D4 , SD4 ), CYP4( D4 , SD4 ), CYP5( D4 , SD4 ), CYP6( D4 , SD4 ), CYP7( D4 , SD4 ), CYP8( D4 , SD4 ), CYP9( D4 , SD4 ), CYP10( D4 , SD4 ), CYP11( D4 , SD4 ), CYP12( D4 , SD4 ), CYP13( D4 , SD4 ), CYP14( D4 , SD4 ), CYP15( D4 , SD4 ), CYP16( D4 , SD4 ) );
+		pin_group->DQ5   = pin( DQ5   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D5 , SD5 ), CYP2( D5 , SD5 ), CYP3( D5 , SD5 ), CYP4( D5 , SD5 ), CYP5( D5 , SD5 ), CYP6( D5 , SD5 ), CYP7( D5 , SD5 ), CYP8( D5 , SD5 ), CYP9( D5 , SD5 ), CYP10( D5 , SD5 ), CYP11( D5 , SD5 ), CYP12( D5 , SD5 ), CYP13( D5 , SD5 ), CYP14( D5 , SD5 ), CYP15( D5 , SD5 ), CYP16( D5 , SD5 ) );
+		pin_group->DQ6   = pin( DQ6   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D6 , SD6 ), CYP2( D6 , SD6 ), CYP3( D6 , SD6 ), CYP4( D6 , SD6 ), CYP5( D6 , SD6 ), CYP6( D6 , SD6 ), CYP7( D6 , SD6 ), CYP8( D6 , SD6 ), CYP9( D6 , SD6 ), CYP10( D6 , SD6 ), CYP11( D6 , SD6 ), CYP12( D6 , SD6 ), CYP13( D6 , SD6 ), CYP14( D6 , SD6 ), CYP15( D6 , SD6 ), CYP16( D6 , SD6 ) );
+		pin_group->DQ7   = pin( DQ7   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D7 , SD7 ), CYP2( D7 , SD7 ), CYP3( D7 , SD7 ), CYP4( D7 , SD7 ), CYP5( D7 , SD7 ), CYP6( D7 , SD7 ), CYP7( D7 , SD7 ), CYP8( D7 , SD7 ), CYP9( D7 , SD7 ), CYP10( D7 , SD7 ), CYP11( D7 , SD7 ), CYP12( D7 , SD7 ), CYP13( D7 , SD7 ), CYP14( D7 , SD7 ), CYP15( D7 , SD7 ), CYP16( D7 , SD7 ) );
+		pin_group->DMI   = pin( DMI   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( C23, C24 ), CYP2( C23, C24 ), CYP3( C23, C24 ), CYP4( C23, C24 ), CYP5( C23, C24 ), CYP6( C23, C24 ), CYP7( C23, C24 ), CYP8( C23, C24 ), CYP9( C23, C24 ), CYP10( C23, C24 ), CYP11( C23, C24 ), CYP12( C23, C24 ), CYP13( C23, C24 ), CYP14( C23, C24 ), CYP15( C23, C24 ), CYP16( C23, C24 ) );
+		pin_group->DQS_t = pin( DQS_t , IN7,  DNRZ, BCLK8, CCLK8, IOC, DRE2, DRENRZ, DRECLK2, OUTL2, VT2, STRB(3,2), EXPA(3), STRB(4,2), EXPB(4), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( C22, FL  ), CYP2( C22, FL  ), CYP3( C22, FL  ), CYP4( C22, FL  ), CYP5( C22, FL  ), CYP6( C22, FL  ), CYP7( C22, FL  ), CYP8( C22, FL  ), CYP9( C22, FL  ), CYP10( C22, FL  ), CYP11( C22, FL  ), CYP12( C22, FL  ), CYP13( C22, FL  ), CYP14( C22, FL  ), CYP15( C22, FL  ), CYP16( C22, FL  ) );
+		pin_group->DQS_c = pin( DQS_c , IN7,  DNRZ, BCLK8, CCLK8, IOC, DRE2, DRENRZ, DRECLK2, OUTL2, VT2, STRB(3,2), EXPA(3), STRB(4,2), EXPB(4), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1(iC22, FH  ), CYP2(iC22, FH  ), CYP3(iC22, FH  ), CYP4(iC22, FH  ), CYP5(iC22, FH  ), CYP6(iC22, FH  ), CYP7(iC22, FH  ), CYP8(iC22, FH  ), CYP9(iC22, FH  ), CYP10(iC22, FH  ), CYP11(iC22, FH  ), CYP12(iC22, FH  ), CYP13(iC22, FH  ), CYP14(iC22, FH  ), CYP15(iC22, FH  ), CYP16(iC22, FH  ) );
+	}else {
+		if (  (pin_group->WL != test->WL) || (pin_group->RL != test->RL ) ) {
+			pin_change ( pin_group->DQ0   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ1   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ2   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ3   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ4   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ5   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ6   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ7   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DMI   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQS_t , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQS_c , DRCYCDLY(WL), EXPCYCDLY(RL));
+		}
+	}
+	pin_group->WL  = test->WL+4;
+	pin_group->RL  = test->RL+3; 
+	PinSend( pin_group);
+
+}
+void	PinDbi( Test_t *test) {
+	double	WL =  test->WL+4;
+	double	RL =  test->RL+3;
+	static	Pin_t	*pin_group	= NULL;
+	
+	if ( pin_group == NULL ) {
+		pin_group	= (Pin_t *)malloc( sizeof(Pin_t));
+
+		pin_group->CK_t  = pin( CK_t  , IN1,   RZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CK_c  = pin( CK_c  , IN1,  iRZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+//		pin_group->CKE0  = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+//		pin_group->CKE1  = pin( CKE1  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C15 ), CYP2( C15 ), CYP3( C15 ), CYP4( C15 ), CYP5( C15 ), CYP6( C15 ), CYP7( C15 ), CYP8( C15 ), CYP9( C15 ), CYP10( C15 ), CYP11( C15 ), CYP12( C15 ), CYP13( C15 ), CYP14( C15 ), CYP15( C15 ) );
+//		pin_group->CKE2  = pin( CKE2  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C16 ), CYP2( C16 ), CYP3( C16 ), CYP4( C16 ), CYP5( C16 ), CYP6( C16 ), CYP7( C16 ), CYP8( C16 ), CYP9( C16 ), CYP10( C16 ), CYP11( C16 ), CYP12( C16 ), CYP13( C16 ), CYP14( C16 ), CYP15( C16 ) );
+		pin_group->CKE   = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+		pin_group->ODTCA = pin( ODTCA , IN3,  NRZB, BCLK3, CCLK3, CYP1( C3  ), CYP2( C3  ), CYP3( C3  ), CYP4( C3  ), CYP5( C3  ), CYP6( C3  ), CYP7( C3  ), CYP8( C3  ), CYP9( C3  ), CYP10( C3  ), CYP11( C3  ), CYP12( C3  ), CYP13( C3  ), CYP14( C3  ), CYP15( C3  ) );
+		pin_group->RST_n = pin( RST_n , IN4, iNRZB, BCLK4, CCLK4, CYP1( C13 ), CYP2( C13 ), CYP3( C13 ), CYP4( C13 ), CYP5( C13 ), CYP6( C13 ), CYP7( C13 ), CYP8( C13 ), CYP9( C13 ), CYP10( C13 ), CYP11( C13 ), CYP12( C13 ), CYP13( C13 ), CYP14( C13 ), CYP15( C13 ) );
+//		pin_group->CS0   = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+//		pin_group->CS1   = pin( CS1   , IN5,  NRZB, BCLK5, CCLK3, CYP1( FL  ), CYP2( C11 ), CYP3( FL  ), CYP4( FL  ), CYP5( C11 ), CYP6( FL  ), CYP7( C11 ), CYP8( FL  ), CYP9( FL  ), CYP10( C11 ), CYP11( FL  ), CYP12( C11 ), CYP13( FL  ), CYP14( C11 ), CYP15( FL  ) );
+//		pin_group->CS2   = pin( CS2   , IN5,  NRZB, BCLK5, CCLK3, CYP1( FL  ), CYP2( C12 ), CYP3( FL  ), CYP4( FL  ), CYP5( C12 ), CYP6( FL  ), CYP7( C12 ), CYP8( FL  ), CYP9( FL  ), CYP10( C12 ), CYP11( FL  ), CYP12( C12 ), CYP13( FL  ), CYP14( C12 ), CYP15( FL  ) );
+		pin_group->CS    = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+		pin_group->CA0   = pin( CA0   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C4  ), CYP3( C17 ), CYP4( X17 ), CYP5( C4  ), CYP6( X0  ), CYP7( C4  ), CYP8( C17 ), CYP9( Y17 ), CYP10( C4  ), CYP11( FL  ), CYP12( C4  ), CYP13( X0  ), CYP14( C4  ), CYP15( Y0  ) );
+		pin_group->CA1   = pin( CA1   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C5  ), CYP3( C18 ), CYP4( X18 ), CYP5( C5  ), CYP6( X1  ), CYP7( C5  ), CYP8( C18 ), CYP9( Y18 ), CYP10( C5  ), CYP11( Y3  ), CYP12( C5  ), CYP13( X1  ), CYP14( C5  ), CYP15( Y1  ) );
+		pin_group->CA2   = pin( CA2   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X12 ), CYP3( C19 ), CYP4( X19 ), CYP5( X6  ), CYP6( X2  ), CYP7( C6  ), CYP8( C19 ), CYP9( Y19 ), CYP10( C6  ), CYP11( Y4  ), CYP12( C6  ), CYP13( X2  ), CYP14( C6  ), CYP15( Y2  ) );
+		pin_group->CA3   = pin( CA3   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X13 ), CYP3( FL  ), CYP4( FL  ), CYP5( X7  ), CYP6( X3  ), CYP7( C7  ), CYP8( FL  ), CYP9( FL  ), CYP10( C7  ), CYP11( Y5  ), CYP12( C7  ), CYP13( X3  ), CYP14( C7  ), CYP15( Y3  ) );
+		pin_group->CA4   = pin( CA4   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X14 ), CYP3( X10 ), CYP4( X10 ), CYP5( X8  ), CYP6( X4  ), CYP7( C8  ), CYP8( Y9  ), CYP9( Y9  ), CYP10( C8  ), CYP11( Y6  ), CYP12( C8  ), CYP13( X4  ), CYP14( C8  ), CYP15( Y4  ) );
+		pin_group->CA5   = pin( CA5   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X15 ), CYP3( X11 ), CYP4( X11 ), CYP5( X9  ), CYP6( X5  ), CYP7( C9  ), CYP8( C9  ), CYP9( C9  ), CYP10( Y8  ), CYP11( Y7  ), CYP12( Y7  ), CYP13( X5  ), CYP14( Y6  ), CYP15( Y5  ) );
+		pin_group->DQ0   = pin( DQ0   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D0 , SD0 ), CYP2( D0 , SD0 ), CYP3( D0 , SD0 ), CYP4( D0 , SD0 ), CYP5( D0 , SD0 ), CYP6( D0 , SD0 ), CYP7( D0 , SD0 ), CYP8( D0 , SD0 ), CYP9( D0 , SD0 ), CYP10( D0 , SD0 ), CYP11( D0 , SD0 ), CYP12( D0 , SD0 ), CYP13( D0 , SD0 ), CYP14( D0 , SD0 ), CYP15( D0 , SD0 ), CYP16( D0 , SD0 ) );
+		pin_group->DQ1   = pin( DQ1   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D1 , SD1 ), CYP2( D1 , SD1 ), CYP3( D1 , SD1 ), CYP4( D1 , SD1 ), CYP5( D1 , SD1 ), CYP6( D1 , SD1 ), CYP7( D1 , SD1 ), CYP8( D1 , SD1 ), CYP9( D1 , SD1 ), CYP10( D1 , SD1 ), CYP11( D1 , SD1 ), CYP12( D1 , SD1 ), CYP13( D1 , SD1 ), CYP14( D1 , SD1 ), CYP15( D1 , SD1 ), CYP16( D1 , SD1 ) );
+		pin_group->DQ2   = pin( DQ2   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D2 , SD2 ), CYP2( D2 , SD2 ), CYP3( D2 , SD2 ), CYP4( D2 , SD2 ), CYP5( D2 , SD2 ), CYP6( D2 , SD2 ), CYP7( D2 , SD2 ), CYP8( D2 , SD2 ), CYP9( D2 , SD2 ), CYP10( D2 , SD2 ), CYP11( D2 , SD2 ), CYP12( D2 , SD2 ), CYP13( D2 , SD2 ), CYP14( D2 , SD2 ), CYP15( D2 , SD2 ), CYP16( D2 , SD2 ) );
+		pin_group->DQ3   = pin( DQ3   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D3 , SD3 ), CYP2( D3 , SD3 ), CYP3( D3 , SD3 ), CYP4( D3 , SD3 ), CYP5( D3 , SD3 ), CYP6( D3 , SD3 ), CYP7( D3 , SD3 ), CYP8( D3 , SD3 ), CYP9( D3 , SD3 ), CYP10( D3 , SD3 ), CYP11( D3 , SD3 ), CYP12( D3 , SD3 ), CYP13( D3 , SD3 ), CYP14( D3 , SD3 ), CYP15( D3 , SD3 ), CYP16( D3 , SD3 ) );
+		pin_group->DQ4   = pin( DQ4   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D4 , SD4 ), CYP2( D4 , SD4 ), CYP3( D4 , SD4 ), CYP4( D4 , SD4 ), CYP5( D4 , SD4 ), CYP6( D4 , SD4 ), CYP7( D4 , SD4 ), CYP8( D4 , SD4 ), CYP9( D4 , SD4 ), CYP10( D4 , SD4 ), CYP11( D4 , SD4 ), CYP12( D4 , SD4 ), CYP13( D4 , SD4 ), CYP14( D4 , SD4 ), CYP15( D4 , SD4 ), CYP16( D4 , SD4 ) );
+		pin_group->DQ5   = pin( DQ5   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D5 , SD5 ), CYP2( D5 , SD5 ), CYP3( D5 , SD5 ), CYP4( D5 , SD5 ), CYP5( D5 , SD5 ), CYP6( D5 , SD5 ), CYP7( D5 , SD5 ), CYP8( D5 , SD5 ), CYP9( D5 , SD5 ), CYP10( D5 , SD5 ), CYP11( D5 , SD5 ), CYP12( D5 , SD5 ), CYP13( D5 , SD5 ), CYP14( D5 , SD5 ), CYP15( D5 , SD5 ), CYP16( D5 , SD5 ) );
+		pin_group->DQ6   = pin( DQ6   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D6 , SD6 ), CYP2( D6 , SD6 ), CYP3( D6 , SD6 ), CYP4( D6 , SD6 ), CYP5( D6 , SD6 ), CYP6( D6 , SD6 ), CYP7( D6 , SD6 ), CYP8( D6 , SD6 ), CYP9( D6 , SD6 ), CYP10( D6 , SD6 ), CYP11( D6 , SD6 ), CYP12( D6 , SD6 ), CYP13( D6 , SD6 ), CYP14( D6 , SD6 ), CYP15( D6 , SD6 ), CYP16( D6 , SD6 ) );
+		pin_group->DQ7   = pin( DQ7   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D7 , SD7 ), CYP2( D7 , SD7 ), CYP3( D7 , SD7 ), CYP4( D7 , SD7 ), CYP5( D7 , SD7 ), CYP6( D7 , SD7 ), CYP7( D7 , SD7 ), CYP8( D7 , SD7 ), CYP9( D7 , SD7 ), CYP10( D7 , SD7 ), CYP11( D7 , SD7 ), CYP12( D7 , SD7 ), CYP13( D7 , SD7 ), CYP14( D7 , SD7 ), CYP15( D7 , SD7 ), CYP16( D7 , SD7 ) );
+		pin_group->DMI   = pin( DMI   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D16,SD16 ), CYP2( D16,SD16 ), CYP3( D16,SD16 ), CYP4( D16,SD16 ), CYP5( D16,SD16 ), CYP6( D16,SD16 ), CYP7( D16,SD16 ), CYP8( D16,SD16 ), CYP9( D16,SD16 ), CYP10( D16,SD16 ), CYP11( D16,SD16 ), CYP12( D16,SD16 ), CYP13( D16,SD16 ), CYP14( D16,SD16 ), CYP15( D16,SD16 ), CYP16( D16,SD16 ) );
+		pin_group->DQS_t = pin( DQS_t , IN7,  DNRZ, BCLK8, CCLK8, IOC, DRE2, DRENRZ, DRECLK2, OUTL2, VT2, STRB(3,2), EXPA(3), STRB(4,2), EXPB(4), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( C22, FL  ), CYP2( C22, FL  ), CYP3( C22, FL  ), CYP4( C22, FL  ), CYP5( C22, FL  ), CYP6( C22, FL  ), CYP7( C22, FL  ), CYP8( C22, FL  ), CYP9( C22, FL  ), CYP10( C22, FL  ), CYP11( C22, FL  ), CYP12( C22, FL  ), CYP13( C22, FL  ), CYP14( C22, FL  ), CYP15( C22, FL  ), CYP16( C22, FL  ) );
+		pin_group->DQS_c = pin( DQS_c , IN7,  DNRZ, BCLK8, CCLK8, IOC, DRE2, DRENRZ, DRECLK2, OUTL2, VT2, STRB(3,2), EXPA(3), STRB(4,2), EXPB(4), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1(iC22, FH  ), CYP2(iC22, FH  ), CYP3(iC22, FH  ), CYP4(iC22, FH  ), CYP5(iC22, FH  ), CYP6(iC22, FH  ), CYP7(iC22, FH  ), CYP8(iC22, FH  ), CYP9(iC22, FH  ), CYP10(iC22, FH  ), CYP11(iC22, FH  ), CYP12(iC22, FH  ), CYP13(iC22, FH  ), CYP14(iC22, FH  ), CYP15(iC22, FH  ), CYP16(iC22, FH  ) );
+	}else {
+		if (  (pin_group->WL != test->WL) || (pin_group->RL != test->RL ) ) {
+			pin_change ( pin_group->DQ0   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ1   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ2   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ3   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ4   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ5   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ6   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ7   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DMI   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQS_t , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQS_c , DRCYCDLY(WL), EXPCYCDLY(RL));
+		}
+	}
+	pin_group->WL  = test->WL+4;
+	pin_group->RL  = test->RL+3; 
+	PinSend( pin_group);
+
+}
+void	PinDbm( Test_t *test) {
+	double	WL =  test->WL;
+	double	RL =  test->RL;
+	static	Pin_t	*pin_group	= NULL;
+	
+	if ( pin_group == NULL ) {
+		pin_group	= (Pin_t *)malloc( sizeof(Pin_t));
+
+		pin_group->CK_t  = pin( CK_t  , IN1,   RZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+		pin_group->CK_c  = pin( CK_c  , IN1,  iRZZ, BCLK1, CCLK1, CYP1( C29 ), CYP2( C29 ), CYP3( C29 ), CYP4( C29 ), CYP5( C29 ), CYP6( C29 ), CYP7( C29 ), CYP8( C29 ), CYP9( C29 ), CYP10( C29 ), CYP11( C29 ), CYP12( C29 ), CYP13( C29 ), CYP14( C29 ), CYP15( C29 ) );
+//		pin_group->CKE0  = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+//		pin_group->CKE1  = pin( CKE1  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C15 ), CYP2( C15 ), CYP3( C15 ), CYP4( C15 ), CYP5( C15 ), CYP6( C15 ), CYP7( C15 ), CYP8( C15 ), CYP9( C15 ), CYP10( C15 ), CYP11( C15 ), CYP12( C15 ), CYP13( C15 ), CYP14( C15 ), CYP15( C15 ) );
+//		pin_group->CKE2  = pin( CKE2  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C16 ), CYP2( C16 ), CYP3( C16 ), CYP4( C16 ), CYP5( C16 ), CYP6( C16 ), CYP7( C16 ), CYP8( C16 ), CYP9( C16 ), CYP10( C16 ), CYP11( C16 ), CYP12( C16 ), CYP13( C16 ), CYP14( C16 ), CYP15( C16 ) );
+		pin_group->CKE   = pin( CKE0  , IN2, iNRZB, BCLK2, CCLK2, CYP1( C14 ), CYP2( C14 ), CYP3( C14 ), CYP4( C14 ), CYP5( C14 ), CYP6( C14 ), CYP7( C14 ), CYP8( C14 ), CYP9( C14 ), CYP10( C14 ), CYP11( C14 ), CYP12( C14 ), CYP13( C14 ), CYP14( C14 ), CYP15( C14 ) );
+		pin_group->ODTCA = pin( ODTCA , IN3,  NRZB, BCLK3, CCLK3, CYP1( C3  ), CYP2( C3  ), CYP3( C3  ), CYP4( C3  ), CYP5( C3  ), CYP6( C3  ), CYP7( C3  ), CYP8( C3  ), CYP9( C3  ), CYP10( C3  ), CYP11( C3  ), CYP12( C3  ), CYP13( C3  ), CYP14( C3  ), CYP15( C3  ) );
+		pin_group->RST_n = pin( RST_n , IN4, iNRZB, BCLK4, CCLK4, CYP1( C13 ), CYP2( C13 ), CYP3( C13 ), CYP4( C13 ), CYP5( C13 ), CYP6( C13 ), CYP7( C13 ), CYP8( C13 ), CYP9( C13 ), CYP10( C13 ), CYP11( C13 ), CYP12( C13 ), CYP13( C13 ), CYP14( C13 ), CYP15( C13 ) );
+//		pin_group->CS0   = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+//		pin_group->CS1   = pin( CS1   , IN5,  NRZB, BCLK5, CCLK3, CYP1( FL  ), CYP2( C11 ), CYP3( FL  ), CYP4( FL  ), CYP5( C11 ), CYP6( FL  ), CYP7( C11 ), CYP8( FL  ), CYP9( FL  ), CYP10( C11 ), CYP11( FL  ), CYP12( C11 ), CYP13( FL  ), CYP14( C11 ), CYP15( FL  ) );
+//		pin_group->CS2   = pin( CS2   , IN5,  NRZB, BCLK5, CCLK3, CYP1( FL  ), CYP2( C12 ), CYP3( FL  ), CYP4( FL  ), CYP5( C12 ), CYP6( FL  ), CYP7( C12 ), CYP8( FL  ), CYP9( FL  ), CYP10( C12 ), CYP11( FL  ), CYP12( C12 ), CYP13( FL  ), CYP14( C12 ), CYP15( FL  ) );
+		pin_group->CS    = pin( CS0   , IN5,  NRZB, BCLK5, CCLK5, CYP1( FL  ), CYP2( C10 ), CYP3( FL  ), CYP4( FL  ), CYP5( C10 ), CYP6( FL  ), CYP7( C10 ), CYP8( FL  ), CYP9( FL  ), CYP10( C10 ), CYP11( FL  ), CYP12( C10 ), CYP13( FL  ), CYP14( C10 ), CYP15( FL  ) );
+		pin_group->CA0   = pin( CA0   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C4  ), CYP3( C17 ), CYP4( X17 ), CYP5( C4  ), CYP6( X0  ), CYP7( C4  ), CYP8( C17 ), CYP9( Y17 ), CYP10( C4  ), CYP11( FL  ), CYP12( C4  ), CYP13( X0  ), CYP14( C4  ), CYP15( Y0  ) );
+		pin_group->CA1   = pin( CA1   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( C5  ), CYP3( C18 ), CYP4( X18 ), CYP5( C5  ), CYP6( X1  ), CYP7( C5  ), CYP8( C18 ), CYP9( Y18 ), CYP10( C5  ), CYP11( Y3  ), CYP12( C5  ), CYP13( X1  ), CYP14( C5  ), CYP15( Y1  ) );
+		pin_group->CA2   = pin( CA2   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X12 ), CYP3( C19 ), CYP4( X19 ), CYP5( X6  ), CYP6( X2  ), CYP7( C6  ), CYP8( C19 ), CYP9( Y19 ), CYP10( C6  ), CYP11( Y4  ), CYP12( C6  ), CYP13( X2  ), CYP14( C6  ), CYP15( Y2  ) );
+		pin_group->CA3   = pin( CA3   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X13 ), CYP3( FL  ), CYP4( FL  ), CYP5( X7  ), CYP6( X3  ), CYP7( C7  ), CYP8( FL  ), CYP9( FL  ), CYP10( C7  ), CYP11( Y5  ), CYP12( C7  ), CYP13( X3  ), CYP14( C7  ), CYP15( Y3  ) );
+		pin_group->CA4   = pin( CA4   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X14 ), CYP3( X10 ), CYP4( X10 ), CYP5( X8  ), CYP6( X4  ), CYP7( C8  ), CYP8( Y9  ), CYP9( Y9  ), CYP10( C8  ), CYP11( Y6  ), CYP12( C8  ), CYP13( X4  ), CYP14( C8  ), CYP15( Y4  ) );
+		pin_group->CA5   = pin( CA5   , IN6,  NRZB, BCLK6, CCLK6, CYP1( FL  ), CYP2( X15 ), CYP3( X11 ), CYP4( X11 ), CYP5( X9  ), CYP6( X5  ), CYP7( C9  ), CYP8( C9  ), CYP9( C9  ), CYP10( Y8  ), CYP11( Y7  ), CYP12( Y7  ), CYP13( X5  ), CYP14( Y6  ), CYP15( Y5  ) );
+		pin_group->DQ0   = pin( DQ0   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D0 , SD0 ), CYP2( D0 , SD0 ), CYP3( D0 , SD0 ), CYP4( D0 , SD0 ), CYP5( D0 , SD0 ), CYP6( D0 , SD0 ), CYP7( D0 , SD0 ), CYP8( D0 , SD0 ), CYP9( D0 , SD0 ), CYP10( D0 , SD0 ), CYP11( D0 , SD0 ), CYP12( D0 , SD0 ), CYP13( D0 , SD0 ), CYP14( D0 , SD0 ), CYP15( D0 , SD0 ), CYP16( D0 , SD0 ) );
+		pin_group->DQ1   = pin( DQ1   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D1 , SD1 ), CYP2( D1 , SD1 ), CYP3( D1 , SD1 ), CYP4( D1 , SD1 ), CYP5( D1 , SD1 ), CYP6( D1 , SD1 ), CYP7( D1 , SD1 ), CYP8( D1 , SD1 ), CYP9( D1 , SD1 ), CYP10( D1 , SD1 ), CYP11( D1 , SD1 ), CYP12( D1 , SD1 ), CYP13( D1 , SD1 ), CYP14( D1 , SD1 ), CYP15( D1 , SD1 ), CYP16( D1 , SD1 ) );
+		pin_group->DQ2   = pin( DQ2   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D2 , SD2 ), CYP2( D2 , SD2 ), CYP3( D2 , SD2 ), CYP4( D2 , SD2 ), CYP5( D2 , SD2 ), CYP6( D2 , SD2 ), CYP7( D2 , SD2 ), CYP8( D2 , SD2 ), CYP9( D2 , SD2 ), CYP10( D2 , SD2 ), CYP11( D2 , SD2 ), CYP12( D2 , SD2 ), CYP13( D2 , SD2 ), CYP14( D2 , SD2 ), CYP15( D2 , SD2 ), CYP16( D2 , SD2 ) );
+		pin_group->DQ3   = pin( DQ3   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D3 , SD3 ), CYP2( D3 , SD3 ), CYP3( D3 , SD3 ), CYP4( D3 , SD3 ), CYP5( D3 , SD3 ), CYP6( D3 , SD3 ), CYP7( D3 , SD3 ), CYP8( D3 , SD3 ), CYP9( D3 , SD3 ), CYP10( D3 , SD3 ), CYP11( D3 , SD3 ), CYP12( D3 , SD3 ), CYP13( D3 , SD3 ), CYP14( D3 , SD3 ), CYP15( D3 , SD3 ), CYP16( D3 , SD3 ) );
+		pin_group->DQ4   = pin( DQ4   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D4 , SD4 ), CYP2( D4 , SD4 ), CYP3( D4 , SD4 ), CYP4( D4 , SD4 ), CYP5( D4 , SD4 ), CYP6( D4 , SD4 ), CYP7( D4 , SD4 ), CYP8( D4 , SD4 ), CYP9( D4 , SD4 ), CYP10( D4 , SD4 ), CYP11( D4 , SD4 ), CYP12( D4 , SD4 ), CYP13( D4 , SD4 ), CYP14( D4 , SD4 ), CYP15( D4 , SD4 ), CYP16( D4 , SD4 ) );
+		pin_group->DQ5   = pin( DQ5   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D5 , SD5 ), CYP2( D5 , SD5 ), CYP3( D5 , SD5 ), CYP4( D5 , SD5 ), CYP5( D5 , SD5 ), CYP6( D5 , SD5 ), CYP7( D5 , SD5 ), CYP8( D5 , SD5 ), CYP9( D5 , SD5 ), CYP10( D5 , SD5 ), CYP11( D5 , SD5 ), CYP12( D5 , SD5 ), CYP13( D5 , SD5 ), CYP14( D5 , SD5 ), CYP15( D5 , SD5 ), CYP16( D5 , SD5 ) );
+		pin_group->DQ6   = pin( DQ6   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D6 , SD6 ), CYP2( D6 , SD6 ), CYP3( D6 , SD6 ), CYP4( D6 , SD6 ), CYP5( D6 , SD6 ), CYP6( D6 , SD6 ), CYP7( D6 , SD6 ), CYP8( D6 , SD6 ), CYP9( D6 , SD6 ), CYP10( D6 , SD6 ), CYP11( D6 , SD6 ), CYP12( D6 , SD6 ), CYP13( D6 , SD6 ), CYP14( D6 , SD6 ), CYP15( D6 , SD6 ), CYP16( D6 , SD6 ) );
+		pin_group->DQ7   = pin( DQ7   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1, PPAT, OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D7 , SD7 ), CYP2( D7 , SD7 ), CYP3( D7 , SD7 ), CYP4( D7 , SD7 ), CYP5( D7 , SD7 ), CYP6( D7 , SD7 ), CYP7( D7 , SD7 ), CYP8( D7 , SD7 ), CYP9( D7 , SD7 ), CYP10( D7 , SD7 ), CYP11( D7 , SD7 ), CYP12( D7 , SD7 ), CYP13( D7 , SD7 ), CYP14( D7 , SD7 ), CYP15( D7 , SD7 ), CYP16( D7 , SD7 ) );
+		pin_group->DMI   = pin( DMI   , IN7,  DNRZ, BCLK7, CCLK7, IOC, DRE1, DRENRZ, DRECLK1,       OUTL1, VT1, STRB(1,1), EXPA(1), STRB(2,1), EXPB(2), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( D16,SD16 ), CYP2( D16,SD16 ), CYP3( D16,SD16 ), CYP4( D16,SD16 ), CYP5( D16,SD16 ), CYP6( D16,SD16 ), CYP7( D16,SD16 ), CYP8( D16,SD16 ), CYP9( D16,SD16 ), CYP10( D16,SD16 ), CYP11( D16,SD16 ), CYP12( D16,SD16 ), CYP13( D16,SD16 ), CYP14( D16,SD16 ), CYP15( D16,SD16 ), CYP16( D16,SD16 ) );
+		pin_group->DQS_t = pin( DQS_t , IN7,  DNRZ, BCLK8, CCLK8, IOC, DRE2, DRENRZ, DRECLK2,       OUTL2, VT2, STRB(3,2), EXPA(3), STRB(4,2), EXPB(4), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1( C22, FL  ), CYP2( C22, FL  ), CYP3( C22, FL  ), CYP4( C22, FL  ), CYP5( C22, FL  ), CYP6( C22, FL  ), CYP7( C22, FL  ), CYP8( C22, FL  ), CYP9( C22, FL  ), CYP10( C22, FL  ), CYP11( C22, FL  ), CYP12( C22, FL  ), CYP13( C22, FL  ), CYP14( C22, FL  ), CYP15( C22, FL  ), CYP16( C22, FL  ) );
+		pin_group->DQS_c = pin( DQS_c , IN7,  DNRZ, BCLK8, CCLK8, IOC, DRE2, DRENRZ, DRECLK2,       OUTL2, VT2, STRB(3,2), EXPA(3), STRB(4,2), EXPB(4), DRCYCDLY(WL), EXPCYCDLY(RL), CYP1(iC22, FH  ), CYP2(iC22, FH  ), CYP3(iC22, FH  ), CYP4(iC22, FH  ), CYP5(iC22, FH  ), CYP6(iC22, FH  ), CYP7(iC22, FH  ), CYP8(iC22, FH  ), CYP9(iC22, FH  ), CYP10(iC22, FH  ), CYP11(iC22, FH  ), CYP12(iC22, FH  ), CYP13(iC22, FH  ), CYP14(iC22, FH  ), CYP15(iC22, FH  ), CYP16(iC22, FH  ) );
+	}else {
+		if (  (pin_group->WL != test->WL) || (pin_group->RL != test->RL ) ) {
+			pin_change ( pin_group->DQ0   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ1   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ2   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ3   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ4   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ5   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ6   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQ7   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DMI   , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQS_t , DRCYCDLY(WL), EXPCYCDLY(RL));
+			pin_change ( pin_group->DQS_c , DRCYCDLY(WL), EXPCYCDLY(RL));
+		}
+	}
+	pin_group->WL  = test->WL+4;
+	pin_group->RL  = test->RL+3; 
+	PinSend( pin_group);
+
+}

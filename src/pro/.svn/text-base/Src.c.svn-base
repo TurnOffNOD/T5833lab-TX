@@ -1,0 +1,47 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include "src.h"
+
+void	SrcFunc( Test_t *test) {
+	static	Src_t	*src	= NULL;
+	if ( src == NULL) {
+		src	= (Src_t *)malloc( sizeof(Src_t));
+		src->handle	= UTL_GetDqsSourceSyncHandle();
+		UTL_SetDqsSourceSyncReadCycle		( src->handle, UT_SIG_C(26));
+		UTL_SetDqsSourceSyncEnableCycle		( src->handle, UT_SIG_C(24));
+		UTL_SetDqsSourceSyncEnableCycleNega	( src->handle, UT_SIG_C(25));
+		UTL_SetDqsSourceSyncFirstEdge		( src->handle, UT_ON , UT_ON );
+		UTL_SetDqsSourceSyncFirstEdgeNega	( src->handle, UT_OFF, UT_ON );
+//		UTL_SetDqsSourceSyncReadEnable		( src->handle, UT_ON);    // not support for T5833
+
+		UTL_SetDqsSourceSyncDqsPin		( src->handle,"DQS0_t_A");
+		UTL_SetDqsSourceSyncDqsPinNega		( src->handle,"DQS0_c_A");
+		UTL_SetDqsSourceSyncDqPin		( src->handle,"Byte0");
+		UTL_SendDqsSourceSync			( src->handle);
+
+		UTL_SetDqsSourceSyncDqsPin		( src->handle,"DQS1_t_A");
+		UTL_SetDqsSourceSyncDqsPinNega		( src->handle,"DQS1_c_A");
+		UTL_SetDqsSourceSyncDqPin		( src->handle,"Byte1");
+		UTL_SendDqsSourceSync			( src->handle);
+
+		UTL_SetDqsSourceSyncDqsPin		( src->handle,"DQS0_t_B");
+		UTL_SetDqsSourceSyncDqsPinNega		( src->handle,"DQS0_c_B");
+		UTL_SetDqsSourceSyncDqPin		( src->handle,"Byte2");
+		UTL_SendDqsSourceSync			( src->handle);
+
+		UTL_SetDqsSourceSyncDqsPin		( src->handle,"DQS1_t_B");
+		UTL_SetDqsSourceSyncDqsPinNega		( src->handle,"DQS1_c_B");
+		UTL_SetDqsSourceSyncDqPin		( src->handle,"Byte3");
+	}
+	if ( src->offset != test->tCK*0.250 ) UTL_SetDqsSourceSyncDqsPhaseAdjust	( src->handle, test->tCK*0.250);
+	src->offset = test->tCK*0.250;
+	UTL_SendDqsSourceSync			( src->handle);
+}

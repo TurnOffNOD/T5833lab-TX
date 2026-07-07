@@ -1,0 +1,51 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatOutVref<4WAY>
+	MODE MUX TP2INV REFRESHB
+	RDX	10
+	REGISTER
+		DRE1	= W             ; 
+		DRE2	= C20           ; 
+		CPE1	= R             ; 
+		CPE2	= C21           ; 
+		D4B	= #0010         ; #10 Y ADDRESS INC  
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK  ,X   ,XC<XC+1 ,CMD  ,BANK  ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,            ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,      ,    ,        ,     ,      ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   1. Before entering 'PPR' mode, All banks must be Precharged
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<13   ,     ,       ,    ,YT<#04  ,    ,     , ,       ,   ,   ,    ,     ,SCROFF       ;   2. Enable PPR using MR4 bit "OP4=1" and wait tMRD
+		NOP                                :    ,CYP12,    ,     ,CS0,CS1,MRW11 ,       ,XT  ,        ,     ,       ,YT  ,        ,    ,     , ,       ,   ,   ,    ,     ,SCROFF       ; 0 tMRD = 14ns
+		                                   :    ,CYP13,    ,     ,   ,   ,MRW12 ,       ,XT  ,        ,     ,       ,YT  ,        ,    ,     , ,       ,   ,   ,    ,     ,SCROFF       ; 1 nMRD = 14ns/0.468ns = 30 nCK/4=8
+		                                   :    ,CYP14,    ,     ,CS0,CS1,MRW21 ,       ,XT  ,        ,     ,       ,YT  ,        ,    ,     , ,       ,   ,   ,    ,     ,SCROFF       ; 2
+		                                   :    ,CYP15,    ,     ,   ,   ,MRW22 ,       ,XT  ,        ,     ,       ,YT  ,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 3
+		IDXI7 8                            :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 4
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 5
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 6
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 7
+VRO:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   1. Before entering 'PPR' mode, All banks must be Precharged
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,	      ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,SCROFF       ;   2. Enable PPR using MR4 bit "OP4=1" and wait tMRD
+		JMP VRO                                 ,     ,    ,     ,   ,   ,      ,      ,    ,        ,     ,      ,    ,        ,    ,     , ,       ,   ,   ,    ,ODTCA,             ;
+		STPS
+	INSERT patPowerUp
+	INSERT patRefresh
+END

@@ -1,0 +1,643 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef		___pin_H
+#define		___pin_H
+#ifdef		__cplusplus
+extern "C" {
+#endif	//	__cplusplus
+
+#include <test.h>
+#include "Pin.h"
+	typedef struct	pin {
+		PinHandle	handle;
+		const char	*name ;
+	} pin_t;
+#define pin(n,...)                   ({pin_t *p = (pin_t *)malloc(sizeof(pin_t)); p->handle = UTL_GetPinHandle(); p->name=#n; __VA_ARGS__; p;})
+#define pin_change(P,...)            ({pin_t *p = P; __VA_ARGS__;})
+#define IN(n)                        UTL_SetPinViNumber          ( p->handle, n                  )
+#define IN1                          IN( 1) 
+#define IN2                          IN( 2) 
+#define IN3                          IN( 3) 
+#define IN4                          IN( 4) 
+#define IN5                          IN( 5) 
+#define IN6                          IN( 6) 
+#define IN7                          IN( 7) 
+#define IN8                          IN( 8) 
+#define IN9                          IN( 9) 
+#define IN10                         IN(10) 
+#define IN11                         IN(11) 
+#define IN12                         IN(12) 
+#define IN13                         IN(13) 
+#define IN14                         IN(14) 
+#define IN15                         IN(15) 
+#define IN16                         IN(16) 
+#define INH(n)                       UTL_SetPinViNumber          ( p->handle, n                  ), UTL_SetPinHvDr               ( p->handle, UT_ON              )
+#define INH1                         INH( 1) 
+#define INH2                         INH( 2) 
+#define INH3                         INH( 3) 
+#define INH4                         INH( 4) 
+#define INH5                         INH( 5) 
+#define INH6                         INH( 6) 
+#define INH7                         INH( 7) 
+#define INH8                         INH( 8) 
+#define INH9                         INH( 9) 
+#define INH10                        INH(10) 
+#define INH11                        INH(11) 
+#define INH12                        INH(12) 
+#define INH13                        INH(13) 
+#define INH14                        INH(14) 
+#define INH15                        INH(15) 
+#define INH16                        INH(16) 
+#define FIXL                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_FIXL        )
+#define FIXH                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_FIXH        )
+#define NRZA                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_NRZA        )
+#define iNRZA                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_INRZA       )
+#define NRZB                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_NRZB        )
+#define iNRZB                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_INRZB       )
+#define NRZC                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_NRZC        )
+#define iNRZC                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_INRZC       )
+#define NRZBC                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_NRZBC       )
+#define iNRZBC                       UTL_SetPinDrWaveform        ( p->handle, UT_WAV_INRZBC      )
+#define RZO                          UTL_SetPinDrWaveform        ( p->handle, UT_WAV_RZO         )
+#define iRZO                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IRZO        )
+#define RZZ                          UTL_SetPinDrWaveform        ( p->handle, UT_WAV_RZZ         )
+#define iRZZ                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IRZZ        )
+#define RZX                          UTL_SetPinDrWaveform        ( p->handle, UT_WAV_RZX         )
+#define iRZX                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IRZX        )
+#define XOR                          UTL_SetPinDrWaveform        ( p->handle, UT_WAV_XOR         )
+#define iXOR                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IXOR        )
+#define XORABC                       UTL_SetPinDrWaveform        ( p->handle, UT_WAV_XORABC      )
+#define iXORABC                      UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IXORABC     )
+#define XORBC                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_XORBC       )
+#define iXORBC                       UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IXORBC      )
+#define XOR_A                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_XOR_A       )
+#define iXOR_A                       UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IXOR_A      )
+#define DNRZ                         UTL_SetPinDrWaveform        ( p->handle, UT_WAV_DNRZ        )
+#define iDNRZ                        UTL_SetPinDrWaveform        ( p->handle, UT_WAV_IDNRZ       )
+#define OPEN                         UTL_InitializePinHandle     ( p->handle                     )
+#define BCLK(n)                      UTL_SetPinDrClock           ( p->handle, UT_PIN_BCLK, n     )
+#define BCLK1                        BCLK( 1)
+#define BCLK2                        BCLK( 2)
+#define BCLK3                        BCLK( 3)
+#define BCLK4                        BCLK( 4)
+#define BCLK5                        BCLK( 5)
+#define BCLK6                        BCLK( 6)
+#define BCLK7                        BCLK( 7)
+#define BCLK8                        BCLK( 8)
+#define BCLK9                        BCLK( 9)
+#define BCLK10                       BCLK(10)
+#define BCLK11                       BCLK(11)
+#define BCLK12                       BCLK(12)
+#define BCLK13                       BCLK(13)
+#define BCLK14                       BCLK(14)
+#define BCLK15                       BCLK(15)
+#define BCLK16                       BCLK(16)
+#define CCLK(n)                      UTL_SetPinDrClock           ( p->handle, UT_PIN_CCLK, n     )
+#define CCLK1                        CCLK( 1) 
+#define CCLK2                        CCLK( 2) 
+#define CCLK3                        CCLK( 3) 
+#define CCLK4                        CCLK( 4) 
+#define CCLK5                        CCLK( 5) 
+#define CCLK6                        CCLK( 6) 
+#define CCLK7                        CCLK( 7) 
+#define CCLK8                        CCLK( 8) 
+#define CCLK9                        CCLK( 9) 
+#define CCLK10                       CCLK(10) 
+#define CCLK11                       CCLK(11) 
+#define CCLK12                       CCLK(12) 
+#define CCLK13                       CCLK(13) 
+#define CCLK14                       CCLK(14) 
+#define CCLK15                       CCLK(15) 
+#define CCLK16                       CCLK(16) 
+#define	PSM                          UTL_SetPinPsm               ( p->handle, UT_ON              )
+#define AINV                         UTL_SetPinAinv              ( p->handle, UT_ON              )
+#define IOC                          UTL_SetPinIoCtrl            ( p->handle, UT_ON              )
+#define DRE(n)                       UTL_SetPinDreNumber         ( p->handle, n                  )
+#define DRE1                         (DRE( 1)) 
+#define DRE2                         (DRE( 2)) 
+#define DRE3                         (DRE( 3)) 
+#define DRE4                         (DRE( 4)) 
+#define DRENRZ                       UTL_SetPinDreWaveform       ( p->handle, UT_DREWAV_NRZ      )
+#define DRECLK(n)                    UTL_SetPinDreClock          ( p->handle, n                  )
+#define DRECLK1                      (DRECLK( 1)) 
+#define DRECLK2                      (DRECLK( 2)) 
+#define DRECLK3                      (DRECLK( 3)) 
+#define DRECLK4                      (DRECLK( 4)) 
+#define DRECLK5                      (DRECLK( 5)) 
+#define DRECLK6                      (DRECLK( 6)) 
+#define DRECLK7                      (DRECLK( 7)) 
+#define DRECLK8                      (DRECLK( 8)) 
+#define DRECLK9                      (DRECLK( 9)) 
+#define DRECLK10                     (DRECLK(10)) 
+#define DRECLK11                     (DRECLK(11)) 
+#define DRECLK12                     (DRECLK(12)) 
+#define DRECLK13                     (DRECLK(13)) 
+#define DRECLK14                     (DRECLK(14)) 
+#define DRECLK15                     (DRECLK(15)) 
+#define DRECLK16                     (DRECLK(16)) 
+#define OUTL(n)                      UTL_SetPinVoNumber          ( p->handle, n                  ), \
+	UTL_SetPinTerm              ( p->handle, UT_ON              )
+#define OUTL1                        (OUTL( 1)) 
+#define OUTL2                        (OUTL( 2)) 
+#define OUTL3                        (OUTL( 3)) 
+#define OUTL4                        (OUTL( 4)) 
+#define OUTL5                        (OUTL( 5)) 
+#define OUTL6                        (OUTL( 6)) 
+#define OUTL7                        (OUTL( 7)) 
+#define OUTL8                        (OUTL( 8)) 
+#define OUTL9                        (OUTL( 9)) 
+#define OUTL10                       (OUTL(10)) 
+#define OUTL11                       (OUTL(11)) 
+#define OUTL12                       (OUTL(12)) 
+#define OUTL13                       (OUTL(13)) 
+#define OUTL14                       (OUTL(14)) 
+#define OUTL15                       (OUTL(15)) 
+#define OUTL16                       (OUTL(16)) 
+#define VT(n)                        UTL_SetPinVtNumber          ( p->handle, n                  )
+#define VT1                          (VT( 1)) 
+#define VT2                          (VT( 2)) 
+#define VT3                          (VT( 3)) 
+#define VT4                          (VT( 4)) 
+#define VT5                          (VT( 5)) 
+#define VT6                          (VT( 6)) 
+#define VT7                          (VT( 7)) 
+#define VT8                          (VT( 8)) 
+#define VT9                          (VT( 9)) 
+#define VT10                         (VT(10)) 
+#define VT11                         (VT(11)) 
+#define VT12                         (VT(12)) 
+#define VT13                         (VT(13)) 
+#define VT14                         (VT(14)) 
+#define VT15                         (VT(15)) 
+#define VT16                         (VT(16)) 
+#define STRB(s,c)                    UTL_AddPinStrbCpeNumber     ( p->handle, s, c               )
+#define EXPA(s)                      UTL_AddPinStrbChannel       ( p->handle, s, 1               ), \
+	UTL_AddPinExpStrbNumber     ( p->handle, s, UT_PIN_EXP_A    )
+#define EXPB(s)                      UTL_AddPinStrbChannel       ( p->handle, s, 2               ), \
+	UTL_AddPinExpStrbNumber     ( p->handle, s, UT_PIN_EXP_B    )
+#define DRCYCDLY(n)                  UTL_SetPinModeDrDelay       ( p->handle, UT_DELAY_CYCLE, n  )
+#define EXPCYCDLY(n)                 UTL_SetPinModeExpDelay      ( p->handle, UT_DELAY_CYCLE, n  )
+#define DC                           UTL_SetPinDcConnect         ( p->handle, UT_ON              )
+
+#define	PPAT			     UTL_SetPinDbmPinPattern     ( p->handle, UT_ON              )
+#define	PDRE                         UTL_SetPinDbmDrePattern     ( p->handle, UT_ON              )
+#define	PCPE(n)                      UTL_AddPinStrbCpeMode       ( p->handle, n, UT_PIN_PCPE     )
+#define	iPCPE(n)                     UTL_AddPinStrbCpeMode       ( p->handle, n, UT_PIN_CPE      )
+
+#define CYP_1(n,a)                   (UTL_AddPinPdsA( p->handle, a, n))
+#define CYP1_1(a)                    (CYP_1( 1,a))
+#define CYP2_1(a)                    (CYP_1( 2,a))
+#define CYP3_1(a)                    (CYP_1( 3,a))
+#define CYP4_1(a)                    (CYP_1( 4,a))
+#define CYP5_1(a)                    (CYP_1( 5,a))
+#define CYP6_1(a)                    (CYP_1( 6,a))
+#define CYP7_1(a)                    (CYP_1( 7,a))
+#define CYP8_1(a)                    (CYP_1( 8,a))
+#define CYP9_1(a)                    (CYP_1( 9,a))
+#define CYP10_1(a)                   (CYP_1(10,a))
+#define CYP11_1(a)                   (CYP_1(11,a))
+#define CYP12_1(a)                   (CYP_1(12,a))
+#define CYP13_1(a)                   (CYP_1(13,a))
+#define CYP14_1(a)                   (CYP_1(14,a))
+#define CYP15_1(a)                   (CYP_1(15,a))
+#define CYP16_1(a)                   (CYP_1(16,a))
+#define CYP17_1(a)                   (CYP_1(17,a))
+#define CYP18_1(a)                   (CYP_1(18,a))
+#define CYP19_1(a)                   (CYP_1(19,a))
+#define CYP20_1(a)                   (CYP_1(20,a))
+#define CYP21_1(a)                   (CYP_1(21,a))
+#define CYP22_1(a)                   (CYP_1(22,a))
+#define CYP23_1(a)                   (CYP_1(23,a))
+#define CYP24_1(a)                   (CYP_1(24,a))
+#define CYP_2(n,a,b)                 (UTL_AddPinPdsA( p->handle, a, n),  UTL_AddPinPdsB( p->handle, b, n) )
+#define CYP1_2(a,b)                  (CYP_2( 1,a,b))
+#define CYP2_2(a,b)                  (CYP_2( 2,a,b))
+#define CYP3_2(a,b)                  (CYP_2( 3,a,b))
+#define CYP4_2(a,b)                  (CYP_2( 4,a,b))
+#define CYP5_2(a,b)                  (CYP_2( 5,a,b))
+#define CYP6_2(a,b)                  (CYP_2( 6,a,b))
+#define CYP7_2(a,b)                  (CYP_2( 7,a,b))
+#define CYP8_2(a,b)                  (CYP_2( 8,a,b))
+#define CYP9_2(a,b)                  (CYP_2( 9,a,b))
+#define CYP10_2(a,b)                 (CYP_2(10,a,b))
+#define CYP11_2(a,b)                 (CYP_2(11,a,b))
+#define CYP12_2(a,b)                 (CYP_2(12,a,b))
+#define CYP13_2(a,b)                 (CYP_2(13,a,b))
+#define CYP14_2(a,b)                 (CYP_2(14,a,b))
+#define CYP15_2(a,b)                 (CYP_2(15,a,b))
+#define CYP16_2(a,b)                 (CYP_2(16,a,b))
+#define CYP17_2(a,b)                 (CYP_2(17,a,b))
+#define CYP18_2(a,b)                 (CYP_2(18,a,b))
+#define CYP19_2(a,b)                 (CYP_2(19,a,b))
+#define CYP20_2(a,b)                 (CYP_2(20,a,b))
+#define CYP21_2(a,b)                 (CYP_2(21,a,b))
+#define CYP22_2(a,b)                 (CYP_2(22,a,b))
+#define CYP23_2(a,b)                 (CYP_2(23,a,b))
+#define CYP24_2(a,b)                 (CYP_2(24,a,b))
+#define CAT( A, B )                  A ## B
+#define SELECT( NAME, NUM )          CAT( NAME ## _, NUM )
+#define GET_COUNT( _1, _2, _3, _4, _5, _6, COUNT, ... ) COUNT
+#define VA_SIZE( ... )               GET_COUNT( __VA_ARGS__, 6, 5, 4, 3, 2, 1 )
+#define VA_SELECT( NAME, ... )       SELECT( NAME, VA_SIZE(__VA_ARGS__) )(__VA_ARGS__)
+#define CYP1(...)                    VA_SELECT( CYP1 , __VA_ARGS__)
+#define CYP2(...)                    VA_SELECT( CYP2 , __VA_ARGS__)
+#define CYP3(...)                    VA_SELECT( CYP3 , __VA_ARGS__)
+#define CYP4(...)                    VA_SELECT( CYP4 , __VA_ARGS__)
+#define CYP5(...)                    VA_SELECT( CYP5 , __VA_ARGS__)
+#define CYP6(...)                    VA_SELECT( CYP6 , __VA_ARGS__)
+#define CYP7(...)                    VA_SELECT( CYP7 , __VA_ARGS__)
+#define CYP8(...)                    VA_SELECT( CYP8 , __VA_ARGS__)
+#define CYP9(...)                    VA_SELECT( CYP9 , __VA_ARGS__)
+#define CYP10(...)                   VA_SELECT( CYP10, __VA_ARGS__)
+#define CYP11(...)                   VA_SELECT( CYP11, __VA_ARGS__)
+#define CYP12(...)                   VA_SELECT( CYP12, __VA_ARGS__)
+#define CYP13(...)                   VA_SELECT( CYP13, __VA_ARGS__)
+#define CYP14(...)                   VA_SELECT( CYP14, __VA_ARGS__)
+#define CYP15(...)                   VA_SELECT( CYP15, __VA_ARGS__)
+#define CYP16(...)                   VA_SELECT( CYP16, __VA_ARGS__)
+#define CYP17(...)                   VA_SELECT( CYP17, __VA_ARGS__)
+#define CYP18(...)                   VA_SELECT( CYP18, __VA_ARGS__)
+#define CYP19(...)                   VA_SELECT( CYP19, __VA_ARGS__)
+#define CYP20(...)                   VA_SELECT( CYP20, __VA_ARGS__)
+#define CYP21(...)                   VA_SELECT( CYP21, __VA_ARGS__)
+#define CYP22(...)                   VA_SELECT( CYP22, __VA_ARGS__)
+#define CYP23(...)                   VA_SELECT( CYP23, __VA_ARGS__)
+#define CYP24(...)                   VA_SELECT( CYP24, __VA_ARGS__)
+#define  ABI                         (UT_SIG_ABI ) 
+#define  FH                          (UT_SIG_FH  ) 
+#define  FL                          (UT_SIG_FL  ) 
+#define  C(n)                        (UT_SIG_C(n)) 
+#define  C0                          (C( 0)) 
+#define  C1                          (C( 1)) 
+#define  C2                          (C( 2)) 
+#define  C3                          (C( 3)) 
+#define  C4                          (C( 4)) 
+#define  C5                          (C( 5)) 
+#define  C6                          (C( 6)) 
+#define  C7                          (C( 7)) 
+#define  C8                          (C( 8)) 
+#define  C9                          (C( 9)) 
+#define  C10                         (C(10)) 
+#define  C11                         (C(11)) 
+#define  C12                         (C(12)) 
+#define  C13                         (C(13)) 
+#define  C14                         (C(14)) 
+#define  C15                         (C(15)) 
+#define  C16                         (C(16)) 
+#define  C17                         (C(17)) 
+#define  C18                         (C(18)) 
+#define  C19                         (C(19)) 
+#define  C20                         (C(20)) 
+#define  C21                         (C(21)) 
+#define  C22                         (C(22)) 
+#define  C23                         (C(23)) 
+#define  C24                         (C(24)) 
+#define  C25                         (C(25)) 
+#define  C26                         (C(26)) 
+#define  C27                         (C(27)) 
+#define  C28                         (C(28)) 
+#define  C29                         (C(29)) 
+#define  C30                         (C(30)) 
+#define  C31                         (C(31)) 
+#define iC(n)                        (UT_SIG_I_C(n) ) 
+#define iC0                          (iC( 0)) 
+#define iC1                          (iC( 1)) 
+#define iC2                          (iC( 2)) 
+#define iC3                          (iC( 3)) 
+#define iC4                          (iC( 4)) 
+#define iC5                          (iC( 5)) 
+#define iC6                          (iC( 6)) 
+#define iC7                          (iC( 7)) 
+#define iC8                          (iC( 8)) 
+#define iC9                          (iC( 9)) 
+#define iC10                         (iC(10)) 
+#define iC11                         (iC(11)) 
+#define iC12                         (iC(12)) 
+#define iC13                         (iC(13)) 
+#define iC14                         (iC(14)) 
+#define iC15                         (iC(15)) 
+#define iC16                         (iC(16)) 
+#define iC17                         (iC(17)) 
+#define iC18                         (iC(18)) 
+#define iC19                         (iC(19)) 
+#define iC20                         (iC(20)) 
+#define iC21                         (iC(21)) 
+#define iC22                         (iC(22)) 
+#define iC23                         (iC(23)) 
+#define iC24                         (iC(24)) 
+#define iC25                         (iC(25)) 
+#define iC26                         (iC(26)) 
+#define iC27                         (iC(27)) 
+#define iC28                         (iC(28)) 
+#define iC29                         (iC(29)) 
+#define iC30                         (iC(30)) 
+#define iC31                         (iC(31)) 
+#define  X(n)                        (UT_SIG_X(n)   ) 
+#define  X0                          (X( 0)) 
+#define  X1                          (X( 1)) 
+#define  X2                          (X( 2)) 
+#define  X3                          (X( 3)) 
+#define  X4                          (X( 4)) 
+#define  X5                          (X( 5)) 
+#define  X6                          (X( 6)) 
+#define  X7                          (X( 7)) 
+#define  X8                          (X( 8)) 
+#define  X9                          (X( 9)) 
+#define  X10                         (X(10)) 
+#define  X11                         (X(11)) 
+#define  X12                         (X(12)) 
+#define  X13                         (X(13)) 
+#define  X14                         (X(14)) 
+#define  X15                         (X(15)) 
+#define  X16                         (X(16)) 
+#define  X17                         (X(17)) 
+#define  X18                         (X(18)) 
+#define  X19                         (X(19)) 
+#define  X20                         (X(20)) 
+#define  X21                         (X(21)) 
+#define  X22                         (X(22)) 
+#define  X23                         (X(23)) 
+#define  X24                         (X(24)) 
+#define  X25                         (X(25)) 
+#define  X26                         (X(26)) 
+#define  X27                         (X(27)) 
+#define  X28                         (X(28)) 
+#define  X29                         (X(29)) 
+#define  X30                         (X(30)) 
+#define  X31                         (X(31)) 
+#define iX(n)                        (UT_SIG_I_X(n) ) 
+#define  Y(n)                        (UT_SIG_Y(n)   ) 
+#define  Y0                          (Y( 0)) 
+#define  Y1                          (Y( 1)) 
+#define  Y2                          (Y( 2)) 
+#define  Y3                          (Y( 3)) 
+#define  Y4                          (Y( 4)) 
+#define  Y5                          (Y( 5)) 
+#define  Y6                          (Y( 6)) 
+#define  Y7                          (Y( 7)) 
+#define  Y8                          (Y( 8)) 
+#define  Y9                          (Y( 9)) 
+#define  Y10                         (Y(10)) 
+#define  Y11                         (Y(11)) 
+#define  Y12                         (Y(12)) 
+#define  Y13                         (Y(13)) 
+#define  Y14                         (Y(14)) 
+#define  Y15                         (Y(15)) 
+#define  Y16                         (Y(16)) 
+#define  Y17                         (Y(17)) 
+#define  Y18                         (Y(18)) 
+#define  Y19                         (Y(19)) 
+#define  Y20                         (Y(20)) 
+#define  Y21                         (Y(21)) 
+#define  Y22                         (Y(22)) 
+#define  Y23                         (Y(23)) 
+#define  Y24                         (Y(24)) 
+#define  Y25                         (Y(25)) 
+#define  Y26                         (Y(26)) 
+#define  Y27                         (Y(27)) 
+#define  Y28                         (Y(28)) 
+#define  Y29                         (Y(29)) 
+#define  Y30                         (Y(30)) 
+#define  Y31                         (Y(31)) 
+#define iY(n)                        (UT_SIG_I_Y(n) ) 
+#define  D(n)                        (UT_SIG_D(n)   ) 
+#define  D0                          (D( 0)) 
+#define  D1                          (D( 1)) 
+#define  D2                          (D( 2)) 
+#define  D3                          (D( 3)) 
+#define  D4                          (D( 4)) 
+#define  D5                          (D( 5)) 
+#define  D6                          (D( 6)) 
+#define  D7                          (D( 7)) 
+#define  D8                          (D( 8)) 
+#define  D9                          (D( 9)) 
+#define  D10                         (D(10)) 
+#define  D11                         (D(11)) 
+#define  D12                         (D(12)) 
+#define  D13                         (D(13)) 
+#define  D14                         (D(14)) 
+#define  D15                         (D(15)) 
+#define  D16                         (D(16)) 
+#define  D17                         (D(17)) 
+#define  D18                         (D(18)) 
+#define  D19                         (D(19)) 
+#define  D20                         (D(20)) 
+#define  D21                         (D(21)) 
+#define  D22                         (D(22)) 
+#define  D23                         (D(23)) 
+#define  D24                         (D(24)) 
+#define  D25                         (D(25)) 
+#define  D26                         (D(26)) 
+#define  D27                         (D(27)) 
+#define  D28                         (D(28)) 
+#define  D29                         (D(29)) 
+#define  D30                         (D(30)) 
+#define  D31                         (D(31)) 
+#define iD(n)                        (UT_SIG_I_D(n) ) 
+#define iD0                          (iD( 0)) 
+#define iD1                          (iD( 1)) 
+#define iD2                          (iD( 2)) 
+#define iD3                          (iD( 3)) 
+#define iD4                          (iD( 4)) 
+#define iD5                          (iD( 5)) 
+#define iD6                          (iD( 6)) 
+#define iD7                          (iD( 7)) 
+#define iD8                          (iD( 8)) 
+#define iD9                          (iD( 9)) 
+#define iD10                         (iD(10)) 
+#define iD11                         (iD(11)) 
+#define iD12                         (iD(12)) 
+#define iD13                         (iD(13)) 
+#define iD14                         (iD(14)) 
+#define iD15                         (iD(15)) 
+#define iD16                         (iD(16)) 
+#define iD17                         (iD(17)) 
+#define iD18                         (iD(18)) 
+#define iD19                         (iD(19)) 
+#define iD20                         (iD(20)) 
+#define iD21                         (iD(21)) 
+#define iD22                         (iD(22)) 
+#define iD23                         (iD(23)) 
+#define iD24                         (iD(24)) 
+#define iD25                         (iD(25)) 
+#define iD26                         (iD(26)) 
+#define iD27                         (iD(27)) 
+#define iD28                         (iD(28)) 
+#define iD29                         (iD(29)) 
+#define iD30                         (iD(30)) 
+#define iD31                         (iD(31)) 
+#define  SD(n)                       (UT_SIG_SD(n)  ) 
+#define  SD0                         (SD( 0)) 
+#define  SD1                         (SD( 1)) 
+#define  SD2                         (SD( 2)) 
+#define  SD3                         (SD( 3)) 
+#define  SD4                         (SD( 4)) 
+#define  SD5                         (SD( 5)) 
+#define  SD6                         (SD( 6)) 
+#define  SD7                         (SD( 7)) 
+#define  SD8                         (SD( 8)) 
+#define  SD9                         (SD( 9)) 
+#define  SD10                        (SD(10)) 
+#define  SD11                        (SD(11)) 
+#define  SD12                        (SD(12)) 
+#define  SD13                        (SD(13)) 
+#define  SD14                        (SD(14)) 
+#define  SD15                        (SD(15)) 
+#define  SD16                        (SD(16)) 
+#define  SD17                        (SD(17)) 
+#define  SD18                        (SD(18)) 
+#define  SD19                        (SD(19)) 
+#define  SD20                        (SD(20)) 
+#define  SD21                        (SD(21)) 
+#define  SD22                        (SD(22)) 
+#define  SD23                        (SD(23)) 
+#define  SD24                        (SD(24)) 
+#define  SD25                        (SD(25)) 
+#define  SD26                        (SD(26)) 
+#define  SD27                        (SD(27)) 
+#define  SD28                        (SD(28)) 
+#define  SD29                        (SD(29)) 
+#define  SD30                        (SD(30)) 
+#define  SD31                        (SD(31)) 
+#define iSD(n)                       (UT_SIG_I_SD(n)) 
+#define iSD0                         (iSD( 0)) 
+#define iSD1                         (iSD( 1)) 
+#define iSD2                         (iSD( 2)) 
+#define iSD3                         (iSD( 3)) 
+#define iSD4                         (iSD( 4)) 
+#define iSD5                         (iSD( 5)) 
+#define iSD6                         (iSD( 6)) 
+#define iSD7                         (iSD( 7)) 
+#define iSD8                         (iSD( 8)) 
+#define iSD9                         (iSD( 9)) 
+#define iSD10                        (iSD(10)) 
+#define iSD11                        (iSD(11)) 
+#define iSD12                        (iSD(12)) 
+#define iSD13                        (iSD(13)) 
+#define iSD14                        (iSD(14)) 
+#define iSD15                        (iSD(15)) 
+#define iSD16                        (iSD(16)) 
+#define iSD17                        (iSD(17)) 
+#define iSD18                        (iSD(18)) 
+#define iSD19                        (iSD(19)) 
+#define iSD20                        (iSD(20)) 
+#define iSD21                        (iSD(21)) 
+#define iSD22                        (iSD(22)) 
+#define iSD23                        (iSD(23)) 
+#define iSD24                        (iSD(24)) 
+#define iSD25                        (iSD(25)) 
+#define iSD26                        (iSD(26)) 
+#define iSD27                        (iSD(27)) 
+#define iSD28                        (iSD(28)) 
+#define iSD29                        (iSD(29)) 
+#define iSD30                        (iSD(30)) 
+#define iSD31                        (iSD(31)) 
+
+typedef	struct	Pin {
+	int	WL     ;
+	int	RL     ;
+	pin_t	*CK_t  ;
+	pin_t	*CK_c  ;
+	pin_t	*CA0   ;
+	pin_t	*CA1   ;
+	pin_t	*CA2   ;
+	pin_t	*CA3   ;
+	pin_t	*CA4   ;
+	pin_t	*CA5   ;
+//	pin_t	*CS0   ;
+//	pin_t	*CS1   ;
+//	pin_t	*CS2   ;
+	pin_t	*CS    ;
+//	pin_t	*CKE0  ;
+//	pin_t	*CKE1  ;
+//	pin_t	*CKE2  ;
+	pin_t	*CKE   ;
+	pin_t	*RST_n ;
+	pin_t	*ODTCA ;
+	pin_t	*DQ0   ;
+	pin_t	*DQ1   ;
+	pin_t	*DQ2   ;
+	pin_t	*DQ3   ;
+	pin_t	*DQ4   ;
+	pin_t	*DQ5   ;
+	pin_t	*DQ6   ;
+	pin_t	*DQ7   ;
+	pin_t	*DMI   ;
+	pin_t	*DQS_t ;
+	pin_t	*DQS_c ;
+} Pin_t;
+#define pinlist(a,...)   (UTL_CreatePinList((char *)a), UTL_SetPinType((char *)a,UT_PINTYPE_PIN),pinlist_(a,__VA_ARGS__,NULL))
+void	pinlist_( const char *name, ...) {
+        UTL_CreatePinList( (char *)name);
+        UTL_SetPinType   ( (char *)name, UT_PINTYPE_PIN);
+
+        va_list     va;
+        const char *list;
+        va_start(va, name);
+        while( (list = va_arg(va, const char *)) != NULL )
+                UTL_AppendPinList((char *)name, (char *)list);
+        va_end(va);
+}
+inline void     vsset ( char *name, int pin_number) {
+        UTL_CreatePinList( name); UTL_SetPinType   ( name, UT_PINTYPE_VS  ); UTL_AddPinNumber ( name, pin_number     );
+}
+inline void     pinset( char *name, int pin_number) {
+        UTL_CreatePinList( name); UTL_SetPinType   ( name, UT_PINTYPE_PIN ); UTL_AddPinNumber ( name, pin_number     );
+}
+inline void	pinSend( pin_t *pin) { UTL_SendPin( pin->handle, (char *)pin->name); }
+inline void     PinSend( Pin_t *pin_group) {
+	UTL_SendPin( pin_group->RST_n ->handle, RST_n    );
+	UTL_SendPin( pin_group->CK_t  ->handle, CK_t_A   ); UTL_SendPin( pin_group->CK_t  ->handle, CK_t_B   );
+	UTL_SendPin( pin_group->CK_c  ->handle, CK_c_A   ); UTL_SendPin( pin_group->CK_c  ->handle, CK_c_B   );
+//	UTL_SendPin( pin_group->CS0   ->handle, CS0_A    ); UTL_SendPin( pin_group->CS0   ->handle, CS0_B    );
+//	UTL_SendPin( pin_group->CS1   ->handle, CS1_A    ); UTL_SendPin( pin_group->CS1   ->handle, CS1_B    );
+//	UTL_SendPin( pin_group->CS2   ->handle, CS2_A    ); UTL_SendPin( pin_group->CS2   ->handle, CS2_B    );
+	UTL_SendPin( pin_group->CS    ->handle, CS0_A    ); UTL_SendPin( pin_group->CS    ->handle, CS0_B    );
+//	UTL_SendPin( pin_group->CKE0  ->handle, CKE0_A   ); UTL_SendPin( pin_group->CKE0  ->handle, CKE0_B   );
+//	UTL_SendPin( pin_group->CKE1  ->handle, CKE1_A   ); UTL_SendPin( pin_group->CKE1  ->handle, CKE1_B   );
+//	UTL_SendPin( pin_group->CKE2  ->handle, CKE2_A   ); UTL_SendPin( pin_group->CKE2  ->handle, CKE2_B   );
+	UTL_SendPin( pin_group->CKE   ->handle, CKE0_A   ); UTL_SendPin( pin_group->CKE   ->handle, CKE0_B   );
+	UTL_SendPin( pin_group->CA0   ->handle, CA0_A    ); UTL_SendPin( pin_group->CA0   ->handle, CA0_B    );
+	UTL_SendPin( pin_group->CA1   ->handle, CA1_A    ); UTL_SendPin( pin_group->CA1   ->handle, CA1_B    );
+	UTL_SendPin( pin_group->CA2   ->handle, CA2_A    ); UTL_SendPin( pin_group->CA2   ->handle, CA2_B    );
+	UTL_SendPin( pin_group->CA3   ->handle, CA3_A    ); UTL_SendPin( pin_group->CA3   ->handle, CA3_B    );
+	UTL_SendPin( pin_group->CA4   ->handle, CA4_A    ); UTL_SendPin( pin_group->CA4   ->handle, CA4_B    );
+	UTL_SendPin( pin_group->CA5   ->handle, CA5_A    ); UTL_SendPin( pin_group->CA5   ->handle, CA5_B    );
+	UTL_SendPin( pin_group->ODTCA ->handle, ODTCA_A  ); UTL_SendPin( pin_group->ODTCA ->handle, ODTCA_B  );
+	UTL_SendPin( pin_group->DQS_t ->handle, DQS0_t_A ); UTL_SendPin( pin_group->DQS_t ->handle, DQS0_t_B );
+	UTL_SendPin( pin_group->DQS_c ->handle, DQS0_c_A ); UTL_SendPin( pin_group->DQS_c ->handle, DQS0_c_B );
+	UTL_SendPin( pin_group->DQ0   ->handle, DQ0_A    ); UTL_SendPin( pin_group->DQ0   ->handle, DQ0_B    );
+	UTL_SendPin( pin_group->DQ1   ->handle, DQ1_A    ); UTL_SendPin( pin_group->DQ1   ->handle, DQ1_B    );
+	UTL_SendPin( pin_group->DQ2   ->handle, DQ2_A    ); UTL_SendPin( pin_group->DQ2   ->handle, DQ2_B    );
+	UTL_SendPin( pin_group->DQ3   ->handle, DQ3_A    ); UTL_SendPin( pin_group->DQ3   ->handle, DQ3_B    );
+	UTL_SendPin( pin_group->DQ4   ->handle, DQ4_A    ); UTL_SendPin( pin_group->DQ4   ->handle, DQ4_B    );
+	UTL_SendPin( pin_group->DQ5   ->handle, DQ5_A    ); UTL_SendPin( pin_group->DQ5   ->handle, DQ5_B    );
+	UTL_SendPin( pin_group->DQ6   ->handle, DQ6_A    ); UTL_SendPin( pin_group->DQ6   ->handle, DQ6_B    );
+	UTL_SendPin( pin_group->DQ7   ->handle, DQ7_A    ); UTL_SendPin( pin_group->DQ7   ->handle, DQ7_B    );
+	UTL_SendPin( pin_group->DMI   ->handle, DMI0_A   ); UTL_SendPin( pin_group->DMI   ->handle, DMI0_B   );
+	UTL_SendPin( pin_group->DQS_t ->handle, DQS1_t_A ); UTL_SendPin( pin_group->DQS_t ->handle, DQS1_t_B );
+	UTL_SendPin( pin_group->DQS_c ->handle, DQS1_c_A ); UTL_SendPin( pin_group->DQS_c ->handle, DQS1_c_B );
+	UTL_SendPin( pin_group->DQ0   ->handle, DQ8_A    ); UTL_SendPin( pin_group->DQ0   ->handle, DQ8_B    );
+	UTL_SendPin( pin_group->DQ1   ->handle, DQ9_A    ); UTL_SendPin( pin_group->DQ1   ->handle, DQ9_B    );
+	UTL_SendPin( pin_group->DQ2   ->handle, DQ10_A   ); UTL_SendPin( pin_group->DQ2   ->handle, DQ10_B   );
+	UTL_SendPin( pin_group->DQ3   ->handle, DQ11_A   ); UTL_SendPin( pin_group->DQ3   ->handle, DQ11_B   );
+	UTL_SendPin( pin_group->DQ4   ->handle, DQ12_A   ); UTL_SendPin( pin_group->DQ4   ->handle, DQ12_B   );
+	UTL_SendPin( pin_group->DQ5   ->handle, DQ13_A   ); UTL_SendPin( pin_group->DQ5   ->handle, DQ13_B   );
+	UTL_SendPin( pin_group->DQ6   ->handle, DQ14_A   ); UTL_SendPin( pin_group->DQ6   ->handle, DQ14_B   );
+	UTL_SendPin( pin_group->DQ7   ->handle, DQ15_A   ); UTL_SendPin( pin_group->DQ7   ->handle, DQ15_B   );
+	UTL_SendPin( pin_group->DMI   ->handle, DMI1_A   ); UTL_SendPin( pin_group->DMI   ->handle, DMI1_B   );
+};
+
+
+#ifdef		__cplusplus
+};
+#endif	//	__cplusplus
+#endif	//	___pin_H
+

@@ -1,0 +1,44 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+;################################ Refresh                          ################################
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK  ,X   ,XC<XC+1 ,CMD  ,BANK  ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,            ;
+REF:		NOP                               I    ,     ,    ,     ,CS0,   ,REFA1 ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,REFA2 ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I       ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+%IFE	X
+		NOP                               I    ,     ,    ,     ,   ,CS1,REFA1 ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,REFA2 ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+%ENDC
+;;		JNI7 .                            I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ; tRFC = 180ns
+		IDXI8 288                         I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ; tRFC = 180ns
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ; nRFC = 180ns/2.5ns = 72 nCK
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ; nRFC = 180ns/625PS = 288 nCK 
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+;;		JNI7 .                            I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		NOP                               I    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;
+		RTN                                    ,     ,    ,     ,   ,   ,DES   ,      ,X<XC,        ,     ,      ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,            ;

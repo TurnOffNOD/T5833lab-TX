@@ -1,0 +1,417 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Fcm.h"
+#include "string.h"
+
+void	ResetFcm();
+void	ResetCfm();
+void	FcmConfig( int pin[], int pin_cnt, int x, int y, int scram, int delay, int speed, int burstCaptureLength);
+void	CfmConfig( int x, int y);
+void	Move_Fcm();
+void	ReadFcmFailCount( int dut, int bit);
+void 	Check();
+void	ReadFcm( int dut); 
+void	ReadFcm2( int dut); 
+
+
+
+//      ################################ Timing Condition ################################
+void    FcmConfig4 ( Test_t *test) {
+	
+//                3322222222221111111111 
+//                10987654321098765432109876543210
+	int x = 0b00000000000011100011111111111111;
+	int y = 0b00000000000000000000001111111111;
+	int scram = 0;
+	int delay = test->RL +3;
+	int speed = 2;
+	int burstCaptureLength = 8;
+	int pin[] = {33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112};
+	int pin_cnt = 32;
+
+	FcmConfig(  pin,  pin_cnt,  x,  y,  scram,  delay,  speed,  burstCaptureLength);
+
+
+}
+
+void    FcmConfig1 ( Test_t *test) {
+//                3322222222221111111111 
+//                10987654321098765432109876543210
+	int x = 0b00000000000011100011111111111111;
+	int y = 0b00000000000000000000001111111111;
+	int scram = 0;
+	int delay = test->RL +3;
+	int speed = 0;
+	int burstCaptureLength = 2;
+	int pin[] = {33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112};
+	int pin_cnt = 32;
+
+	FcmConfig(  pin,  pin_cnt,  x,  y,  scram,  delay,  speed,  burstCaptureLength);
+
+}
+
+
+
+void    FcmReadResult ( Test_t *test) {
+ 	Check();
+
+}
+
+// ####### AFM Setting ####################################################//
+void	ResetFcm()
+{
+	FcmAccessHandle FcmAccess_H = UTL_GetFcmAccessHandle();
+	UTL_SetFcmAccessAllDut			( FcmAccess_H, UT_ON	);
+	UTL_SetFcmAccessAllBit			( FcmAccess_H, UT_ON	);
+	UTL_SetFcmAccessPresetAllMemory		( FcmAccess_H, UT_ON	);
+	UTL_PresetFcm				( FcmAccess_H, 0	);
+	UTL_DeleteHandle			( FcmAccess_H		);
+
+}
+void	ResetCfm()
+{
+	CfmAccessHandle CfmAccess_H = UTL_GetCfmAccessHandle();
+	UTL_SetCfmAccessAllDut			( CfmAccess_H,	UT_ON	);
+	UTL_SetCfmAccessAllBit			( CfmAccess_H,	UT_ON	);
+	UTL_SetCfmAccessPresetAllMemory		( CfmAccess_H,	UT_ON	);
+	UTL_PresetCfm				( CfmAccess_H,	0	);
+	UTL_DeleteHandle			( CfmAccess_H		);
+
+}
+
+
+void	FcmConfig( int pin[], int pin_cnt, int x, int y, int scram, int delay, int speed, int burstCaptureLength)
+{
+//	long x,y,delay,scram,speed,pin_cnt;
+//	long pin[1024]; 
+	int i, steps;
+
+
+
+
+	steps = 0;
+	FcmConfigHandle FcmConfig_H			= UTL_GetFcmConfigHandle();
+	for(i=0; i<=31; i++){
+		if ((y & (1<<i)) != 0){
+			UTL_SetFcmConfigAddrAssign	(FcmConfig_H,	steps,		UT_SIG_Y(i)	);
+			steps++;
+		}
+	}
+	for(i=0; i<=31; i++){
+		if ((x & (1<<i)) !=0){
+			UTL_SetFcmConfigAddrAssign	(FcmConfig_H,	steps,		UT_SIG_X(i)	);
+			steps++;
+		}
+	}
+	for(i=0; i<pin_cnt; i++){
+		UTL_AddFcmConfigPinAssign		(FcmConfig_H,	i,		pin[i]		);
+	}
+
+	if (scram == 0) {
+		UTL_SetFcmConfigAddrScramByAlpg		(FcmConfig_H,	UT_MAIN,	UT_OFF		);  // unnecessary for T5832/33
+		UTL_SetFcmConfigAddrScram		(FcmConfig_H,	UT_OFF				);
+	}else if(scram == 1){
+		UTL_SetFcmConfigAddrScramByAlpg		(FcmConfig_H,	UT_MAIN,	UT_ON		);
+		UTL_SetFcmConfigAddrScram		(FcmConfig_H,	UT_ON				);
+	}else{
+		UTL_SetFcmConfigAddrScramByAlpg		(FcmConfig_H,	UT_MAIN,	UT_OFF		);
+		UTL_SetFcmConfigAddrScram		(FcmConfig_H,	UT_OFF				);
+	}
+
+
+	if (speed == 0){
+		UTL_SetFcmConfigRate			(FcmConfig_H,	UT_FCM_LS			);
+	}else if ( speed == 1){
+		UTL_SetFcmConfigRate			(FcmConfig_H,	UT_FCM_MS			);
+	}else{
+		UTL_SetFcmConfigRate			(FcmConfig_H,	UT_FCM_HS			);
+	}
+	
+//	UTL_SetFcmConfigDutBitSize			(FcmConfig_H,	pin_cnt				);		
+	UTL_SetFcmConfigDutBitSize			(FcmConfig_H,	40				);		
+//	UTL_SetFcmConfigBitSize				(FcmConfig_H,	pin_cnt				);		
+	UTL_SetFcmConfigBitSize				(FcmConfig_H,	32				);		
+	UTL_SetFcmConfigDdrMode				(FcmConfig_H,	UT_ON				);		
+	UTL_SetFcmConfigBurstCaptureLength		(FcmConfig_H,	burstCaptureLength	        );		
+	UTL_SetFcmConfigModeDelayByAlpg			(FcmConfig_H,	UT_MAIN,	UT_DELAY_CYCLE,	delay	);
+	UTL_SetFcmConfigPinAssignTarget			(FcmConfig_H,	UT_FCMCFM			);
+	UTL_AddFcmConfigAction				(FcmConfig_H,	1,	UT_FCM_TOTALFAIL	);
+//	UTL_AddFcmConfigAction				(FcmConfig_H,	2,	UT_FCM_MASK		);
+	UTL_SendFcmConfig				(FcmConfig_H					);
+	
+	UTL_DeleteHandle				(FcmConfig_H					);
+
+  
+}
+
+
+void	CfmConfig( int x, int y)
+{
+	int i, steps;
+
+	CfmConfigHandle CfmConfig_H = UTL_GetCfmConfigHandle();
+
+	steps = 0;
+	for(i=0; i<=31; i++){
+		if ((y & (1<<i)) != 0){
+			UTL_SetCfmConfigAddrAssign	(CfmConfig_H,	steps,		UT_SIG_X(i)	);
+			steps++;
+		}
+	}
+	for(i=0; i<=31; i++){
+		if ((x & (1<<i)) != 0){
+			UTL_SetCfmConfigAddrAssign	(CfmConfig_H,	steps,		UT_SIG_Y(i)	);
+			steps++;
+		}
+	}
+	if (steps >15){
+		fprintf (stdout, "Cfm Config bit > 15, Config error!");
+		fflush(stdout);
+		UTL_DeleteHandle(CfmConfig_H);
+	}
+
+	UTL_SendCfmConfig				(CfmConfig_H					);
+	UTL_DeleteHandle				(CfmConfig_H					);
+
+
+}
+
+
+
+void	Move_Fcm()
+{
+
+	FcmAccessHandle FcmAccess_H =	UTL_GetFcmAccessHandle();
+	UTL_ClearFcmAccessBit		(FcmAccess_H		);	
+	UTL_SetFcmAccessAllDut		(FcmAccess_H,	UT_ON	);
+	UTL_SetFcmAccessAllBit		(FcmAccess_H,	UT_ON	);      
+	UTL_RemoveFcm			(FcmAccess_H		);                     
+	UTL_DeleteHandle		(FcmAccess_H		);
+//	fprintf( stdout, "Move Fcm Done\n"); 
+}
+
+
+void	ReadFcmFailCount( int dut, int bit) 
+{
+	
+	fprintf(stdout,"Read FCM FailCount(%d,%d)\n",dut,bit);
+	int failcount;
+	FcmAccessHandle	fcm_access	= UTL_GetFcmAccessHandle();
+	UTL_SetFcmAccessAutoAddrAssignMode( fcm_access, UT_ON );
+	UTL_SetFcmAccessAllDut            ( fcm_access, UT_OFF);
+	UTL_SetFcmAccessAllBit            ( fcm_access, UT_OFF);
+	UTL_SetFcmAccessSearchMaxCnt	  ( fcm_access, 1024);
+	UTL_SetFcmAccessPfcMode		  (fcm_access, UT_FCM_PFCMODE_BYCOUNT);
+//	UTL_SetFcmAccessPfcMode		  (fcm_access, UT_FCM_PFCMODE_REALTIME);
+
+	UTL_ParallelFailCountFcm	  (fcm_access);
+
+	// fail count
+	UTL_SetFcmAccessDut		  (fcm_access, dut);
+	UTL_AddFcmAccessBit		  (fcm_access, bit);
+	failcount = UTL_GetFcmParallelFailCount(fcm_access);
+	fprintf(stdout,"DUT%d,DQ%d failcount = %d \n",dut,bit,failcount);
+	fflush(stdout);
+
+	// fail address
+	UTL_SearchFcmFailAddr			( fcm_access);
+	AddrCursor addr_cursor	= UTL_GetFcmFailAddr(bit);
+	int fail =0;
+	UT_ADDR addr;
+	while( (addr = UTL_NextAddr( addr_cursor)) != UT_NOMORE) 
+	fprintf(stdout,"DQ%d,%4d: (0x%08x,0x%08x)\n", bit,fail++, UTL_GetXAddr(addr), UTL_GetYAddr(addr));
+	fflush(stdout);
+
+	UTL_DeleteHandle(fcm_access);
+}
+
+
+void	ReadFcm( int dut) 
+{
+	int i;
+	int AA[32];
+ 	UT_ADDR		addr;
+	int			fail = 0;
+	AddrCursor	addr_cursor;
+	fprintf(stdout,"Read FCM(DUT%d)\n",dut);
+	FcmAccessHandle	fcm_access	= UTL_GetFcmAccessHandle();
+	UTL_SetFcmAccessAutoAddrAssignMode		( fcm_access, UT_ON );
+	UTL_SetFcmAccessAllDut				( fcm_access, UT_OFF);
+	UTL_SetFcmAccessAllBit				( fcm_access, UT_OFF);
+	UTL_SetFcmAccessXAddr				( fcm_access, 0x000, 0x1ffff); //X0-13 X17-19 17bit
+	UTL_SetFcmAccessYAddr				( fcm_access, 0x000, 0x3ff);   //Y0-9         10bit	
+	UTL_SetFcmAccessSearchMaxCnt			( fcm_access, 1024);
+	UTL_SetFcmAccessDut				( fcm_access, dut   );
+	
+	UTL_SetFcmAccessBitMode				( fcm_access,	UT_FCM_BITMODE_BLOCK);
+
+
+	// Bit Block 1
+	UTL_SetFcmAccessBitBlock			( fcm_access, 1		    );
+	UTL_ClearFcmAccessBit				( fcm_access);
+	for(i=0;i<16;i++) UTL_AddFcmAccessBit		( fcm_access, i);
+	UTL_CntFcmFailAddr				( fcm_access);
+
+	for (i=0;i<16;i++){
+		AA[i] = UTL_GetFcmFailAddrCnt(i);
+		fprintf(stdout,"###Fail Count###  DQ[%d]= %d\n",i,AA[i]);
+	}
+
+	UTL_SearchFcmFailAddr			( fcm_access);
+	for (i=0;i<16;i++){
+		addr_cursor	= UTL_GetFcmFailAddr(i);
+		fail =0;
+		while( (addr = UTL_NextAddr( addr_cursor)) != UT_NOMORE) 
+		fprintf(stdout,"DQ%d,%4d: (0x%08x,0x%08x)\n", i,fail++, UTL_GetXAddr(addr), UTL_GetYAddr(addr));
+		fflush(stdout);
+	}
+
+
+
+	// Bit Block 2
+	UTL_SetFcmAccessBitBlock			( fcm_access, 2);
+	UTL_ClearFcmAccessBit				( fcm_access);
+	for(i=0;i<16;i++) UTL_AddFcmAccessBit		( fcm_access, i+16);
+	UTL_CntFcmFailAddr				( fcm_access);
+
+	for (i=0;i<16;i++){
+		AA[i+16] = UTL_GetFcmFailAddrCnt(i+16);
+		fprintf(stdout,"###Fail Count###  DQ[%d]= %d\n",i+16,AA[i+16]);
+	}
+
+	UTL_SearchFcmFailAddr             ( fcm_access);
+	for (i=0;i<16;i++){
+		addr_cursor	= UTL_GetFcmFailAddr(i+16);
+		fail = 0;
+		while( (addr = UTL_NextAddr( addr_cursor)) != UT_NOMORE) 
+			fprintf(stdout,"DQ%d,%4d: (0x%08x,0x%08x)\n", i+16,fail++, UTL_GetXAddr(addr), UTL_GetYAddr(addr));
+		fflush(stdout);
+	}
+
+	UTL_DeleteCursor( addr_cursor);
+	UTL_DeleteHandle(fcm_access);
+}
+
+#define X_AFM 0x20000
+#define Y_AFM 0x400
+
+
+void	ReadFcm2( int dut) 
+{
+	int i;
+	int j=0;
+	int k=0;
+	uint32_t	afmdata[X_AFM][Y_AFM];
+	uint32_t	dqfail[32];
+	memset(afmdata,0,sizeof(afmdata));
+	memset(dqfail,0,sizeof(dqfail));	
+
+
+	fprintf(stdout,"Read FCM2(DUT%d)\n",dut);
+	FcmAccessHandle	fcm_access	= UTL_GetFcmAccessHandle();
+	UTL_SetFcmAccessAutoAddrAssignMode		( fcm_access, UT_ON );
+	UTL_SetFcmAccessAllDut				( fcm_access, UT_OFF);
+	UTL_SetFcmAccessAllBit				( fcm_access, UT_OFF);
+
+	UTL_SetFcmAccessXAddr				( fcm_access, 0x000, 0x1ffff); //X0-13 X17-19 17bit
+	UTL_SetFcmAccessYAddr				( fcm_access, 0x000, 0x3ff);   //Y0-9         10bit	
+	UTL_SetFcmAccessSearchMaxCnt			( fcm_access, 1024);
+	UTL_SetFcmAccessDut				( fcm_access, dut   );
+
+	UTL_SetFcmAccessApLink				( fcm_access, UT_FCM_APLINK_YXZ);
+	UTL_SetFcmAccessBitMode				( fcm_access, UT_FCM_BITMODE_BLOCK);
+
+
+	// Bit Block 1
+	UTL_SetFcmAccessBitBlock			( fcm_access, 1		    );
+	UTL_ReadFcm					( fcm_access, afmdata, sizeof(uint32_t)*sizeof(afmdata));
+	fprintf(stdout, "DQ0-15\n");
+	fflush(stdout);
+	for(i=0;i<32;i++){
+		for(j=0;j<1024;j++){
+			if(afmdata[i][j] !=0){
+				for(k=0;k<16;k++){
+					if((afmdata[i][j] & (1<<k)) !=0){
+						dqfail[k]++;
+						//fprintf(stdout,"DQ%d,%4d: (0x%08x,0x%08x)\n", k,dqfail[k]++, i,j);
+						//fflush(stdout);
+					}
+				}
+				fprintf(stdout,"X=0x%08x, Y=0x%08x, Data=0x%08x\n", i,j, afmdata[i][j]);
+				fflush(stdout);
+			}
+		}
+	}
+
+
+	memset(afmdata,0,sizeof(afmdata));
+	// Bit Block 2
+	UTL_SetFcmAccessBitBlock			( fcm_access, 2);
+	UTL_ReadFcm					( fcm_access, afmdata, sizeof(uint32_t)*sizeof(afmdata));
+	fprintf(stdout, "DQ16-31\n");
+	fflush(stdout);
+	for(i=0;i<32;i++){
+		for(j=0;j<1024;j++){
+			if(afmdata[i][j] !=0){
+				for(k=0;k<16;k++){
+					if((afmdata[i][j] & (1<<k)) !=0){
+						dqfail[k+16]++;	
+						//fprintf(stdout,"DQ%d,%4d: (0x%08x,0x%08x)\n", k+16,dqfail[k+16]++, i,j);
+						//fflush(stdout);
+					}
+				}
+				
+				fprintf(stdout,"X=0x%08x, Y=0x%08x, Data=0x%08x\n", i,j, afmdata[i][j]);
+				fflush(stdout);
+			}
+		}
+	}
+
+	for(k=0;k<32;k++)
+	{
+		fprintf(stdout, "DQ%d, fail count = %d\n",k,dqfail[k]);
+	}
+
+
+	UTL_DeleteHandle(fcm_access);
+}
+
+void 	Check()
+{
+	// solution 1
+	printf ( "======== solution 1 ========\n");
+	int i;
+	for (i=1;i<=3;i++)
+	{
+		ReadFcm(i);
+	}
+	// solution 2
+	printf ( "======== solution 2 ========\n");
+	int j;
+	for (j=0;j<=1 ;j++)
+	{
+		ReadFcmFailCount(1,j);
+	}
+	// solution 3
+	printf ( "======== solution 3 ========\n");
+	int k;
+	for (k=1;k<=3;k++)
+	{
+		ReadFcm2(k);
+	}
+
+
+
+//		ReadFcm(1);
+//		ReadFcm2(1);
+}

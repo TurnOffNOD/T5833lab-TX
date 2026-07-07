@@ -1,0 +1,102 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Lev.h"
+#include "lev.h"
+
+//	;-------------------------------- Level Condition Setting --------------------------------
+void	LevFunc( Test_t *test) {
+        static Lev_t    *lev = NULL;
+        if ( lev == NULL ) lev = levInit();
+	if (   lev->VDDQ  != test->VDDQ   ) {
+		double	Vih_CK 	  =  0.272 * test->VDDQ  + 300.0 mV;
+		double	Vil_CK 	  =  0.272 * test->VDDQ  - 300.0 mV;
+		double	Vih_CKE	  =  1.000 * test->VDDQ            ;
+		double	Vil_CKE	  =  0.000 * test->VDDQ            ;
+		double	Vih_ODTCA =  1.000 * test->VDDQ            ;
+		double	Vil_ODTCA =  0.000 * test->VDDQ            ;
+		double	Vih_RST	  =  1.000 * test->VDDQ            ;
+		double	Vil_RST	  =  0.000 * test->VDDQ            ;
+		double	Vih_CS 	  =  0.272 * test->VDDQ  + 300.0 mV;
+		double	Vil_CS 	  =  0.272 * test->VDDQ  - 300.0 mV;
+		double	Vih_CA 	  =  0.272 * test->VDDQ  + 300.0 mV;
+		double	Vil_CA 	  =  0.272 * test->VDDQ  - 300.0 mV;
+		double	Vih_DQ 	  =  1.000 * test->VDDQ            ;
+		double	Vil_DQ 	  =  0.000 * test->VDDQ            ;
+		double	Vih_DQS	  =  1.000 * test->VDDQ            ;
+		double	Vil_DQS	  =  0.000 * test->VDDQ            ;
+		double	Voh_DQ 	  =  0.200 * test->VDDQ            ;
+		double	Vol_DQ 	  =  0.200 * test->VDDQ            ;
+		double	Voh_DQS	  =  0.200 * test->VDDQ            ;
+		double	Vol_DQS	  =  0.200 * test->VDDQ            ;
+		double	Vtt_DQ 	  =  0.100 * test->VDDQ            ;
+		double	Vtt_DQS	  =  0.100 * test->VDDQ            ;
+
+		UTL_SetViHigh( lev->in1 , Vih_CK    ); UTL_SetViLow ( lev->in1 , Vil_CK    ); //Clock
+		UTL_SetViHigh( lev->in2 , Vih_CKE   ); UTL_SetViLow ( lev->in2 , Vil_CKE   ); //Clock enable 
+		UTL_SetViHigh( lev->in3 , Vih_ODTCA ); UTL_SetViLow ( lev->in3 , Vil_ODTCA ); //ODTCA 
+		UTL_SetViHigh( lev->in4 , Vih_RST   ); UTL_SetViLow ( lev->in4 , Vil_RST   ); //RESET
+		UTL_SetViHigh( lev->in5 , Vih_CS    ); UTL_SetViLow ( lev->in5 , Vil_CS    ); //CS Chip Select 
+		UTL_SetViHigh( lev->in6 , Vih_CA    ); UTL_SetViLow ( lev->in6 , Vil_CA    ); //CA Command/Address
+		UTL_SetViHigh( lev->in7 , Vih_DQ    ); UTL_SetViLow ( lev->in7 , Vil_DQ    ); //DQ
+		UTL_SetViHigh( lev->in8 , Vih_DQS   ); UTL_SetViLow ( lev->in8 , Vil_DQS   ); //DQS
+		UTL_SetVoHigh( lev->out1, Voh_DQ    ); UTL_SetVoLow ( lev->out1, Vol_DQ    ); //DQ
+		UTL_SetVoHigh( lev->out2, Voh_DQS   ); UTL_SetVoLow ( lev->out2, Vol_DQS   ); //DQS
+		UTL_SetVt    ( lev->vt1 , Vtt_DQ    );                                        //DQ
+		UTL_SetVt    ( lev->vt2 , Vtt_DQS   );                                        //DQS
+	}
+	lev->VDDQ	= test->VDDQ ;
+	levSend( lev);
+}
+void	LevLeak( Test_t *test) {
+        static Lev_t    *lev = NULL;
+        if ( lev == NULL ) lev = levInit();
+	if (    lev->VDDQ  != test->VDDQ   ) {
+		double	Vih_CK 	  =  1.000 * test->VDDQ            ;
+		double	Vil_CK 	  =  0.000 * test->VDDQ            ;
+		double	Vih_CKE	  =  1.000 * test->VDDQ            ;
+		double	Vil_CKE	  =  0.000 * test->VDDQ            ;
+		double	Vih_ODTCA =  1.000 * test->VDDQ            ;
+		double	Vil_ODTCA =  0.000 * test->VDDQ            ;
+		double	Vih_RST	  =  1.000 * test->VDDQ            ;
+		double	Vil_RST	  =  0.000 * test->VDDQ            ;
+		double	Vih_CS 	  =  1.000 * test->VDDQ            ;
+		double	Vil_CS 	  =  0.000 * test->VDDQ            ;
+		double	Vih_CA 	  =  1.000 * test->VDDQ            ;
+		double	Vil_CA 	  =  0.000 * test->VDDQ            ;
+		double	Vih_DQ 	  =  1.000 * test->VDDQ            ;
+		double	Vil_DQ 	  =  0.000 * test->VDDQ            ;
+		double	Vih_DQS	  =  1.000 * test->VDDQ            ;
+		double	Vil_DQS	  =  0.000 * test->VDDQ            ;
+		double	Voh_DQ 	  =  0.200 * test->VDDQ            ;
+		double	Vol_DQ 	  =  0.200 * test->VDDQ            ;
+		double	Voh_DQS	  =  0.200 * test->VDDQ            ;
+		double	Vol_DQS	  =  0.200 * test->VDDQ            ;
+		double	Vtt_DQ 	  =  0.000 * test->VDDQ            ;
+		double	Vtt_DQS	  =  0.000 * test->VDDQ            ;
+
+		UTL_SetViHigh( lev->in1 , Vih_CK    ); UTL_SetViLow ( lev->in1 , Vil_CK    ); //Clock
+		UTL_SetViHigh( lev->in2 , Vih_CKE   ); UTL_SetViLow ( lev->in2 , Vil_CKE   ); //Clock enable 
+		UTL_SetViHigh( lev->in3 , Vih_ODTCA ); UTL_SetViLow ( lev->in3 , Vil_ODTCA ); //ODTCA 
+		UTL_SetViHigh( lev->in4 , Vih_RST   ); UTL_SetViLow ( lev->in4 , Vil_RST   ); //RESET
+		UTL_SetViHigh( lev->in5 , Vih_CS    ); UTL_SetViLow ( lev->in5 , Vil_CS    ); //CS Chip Select 
+		UTL_SetViHigh( lev->in6 , Vih_CA    ); UTL_SetViLow ( lev->in6 , Vil_CA    ); //CA Command/Address
+		UTL_SetViHigh( lev->in7 , Vih_DQ    ); UTL_SetViLow ( lev->in7 , Vil_DQ    ); //DQ
+		UTL_SetViHigh( lev->in8 , Vih_DQS   ); UTL_SetViLow ( lev->in8 , Vil_DQS   ); //DQS
+		UTL_SetVoHigh( lev->out1, Voh_DQ    ); UTL_SetVoLow ( lev->out1, Vol_DQ    ); //DQ
+		UTL_SetVoHigh( lev->out2, Voh_DQS   ); UTL_SetVoLow ( lev->out2, Vol_DQS   ); //DQS
+		UTL_SetVt    ( lev->vt1 , Vtt_DQ    );                                        //DQ
+		UTL_SetVt    ( lev->vt2 , Vtt_DQS   );                                        //DQS
+	}
+	lev->VDDQ	= test->VDDQ ;
+	levSend( lev);
+}

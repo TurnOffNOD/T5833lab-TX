@@ -1,0 +1,134 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatReadId<4WAY>
+	MODE MUX TP2INV REFRESHB
+	RDX	10
+	REGISTER
+		DRE1	= W             ;
+		DRE2	= C20           ;
+		CPE1	= R             ;
+		CPE2	= C21           ;
+		ISP	= REF           ; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ,UBMEN UBMAP0 ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		NOP                              T      ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		JSR RDID                                ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		STPS
+;################################ Read ID      ################################
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ,             ;
+RDID:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,TP<0 TP2<0 ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSLL, ,       ,   ,   ,    ,     ,       ENSIG2,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<5    ,     ,	    ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;   MR5: LPDDR4 Manufacturer ID
+		NOP                              I :C0  ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;0 |RL = 6 +3 =9
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;1 | tMRR=8nCK
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;2 |
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;3 |
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;4 |
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;5 |
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;6 |
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<6    ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;7 |MR6: Revision ID-1
+		NOP                              I :    ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,             ;8 |				 1   2
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,C0      ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN UBMAP0 ;9 |   				 3   4 R MR5 
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;10|   				 5   6 R
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;11|   				 7   8  
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;12|   				 9  10
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;13|   				11  12
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;      				13  14
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<7    ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;MR7: Revision ID-2		15  16
+		NOP                              I :    ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;					17  18  MR6
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				19  20 R 
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				21  22 R
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				23  24
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				25  26
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				27  28
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				29  30
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<8    ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;MR8: IO Width, Density, Type     31  32
+		NOP                              I :    ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;					33  34   MR7
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				35  36 R
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				37  38 R
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				39  40
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				41  42
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;     				43  44
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;					45  46
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<12   ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;MR12 VRef(CA)                    47  48 
+		NOP                              I :    ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 49  50   MR8           
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 51  52 R             
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 53  54 R          
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 55  56              
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 57  58              
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 59  60                 
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 61  62                  
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<14   ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;MR14  VRef(DQ)                   63  64                
+		NOP                              I :    ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 65  66   MR12              
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 67  68 R            
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 69  70 R             
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 71  72             
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 73  74                 
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 75  76                
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 77  78         
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,XT<25   ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;MR25  Post Package Repair        79  80  
+		NOP                              I :    ,CYP12,    ,     ,CS0,   ,MRR11 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;Resource is available or not.    81  82   MR14  
+		                                   :    ,CYP13,    ,     ,   ,   ,MRR12 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 83  84 R      
+		                                   :    ,CYP10,    ,     ,CS0,   ,CAS21 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 85  86 R      
+		                                   :    ,CYP11,    ,     ,   ,   ,CAS22 ,       ,XT  ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 87  88     
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 89  90     
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,ENSIG1,ENSIG2,UBMEN        ;                                 91  92      
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                 93  94     
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                 95  96        
+		NOP	                         I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                 95  96           
+			                           :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                 97  98   MR25        
+			                           :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                 99 100 R           
+			                           :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                101 102 R        
+		NOP	                         I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                103 104                
+			 	                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                105 106           
+			 	                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                107 108               
+			 	                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,	  ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                109 110            
+		IDXI8 #2 	                 I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                111 112       
+		         	                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                113 114          
+		         	                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                115 116          
+		         	                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,UBMEN        ;                                
+		IDXI8 #2                         I :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;                                             
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,	    ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		RTN                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,	    ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,      ,      ,             ;
+	INSERT patPowerUp
+	INSERT patRefresh
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

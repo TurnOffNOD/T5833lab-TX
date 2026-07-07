@@ -1,0 +1,170 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Ubm.h"
+
+void	UbmConfig ();
+void	ReverseData( unsigned int *data, int siz);
+void	UbmRead();
+
+
+//      ################################ Ubm    Setting   ################################
+void    UbmCapture ( Test_t *test) {
+
+	UbmConfig ();
+}
+
+void    UbmReadResult( Test_t *test) {
+
+	UbmRead();
+
+}
+
+
+
+void	UbmConfig ()
+{
+	UbmConfigHandle  ubmConfig = UTL_GetUbmConfigHandle();
+
+	// clear config and setting
+	// CALL IDSELCLR
+	UTL_ClearUbmConfigFunctionSelect	( ubmConfig						    );
+	UTL_ClearUbmConfigPin			( ubmConfig, UT_UBM_UNIT_PM				    );
+	UTL_ClearUbmConfigPin			( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY			    );
+	UTL_ClearUbmConfigPin			( ubmConfig, UT_UBM_UNIT_EXP			    );
+		
+	// CALL IDSELUBM()
+	UTL_AddUbmConfigFunctionSelect		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, UT_SIGNAL_C(22)    );
+	UTL_SetUbmConfigPin			( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, "DQ"		    );
+	UTL_SetUbmConfigJumpAddr		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, 0, 0x00	    );
+	UTL_SetUbmConfigJumpCycle		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, 0, UT_SIGNAL_C(26) );
+
+	/*
+	UTL_SetUbmConfigJumpAddr		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, 1, 0x10	    ); //  1&2 only  support not SCRESULTMEMORY selection
+	UTL_SetUbmConfigJumpCycle		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, 1, UT_SIGNAL_C(27) );
+	UTL_SetUbmConfigJumpAddr		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, 2, 0x20	    );
+	UTL_SetUbmConfigJumpCycle		( ubmConfig, UT_UBM_UNIT_SCRESULTMEMORY, 2, UT_SIGNAL_C(28) );
+	*/
+
+	UTL_SetUbmConfigDdrMode			( ubmConfig, UT_ON					    );
+	UTL_SetUbmConfigStrbMode		( ubmConfig, UT_UBM_INDIVIDUAL				    );
+	UTL_AddUbmConfigStrbChannel		( ubmConfig, 0,				 0		    );
+	UTL_AddUbmConfigStrbChannel		( ubmConfig, 0,				 1		    );
+
+	UTL_SendUbmConfig			( ubmConfig						    );
+	UTL_DeleteHandle			( ubmConfig						    );
+	
+}
+
+
+void	UbmRead()
+{
+	UbmAccessHandle ubmAccess = UTL_GetUbmAccessHandle();
+//	unsigned int ubm_data[128*3]={0};
+	unsigned int ubm_data[128]={0};
+
+	UTL_SetUbmAccessPin			( ubmAccess, "DQID"					    );
+	UTL_SetUbmAccessPinBlock		( ubmAccess, 2					    );
+	UTL_SetUbmAccessStartAddr		( ubmAccess, 0					            );
+	UTL_SetUbmAccessStopAddr		( ubmAccess, 127					    );
+	UTL_SetUbmAccessStrbChannel		( ubmAccess, 0,				0		    );
+	UTL_SetUbmAccessStrbChannel		( ubmAccess, 0,				1		    );
+	UTL_SetUbmAccessDdrMode			( ubmAccess, UT_ON					    );
+
+//	UTL_ReadUbmAllDut			( ubmAccess, 3, ubm_data, sizeof(ubm_data)		    );
+//	ReverseData(ubm_data,128*3);	
+
+
+	for ( int i=0;i<3;i++)
+	{
+		UTL_SetUbmAccessDut			( ubmAccess, i+1				    );
+		UTL_ReadUbm				( ubmAccess, ubm_data, sizeof(ubm_data)		    );
+		ReverseData(ubm_data,128);	
+		printf("DUT %2d:Manufacturer:",i+1);
+		if     ( ubm_data[2+128*0] == 0x01) printf(" Samsung	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x05) printf(" Nanya  	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x06) printf(" SK Hynix    / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x08) printf(" Winbond	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x09) printf(" ESMT   	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x13) printf(" CXMT   	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x1a) printf(" UniIC  	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0x1c) printf(" JSC    	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0xf8) printf(" Fidelix	 / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0xf9) printf(" Ultra Memory/ LPDDR4,");
+		else if( ubm_data[2+128*0] == 0xfd) printf(" AP Memory   / LPDDR4,");
+		else if( ubm_data[2+128*0] == 0xff) printf(" Micron 	 / LPDDR4,");
+		else                                printf(" Nothing             ,");
+
+		printf( "Rev: %d.%d,",ubm_data[18+128*0],ubm_data[34+128*0]);
+		printf ("Capacity:");
+		if     ( (ubm_data[50+128*0] & 0xc0) == 0x00) printf(" S16 SDRAM ");
+		if     ( (ubm_data[50+128*0] & 0x3c) == 0x30) printf(" 1Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x00) printf(" 2Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x04) printf(" 3Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x08) printf(" 4Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x0c) printf(" 6Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x10) printf(" 8Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x14) printf("12Gb x 2Channel,");
+		else if( (ubm_data[50+128*0] & 0x3c) == 0x18) printf("16Gb x 2Channel,");
+		if     ( (ubm_data[50+128*0] & 0x03) == 0x00) printf("x16IO,");
+		else if( (ubm_data[50+128*0] & 0x03) == 0x01) printf(" x8IO,");
+//		else                                 printf("	Nothing              ");
+
+		printf ("VrefCA:");
+		if     ( (ubm_data[66+128*0] & 0x40) == 0x40) printf("%4.2f%%,", 22.0+((double)(ubm_data[66+128*0])*0.4) );
+		else                                          printf("%4.2f%%,", 10.0+((double)(ubm_data[66+128*0])*0.4) );
+
+		printf ("VrefDQ:");
+		if     ( (ubm_data[82+128*0] & 0x40) == 0x40) printf("%4.2f%%,", 22.0+((double)(ubm_data[82+128*0])*0.4) );
+		else                                          printf("%4.2f%%,", 10.0+((double)(ubm_data[82+128*0])*0.4) );
+
+		printf ("PPR Result:");
+	
+		if     ( (ubm_data[98+128*0] & 0x01) == 0x01) printf(" PPR(0):Yes");
+		else                                          printf(" PPR(0):No ");
+		if     ( (ubm_data[98+128*0] & 0x02) == 0x02) printf(" PPR(1):Yes");
+		else                                          printf(" PPR(1):No ");
+		if     ( (ubm_data[98+128*0] & 0x04) == 0x04) printf(" PPR(2):Yes");
+		else                                          printf(" PPR(2):No ");
+		if     ( (ubm_data[98+128*0] & 0x08) == 0x08) printf(" PPR(3):Yes");
+		else                                          printf(" PPR(3):No ");
+		if     ( (ubm_data[98+128*0] & 0x10) == 0x10) printf(" PPR(4):Yes");
+		else                                          printf(" PPR(4):No ");
+		if     ( (ubm_data[98+128*0] & 0x20) == 0x20) printf(" PPR(5):Yes");
+		else                                          printf(" PPR(5):No ");
+		if     ( (ubm_data[98+128*0] & 0x40) == 0x40) printf(" PPR(6):Yes");
+		else                                          printf(" PPR(6):No ");
+		if     ( (ubm_data[98+128*0] & 0x80) == 0x80) printf(" PPR(7):Yes\n");
+		else                                          printf(" PPR(7):No \n");
+
+	}
+}
+// for example:
+//original     :0b0000 0000 0000 0000 0000 0001 0101 1110
+//after reverse:0b0111 1010 1000 0000 0000 0000 0000 0000
+void	ReverseData( unsigned int *data, int size)
+{
+	for (int i=0;i<size; i++)
+	{
+		*(data+i) = ( ((*(data+i)) & 0xaaaaaaaa)>> 1) | ( ((*(data+i)) & 0x55555555 )<< 1);  // swap     adjacent bits
+		*(data+i) = ( ((*(data+i)) & 0xcccccccc)>> 2) | ( ((*(data+i)) & 0x33333333 )<< 2);  // swap 2   adjacent bits
+		*(data+i) = ( ((*(data+i)) & 0xf0f0f0f0)>> 4) | ( ((*(data+i)) & 0x0f0f0f0f )<< 4);  // swap 4   adjacent bits
+		*(data+i) = ( ((*(data+i)) & 0xff00ff00)>> 8) | ( ((*(data+i)) & 0x00ff00ff )<< 8);  // swap 8   adjacent bits
+		*(data+i) = ( ((*(data+i)) & 0xffff0000)>>16) | ( ((*(data+i)) & 0x0000ffff )<<16);  // swap 16  adjacent bits
+//		*(data+i) = (  (*(data+i))              >>16) | (  (*(data+i))               <<16);  // swap 16  adjacent bits
+
+	}
+}
+
+
+
+

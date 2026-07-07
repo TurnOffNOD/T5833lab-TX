@@ -1,0 +1,39 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatRcd24BankIntRow1st<4WAY>
+	MODE MUX TP2INV REFRESHB
+	RDX	10
+	REGISTER
+		DRE1	= W             ; 
+		DRE2	= C20           ; 
+		CPE1	= R             ; 
+		CPE2	= C21           ; 
+		D4B	= #0010         ; #10 Y ADDRESS INC  
+		ISP	= REF           ; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP      ,/D1,/D2,DM00,ODT  ,             ,             ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+LOOP:		NOP                              T :    ,     ,    ,     ,   ,   ,      ,       ,    ,D3<0    ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,TP<TPH  ,   ,   ,    ,     ,             ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,TP2<TPH2,   ,   ,    ,     ,             ,             ;  
+		JSR BINTW                               ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		JSR BINTR                               ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		JZD LOOP                                ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,        ,   ,   ,    ,     ,             ,             ;
+		STPS
+	INSERT patPowerUp
+	INSERT patBintRcd24
+	INSERT patRefresh
+END

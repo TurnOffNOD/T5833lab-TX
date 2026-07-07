@@ -1,0 +1,4 @@
+#!/bin/bash -v
+source env_set.sh
+startfs
+

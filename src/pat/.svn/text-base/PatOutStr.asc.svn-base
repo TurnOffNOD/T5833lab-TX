@@ -1,0 +1,986 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatOutStr<4WAY>
+	RDX	10
+	MODE MUX TP2INV REFRESHB
+	REGISTER
+		DRE1	= W             ; 
+		DRE2	= C20           ; 
+		CPE1	= R             ; 
+		CPE2	= C21           ; 
+		D4B	= #0010         ; #10 Y ADDRESS INC  
+		ISP	= REF           ; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                              T      ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+LOOP:		JSR WR0                                 ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		JSR RD0                                 ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		STPS
+;################################ Bank Interleave Burst Write      ################################
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ;
+WR0:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,BANK_XA,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  0  0 nRRD = 16 nCK
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1  1 nRCD = 28 nCK
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2  2
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3  3
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4  4
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5  5
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6  6
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7  7
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8  8
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9  9
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 10 10
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 11 11
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 12 12
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 13 13
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 14 14
+		                                   :    ,     ,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 15 15
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 16<16>
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 17
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 18
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 19
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 20
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 21
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 22
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 23
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 24
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 25
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,       ,   ,   ,    ,     ,             ; 26
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,        ,DQSW,DQSHL, ,       ,   ,   ,    ,     ,             ; 27
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;<28>
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+WR1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YB,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XD,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YC,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XE,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YD,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XF,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YE,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XG,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YF,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XH,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YG,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<XC+1 ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YH,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;		JNI2 WR1                         I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YB,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XD,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YC,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XE,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YD,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XF,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YE,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XG,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YF,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XH,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YG,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<0    ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;   
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YH,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;;		JNI3 WR1                         I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;;		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+;;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+WR2:		NOP                          I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YB,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XD,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YC,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XE,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YD,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XF,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YE,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XG,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YF,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XH,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YG,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<XC+1 ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YH,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;		JNI2 WR2                         I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YB,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XD,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YC,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XE,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YD,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XF,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YE,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XG,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YF,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XH,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YG,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YH,Y<YC,YC<YC-D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WRAL1,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;  0 WR to ACT = WL+BL/2+WR+tRP = 22+16+28+24 = 90
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WRAL2,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  1 WL  = 22
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  2 nRP = 28 nCK
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  3 nWR = 24
+		                                   :    ,CYP2 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  4
+		                                   :    ,CYP4 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  5
+		NOP                              I :    ,CYP5 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  6
+		                                   :    ,CYP6 ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  7
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,BST  ,             ;  8
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ;  9
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ; 10
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ; 11
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ; 12
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ; 13
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ; 14
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,DQSW,DQSHL,W,       ,   ,   ,    ,     ,             ; 15
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 16
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 17
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 18
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 19
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 20
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 21
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 22
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 23
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 24
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 25
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 26
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 27
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 28
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 29
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 30
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 31
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 32
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 33
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 34
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 35
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 36
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 37
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 38
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 39
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 40
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 41
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 42
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 43
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 44
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 45
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 46
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 47
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 48
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 49
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 50
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 51
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 52
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 53
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 54
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 55
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 56
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 57
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 58
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 59
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 60
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 61
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 62
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 63
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 64
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 65
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 66
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 67
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 68
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 69
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 70
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 71
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 72
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 73
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 74
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 75
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 76
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 77
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 78
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 79
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 80
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 81
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 82
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 83
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 84
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 85
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 86
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 87
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 88
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 89
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; Need Auto-Refresh cycles for each X-address
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		RTN                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+;################################ Bank Inter    ,leave Burst Read       ################################
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,            ;
+RD0:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,BANK_XA,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  0 nRCD = 28 nCK
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 10
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 11
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 12
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 13
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 14
+		                                   :    ,     ,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 15
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 16
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 17
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 18
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 19
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 20
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 21
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 22
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 23
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 24
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 25
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSLL, ,       ,   ,   ,    ,     ,       ENSIG2; 26
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,        ,DQSR,DQSHL, ,       ,   ,   ,    ,     ,             ; 27
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;<28>
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+RD1:		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YB,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XD,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YC,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XE,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YD,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XF,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YE,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XG,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YF,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XH,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YG,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<XC+1 ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YH,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+;;;		JNI2 RD1                         I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+;;;		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+;;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+;;;		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YB,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XD,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YC,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XE,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YD,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XF,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YE,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XG,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YF,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XH,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YG,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XA,X<XC,XC<0    ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;   
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YH,Y<YC,YC<YC-D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XB,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,BANK_YA,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RDAL1,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RDAL2,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		NOP                              I :    ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP11,    ,     ,   ,   ,      ,BANK_XC,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		JMP  RD1                         I :    ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,BST  ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,       ,   ,   ,    ,     ,             ;
+	INSERT patPowerUp
+	INSERT patRefresh
+END

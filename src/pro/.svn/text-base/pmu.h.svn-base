@@ -1,0 +1,90 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef ___pmu_H
+#define ___pmu_H
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+#include "Pmu.h"
+
+#define VSIM(s,...)						\
+(								\
+	{							\
+		DcHandle handle	= UTL_GetDcHandle();     	\
+		UTL_SetDcMode  ( handle, UT_DCT_VSIM);		\
+		UTL_SetDcSource( handle, s          );		\
+		__VA_ARGS__;					\
+        	UTL_SetDcLimitHigh( handle, 0.000, UT_OFF);     \
+        	UTL_SetDcLimitLow ( handle, 0.000, UT_OFF);     \
+		UTL_SendDc        ( handle, 1);			\
+		UTL_DeleteHandle  ( handle);			\
+	}							\
+)
+#define ISVM(s,...)						\
+(								\
+	{							\
+		DcHandle handle	= UTL_GetDcHandle();     	\
+		UTL_SetDcMode  ( handle, UT_DCT_ISVM);		\
+		UTL_SetDcSource( handle, s          );		\
+		__VA_ARGS__;					\
+        	UTL_SetDcLimitHigh( handle, 0.000, UT_OFF);     \
+        	UTL_SetDcLimitLow ( handle, 0.000, UT_OFF);     \
+		UTL_SendDc        ( handle, 1);			\
+		UTL_DeleteHandle  ( handle);			\
+	}							\
+)
+#define MVM(...)						\
+(								\
+	{							\
+		DcHandle handle	= UTL_GetDcHandle();     	\
+		UTL_SetDcMode  ( handle, UT_DCT_MVM);		\
+		__VA_ARGS__;					\
+        	UTL_SetDcLimitHigh( handle, 0.000, UT_OFF);     \
+        	UTL_SetDcLimitLow ( handle, 0.000, UT_OFF);     \
+		UTL_SendDc        ( handle, 1);			\
+		UTL_DeleteHandle  ( handle);			\
+	}							\
+)
+
+// ---for HS2---
+//#define	R80uA			(UTL_SetDcSrange( handle, 20.00 uA, -20.00 uA))
+//#define	R800uA			(UTL_SetDcSrange( handle, 200.0 uA, -200.0 uA))
+//#define	R8mA			(UTL_SetDcSrange( handle, 2.000 mA, -2.000 mA))
+//#define	R128mA			(UTL_SetDcSrange( handle, 48.00 mA, -48.00 mA))
+//#define	M20V			(UTL_SetDcMrange( handle, 7.000  V, -0.300  V))
+//#define	Mi20V			(UTL_SetDcMrange( handle, 0.300  V, -2.000  V))
+//#define	R20V			(UTL_SetDcSrange( handle, 7.000  V, -2.000  V))
+//#define	M8uA			(UTL_SetDcMrange( handle, 5.000 uA, -5.000 uA))
+//#define	M80uA			(UTL_SetDcMrange( handle, 20.00 uA, -20.00 uA))
+//#define	M800uA			(UTL_SetDcMrange( handle, 200.0 uA, -200.0 uA))
+//#define	M8mA			(UTL_SetDcMrange( handle, 2.000 mA, -2.000 mA))
+//#define	M128mA			(UTL_SetDcMrange( handle, 48.00 mA, -48.00 mA))
+
+// for T5833
+#define	R80uA			(UTL_SetDcSrange( handle, 20.00 uA, -20.00 uA))
+#define	R800uA			(UTL_SetDcSrange( handle, 200.0 uA, -200.0 uA))
+#define	R8mA			(UTL_SetDcSrange( handle, 2.000 mA, -2.000 mA))
+#define	R80mA			(UTL_SetDcSrange( handle, 48.00 mA, -48.00 mA))
+#define	M20V			(UTL_SetDcMrange( handle, 7.000  V, -0.300  V))
+#define	Mi20V			(UTL_SetDcMrange( handle, 0.300  V, -7.000  V))
+#define	R20V			(UTL_SetDcSrange( handle, 7.000  V, -7.000  V))
+#define	M8uA			(UTL_SetDcMrange( handle, 5.000 uA, -5.000 uA))
+#define	M80uA			(UTL_SetDcMrange( handle, 20.00 uA, -20.00 uA))
+#define	M800uA			(UTL_SetDcMrange( handle, 200.0 uA, -200.0 uA))
+#define	M8mA			(UTL_SetDcMrange( handle, 2.000 mA, -2.000 mA))
+#define	M128mA			(UTL_SetDcMrange( handle, 48.00 mA, -48.00 mA))
+
+#define Clamp(p,m)              (UTL_SetDcPclamp( handle, p   ),             \
+                                 UTL_SetDcMclamp( handle, m   )               )
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+#endif // ___pmu_H

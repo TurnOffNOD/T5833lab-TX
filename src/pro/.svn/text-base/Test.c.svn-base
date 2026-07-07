@@ -1,0 +1,514 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <math.h>
+#include <test.h>
+
+#include "Def.h"
+#include "Pmu.h"
+#include "Dps.h"
+#include "Pin.h"
+#include "Tim.h"
+#include "Lev.h"
+#include "Fcm.h"
+#include "Dbm.h"
+#include "Ubm.h"
+#include "Test.h"
+#include "Fixed.h"
+
+static inline	void	setCategory( Test_t *test) {
+	DutCursor dut_cursor;
+	UT_DUT    dut;
+	if ( test->pass_category > 0 ) { dut_cursor = UTL_GetDutCursor( UT_PDUT); while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) UTL_SetCategory( dut, test->pass_category); UTL_DeleteCursor( dut_cursor); }
+	if ( test->fail_category > 0 ) { dut_cursor = UTL_GetDutCursor( UT_FDUT); while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) UTL_SetCategory( dut, test->fail_category); UTL_DeleteCursor( dut_cursor); }
+}
+static	inline	void	patMeas ( Test_t *test) {
+	FctHandle	fct	= UTL_GetFctHandle();
+	UTL_SetFctMpatName ( fct, (char *)test->pattern_name);
+//	UTL_SetFctStartPc  ( fct, 0);
+	UTL_SetFctStartPc  ( fct, test->start_pc);
+	UTL_SetFctNoWait   ( fct, UT_OFF);
+	UTL_SetFctNoClear  ( fct, UT_ON );
+	UTL_MeasFct        ( fct );
+	UTL_DeleteHandle   ( fct );
+}
+static	inline	void	patStart( Test_t *test) {
+	FctHandle	fct	= UTL_GetFctHandle();
+	UTL_SetFctMpatName ( fct, (char *)test->pattern_name);
+//	UTL_SetFctStartPc  ( fct, 0);
+	UTL_SetFctStartPc  ( fct, test->start_pc);
+	UTL_SetFctNoWait   ( fct, UT_ON );
+	UTL_SetFctNoClear  ( fct, UT_ON );
+	UTL_StartFct       ( fct );
+	UTL_DeleteHandle   ( fct );
+}
+static	inline	void    patStop ( void ) { UTL_StopFct (); }
+static	inline	void	PmuMeas( const char *pinlist_name, int count, double upper, double lower) {
+	DcHandle	dc	= UTL_GetDcHandle();
+	UTL_UpdateDc      ( dc, 1);
+	UTL_SetDcMeasCnt  ( dc, count);
+	UTL_SetDcLimitHigh( dc, (isnan(upper)?0.000:upper), (isnan(upper)?UT_OFF:UT_ON));
+	UTL_SetDcLimitLow ( dc, (isnan(lower)?0.000:lower), (isnan(lower)?UT_OFF:UT_ON));
+	UTL_SendDc        ( dc, 1);
+	UTL_DeleteHandle  ( dc);
+
+	DcHandle	dct	= UTL_GetDctHandle();
+	UTL_SetDctPinList( dct, (char *)pinlist_name);
+	UTL_MeasDct      ( dct);
+	UTL_DeleteHandle ( dct);
+}
+static	inline	void	DpsMeas( const char *vslist_name, int count, double upper, double lower) {
+	PinCursor	pin_cursor	= UTL_GetPinCursor( (char *)vslist_name);
+	UT_PIN		pin		= UTL_NextPin( pin_cursor);
+	UTL_DeleteCursor( pin_cursor);
+
+	VsHandle	vs	= UTL_GetVsHandle();
+	UTL_UpdateVs      ( vs, pin);
+	UTL_SetVsMeasCnt  ( vs, count);
+	UTL_SetVsLimitHigh( vs, (isnan(upper)?0.000:upper), (isnan(upper)?UT_OFF:UT_ON));
+	UTL_SetVsLimitLow ( vs, (isnan(lower)?0.000:lower), (isnan(lower)?UT_OFF:UT_ON));
+	UTL_SendVs        ( vs, pin);
+	UTL_DeleteHandle  ( vs);
+
+	DcHandle	dct	= UTL_GetDctHandle();
+	UTL_SetDctPinList( dct, (char *)vslist_name);
+	UTL_MeasDct      ( dct);
+	UTL_DeleteHandle ( dct);
+}
+static	inline	void	addrScram(  Test_t *test) {
+	AddrScramHandle	addr_scram	= UTL_GetAddrScramHandle();
+	if ( test->scram_name == NULL ) UTL_SetAddrScramMode    ( addr_scram, UT_SCR_DISABLE);
+	else {
+		UTL_SetAddrScramMode    ( addr_scram, UT_SCR_ENABLE);
+		UTL_SetAddrScramFileName( addr_scram, test->scram_name);
+	}
+	UTL_SendAddrScram       ( addr_scram);
+	UTL_DeleteHandle        ( addr_scram);
+}
+static	inline	void	preScram(  Test_t *test) {
+	AddrScramHandle	pre_scram	= UTL_GetAddrScramHandle();
+	if ( test->prescram_name == NULL ) UTL_SetAddrScramMode    ( pre_scram, UT_SCR_DISABLE);
+	else {
+		UTL_SetAddrScramMode    ( pre_scram, UT_SCR_ENABLE);
+		UTL_SetAddrScramFileName( pre_scram, test->prescram_name);
+	}
+	UTL_SendPreScram       ( pre_scram);
+	UTL_DeleteHandle        ( pre_scram);
+}
+static	inline	void	burstScram( Test_t *test) {
+	static BurstScramHandle bscr = -1;
+	if ( bscr < 0 ) {
+		bscr = UTL_GetBurstScramHandle();
+		UTL_SetBurstScramMode           ( bscr, UT_ON);
+		UTL_SetBurstScramDdrType        ( bscr, 4);
+		UTL_SetBurstScramBaseFileName   ( bscr, (char *)"BscrLp");
+		UTL_SetBurstScramDataRate       ( bscr, 2);
+		UTL_SetBurstScramLength         ( bscr, 16);
+		UTL_SetBurstScramWrapType       ( bscr, UT_WPTSQ);
+		UTL_AddBurstScramWriteSignal    ( bscr, UT_SIG_WT);
+		UTL_SetBurstScramAddrUnit       ( bscr, UT_UNIT_PDS , UT_OFF);
+		UTL_SetBurstScramAddrUnit       ( bscr, UT_UNIT_DFM , UT_ON );
+		UTL_SetBurstScramAddrUnit       ( bscr, UT_UNIT_FP  , UT_ON );
+	}
+	UTL_SendBurstScram( bscr);
+}
+
+static	inline	void	afmDisable( Test_t *test) {
+	static FcmConfigHandle afmhandle = -1;
+	if ( afmhandle < 0 ) {
+		afmhandle = UTL_GetFcmConfigHandle();
+		UTL_AddFcmConfigAction		( afmhandle, 1,	UT_FCM_DISABLE);
+//		UTL_AddFcmConfigAction		( afmhandle, 2,	UT_FCM_DISABLE);
+	}
+	UTL_SendFcmConfig( afmhandle ); 
+
+//	static FcmAccessHandle afmaccess = -1;
+//	if ( afmhandle < 0 ) {
+//		afmaccess = UTL_GetAccessHandle();
+//		UTL_SetFcmAccessAllDut		( afmaccess, UT_ON);
+//		UTL_SetFcmAccessAllBit		( afmaccess, UT_ON);
+//		UTL_SetFcmAccessPresetAllMemory ( afmaccess, UT_ON);
+//	}
+//	UTL_PresetFcm( afmaccess, 0 );
+}
+static	inline	void	ubmDisable( Test_t *test) {
+	static UbmConfigHandle ubmhandle = -1;
+	if ( ubmhandle < 0 ) {
+		ubmhandle = UTL_GetUbmConfigHandle();
+		UTL_ClearUbmConfigFunctionSelect	( ubmhandle					);
+		UTL_ClearUbmConfigPin			( ubmhandle,	UT_UBM_UNIT_PM			);
+		UTL_ClearUbmConfigPin			( ubmhandle,	UT_UBM_UNIT_SCRESULTMEMORY	);
+		UTL_ClearUbmConfigPin			( ubmhandle,	UT_UBM_UNIT_EXP			);
+	}
+	UTL_SendUbmConfig( ubmhandle ); 
+}
+static	inline	void	ilMode( Test_t *test) {
+	IlModeHandle    handle = UTL_GetIlModeHandle();
+	UTL_SetIlMode          ( handle,  test->ilway);
+	UTL_SendIlMode         ( handle    );
+	UTL_DeleteHandle       ( handle    );
+}
+
+
+void	PmuTest( Test_t *test) {
+	char *name;
+	asprintf( &name, "%d", test->test_no);
+	char *caliname;
+	asprintf( &caliname, "%d", test->test_no);
+	asprintf( &name, "%d", test->test_no);
+#ifdef  SHOW_TEST_NAME
+	asprintf( &name, "%s", test->title);
+#endif
+	void    func() {
+		if ( test->pattern_name) ilMode( test );
+		if ( test->tim) test->tim( test);
+		if ( test->lev) test->lev( test);
+		if ( test->dps) test->dps( test);
+		if ( test->pmu) test->pmu( test);
+		if ( test->pin) test->pin( test);
+		if ( test->reg) test->reg( test);
+		if ( test->afm) test->afm( test); else afmDisable( test );
+		if ( test->ubm) test->ubm( test); else ubmDisable( test ); 
+		if ( test->pre) test->pre( test);
+		if ( test->pattern_name) preScram( test), addrScram( test), burstScram( test);
+		fixeddelay_config();
+		if ( test->pattern_name) UTL_ExecSbcal( caliname, (char *)"NOPBIDCHK,NOMBTYPECHK,NOMBIDCHK,NOPBLOCKCHK,NOMBLOCKCHK,NOSTATUSCHK");
+		UTL_OnPowerSeq();
+		UTL_SetWet();
+		if ( test->pattern_name) patStart( test);
+		UTL_WaitTime( 200 mS);
+		PmuMeas  ( test->target, 16, test->upper, test->lower);
+		if ( test->pattern_name) patStop ();
+		fixeddelay_reset();
+		UTL_ResetWet();
+		UTL_OffPowerSeq();
+
+		if ( test->pst) test->pst( test);
+		setCategory( test);
+	}
+	TestHandle test_handle = UTL_GetTestHandle();
+	UTL_SetTestAction( test_handle, func);
+	UTL_Test         ( test_handle, name);
+	UTL_DeleteHandle ( test_handle      );
+	free(name);
+	free(caliname);
+}
+
+void	DpsTest( Test_t *test) {
+	char *name;
+	char *caliname;
+	asprintf( &caliname, "%d", test->test_no);
+	asprintf( &name, "%d", test->test_no);
+#ifdef  SHOW_TEST_NAME
+	asprintf( &name, "%s", test->title);
+#endif
+	void    func() {
+		if ( test->pattern_name) ilMode( test );
+		if ( test->tim) test->tim( test);
+		if ( test->lev) test->lev( test);
+		if ( test->dps) test->dps( test);
+		if ( test->pmu) test->pmu( test);
+		if ( test->pin) test->pin( test);
+		if ( test->reg) test->reg( test);
+		if ( test->afm) test->afm( test); else afmDisable( test );
+		if ( test->ubm) test->ubm( test); else ubmDisable( test ); 
+		if ( test->pre) test->pre( test);
+		if ( test->pattern_name) preScram( test), addrScram( test), burstScram( test);
+		fixeddelay_config();
+		if ( test->pattern_name) UTL_ExecSbcal( caliname, (char *)"NOPBIDCHK,NOMBTYPECHK,NOMBIDCHK,NOPBLOCKCHK,NOMBLOCKCHK,NOSTATUSCHK");
+		UTL_OnPowerSeq();
+		UTL_SetWet();
+		if ( test->pattern_name) patStart( test);
+		UTL_WaitTime( 300 mS);
+		DpsMeas  ( test->target, 16, test->upper, test->lower);
+		if ( test->pattern_name) patStop ();
+		fixeddelay_reset();
+		UTL_ResetWet();
+		UTL_OffPowerSeq();
+
+		if ( test->pst) test->pst( test);
+		setCategory( test);
+	}
+	TestHandle test_handle = UTL_GetTestHandle();
+	UTL_SetTestAction( test_handle, func);
+	UTL_Test         ( test_handle, name);
+	UTL_DeleteHandle ( test_handle      );
+	free(name);
+	free(caliname);
+}
+
+void	PatTest ( Test_t *test) {
+	char *name;
+	char *caliname;
+	asprintf( &caliname, "%d", test->test_no);
+	asprintf( &name, "%d", test->test_no);
+#ifdef  SHOW_TEST_NAME
+	asprintf( &name, "%s", test->title);
+#endif
+	void    func() {
+		if ( test->pattern_name) ilMode( test );
+		if ( test->tim) test->tim( test);
+		if ( test->lev) test->lev( test);
+		if ( test->dps) test->dps( test);
+		if ( test->pmu) test->pmu( test);
+		if ( test->pin) test->pin( test);
+		if ( test->afm) test->afm( test); else afmDisable( test );
+		if ( test->ubm) test->ubm( test); else ubmDisable( test ); 
+		if ( test->reg) test->reg( test);
+		if ( test->pre) test->pre( test);
+		preScram ( test);
+		addrScram ( test);
+		burstScram( test);
+		fixeddelay_config();
+		UTL_ExecSbcal( caliname, (char *)"NOPBIDCHK,NOMBTYPECHK,NOMBIDCHK,NOPBLOCKCHK,NOMBLOCKCHK,NOSTATUSCHK");
+		UTL_OnPowerSeq();
+		UTL_SetWet();
+		patMeas( test);
+		fixeddelay_reset();
+		UTL_ResetWet();
+		UTL_OffPowerSeq();
+		if ( test->pst) test->pst( test);
+		setCategory( test);
+	}
+	TestHandle test_handle = UTL_GetTestHandle();
+	UTL_SetTestAction( test_handle, func);
+	UTL_Test         ( test_handle, name);
+	UTL_DeleteHandle ( test_handle      );
+	free(name);
+	free(caliname);
+}
+
+void	TestStart(void) {
+	UTL_StartTimer         ( UT_TIMER_R10US);
+	setlinebuf(stdout);
+	printf("-------------------------------------------Test Start-----------------------------------------------------\n");
+
+	// ------------------ only For T5833/32, not support T5503HS2
+	MemoryModuleHandle h=UTL_GetMemoryModuleHandle();
+	UTL_AddMemoryModulePurpose(h, UT_MEM_FCM, 3);
+	UTL_AddMemoryModulePurpose(h, UT_MEM_FBM, 1);
+	UTL_SendMemoryModule(h);
+	UTL_DeleteHandle(h);
+
+	UTL_SetDctSepaDrCtrlMode( UT_DCT_SEPA);
+
+	SettlingTimeHandle	settling_time	= UTL_GetSettlingTimeHandle();
+	UTL_SetSettlingTime        ( settling_time, 1.000 mS);
+	UTL_SetSettlingTimeAfterRon( settling_time, 1.000 mS);
+	UTL_SetSettlingTimeAfterRof( settling_time, 1.000 mS);
+	UTL_SendSettlingTime       ( settling_time);
+	UTL_DeleteHandle           ( settling_time);
+
+	PowerSeqHandle	power_seq	= UTL_GetPowerSeqHandle();
+	UTL_AddPowerSeqUnit    ( power_seq, 1, UT_UNIT_VSALL );
+	UTL_SetPowerSeqWaitTime( power_seq, 1, 50.00 mS      );
+	UTL_AddPowerSeqUnit    ( power_seq, 2, UT_UNIT_VIALL );
+	UTL_AddPowerSeqUnit    ( power_seq, 2, UT_UNIT_VTALL );
+	UTL_SetPowerSeqWaitTime( power_seq, 2, 50.00 mS      );
+	UTL_AddPowerSeqUnit    ( power_seq, 3, UT_UNIT_OTHERS);
+	UTL_SetPowerSeqWaitTime( power_seq, 3, 50.00 mS      );
+	UTL_SendPowerSeq       ( power_seq);
+	UTL_DeleteHandle       ( power_seq);
+
+	IlModeHandle    handle = UTL_GetIlModeHandle();
+	UTL_SetIlMode          ( handle,  4);
+//	UTL_SetIlComparisonMode( handle,  1);        // for T5503HS2 9G PEM
+	UTL_SendIlMode         ( handle    );
+	UTL_DeleteHandle       ( handle    );
+
+	DefinePinlist();
+}
+
+void	TestMain( Test_t *test_flow, int test_count) {
+	for ( int i = 0; i<test_count; i++)
+		test_flow[ i].type ( &test_flow[ i]);
+}
+
+inline	static	void	ShowTime(void) {
+	CheckButton	overflow;
+	static	double	prev	= 0.0;
+	double		curr	= UTL_ReadTimer(&overflow);
+	printf(":%6.3f[s]: %6.3f[s]\n", ((overflow)?(NAN):(curr)), ((overflow)?(NAN):(curr-prev))); prev = curr;
+}
+
+void	TestEnd  (void) {
+	DutCursor dut_cursor;
+	UT_DUT    dut;
+	printf("------------------------------------------------------------------------------------------------\n");
+	printf("    : %-67s:","Total Bin");
+	dut_cursor = UTL_GetDutCursor( UT_MDUT);
+	while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) {
+		if      ( (UTL_ReadCategory( dut,   2) == UT_ON) )    { UTL_SendSort( dut, 7); UTL_SetFinalResultOnly   ( dut, UT_RES_DC  ); }
+		else if ( (UTL_ReadCategory( dut,   4) == UT_ON) ||
+			  (UTL_ReadCategory( dut,   6) == UT_ON) ||
+			  (UTL_ReadCategory( dut,   8) == UT_ON) )    { UTL_SendSort( dut, 6); UTL_SetFinalResultOnly   ( dut, UT_RES_DC  ); }
+		else if ( (UTL_ReadCategory( dut,  10) == UT_ON) )    { UTL_SendSort( dut, 5); UTL_SetFinalResultOnly   ( dut, UT_RES_DC  ); }
+		else if ( (UTL_ReadCategory( dut, 130) == UT_ON) &&
+			  (UTL_ReadCategory( dut, 150) == UT_ON) )    { UTL_SendSort( dut, 1); UTL_ResetFinalResultOnly ( dut, UT_RES_FUNC); }
+		else if ( (UTL_ReadCategory( dut, 120) == UT_ON) &&
+			  (UTL_ReadCategory( dut, 140) == UT_ON) )    { UTL_SendSort( dut, 2); UTL_ResetFinalResultOnly ( dut, UT_RES_FUNC); }
+		else if	( (UTL_ReadCategory( dut, 110) == UT_ON) )    { UTL_SendSort( dut, 3); UTL_ResetFinalResultOnly ( dut, UT_RES_FUNC); }
+		else if	( (UTL_ReadCategory( dut, 100) == UT_ON) )    { UTL_SendSort( dut, 4); UTL_ResetFinalResultOnly ( dut, UT_RES_FUNC); }
+		else                                                  { UTL_SendSort( dut, 8); UTL_SetFinalResultOnly   ( dut, UT_RES_ALL ); }
+	}
+	UTL_DeleteCursor( dut_cursor);
+	dut_cursor = UTL_GetDutCursor( UT_MDUT);
+	while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) printf("%d%s",UTL_ReadSort( dut),((dut%8)==0?" ":"") );
+	UTL_DeleteCursor( dut_cursor); 
+	ShowTime();
+}
+
+void    ShowId( Test_t *test) {
+	
+	UbmReadResult(test);
+	ShowResult(test);
+	setDutPass(test);
+
+}
+
+void    ShowFcm4( Test_t *test) {
+	
+//	FcmReadResult ( test);
+	ShowResult(test);
+	// SET JDUT 1 2 3
+	// RESET TNO
+	// RESET JDUT
+	setDutPass(test);
+}
+
+void    ShowFcm1( Test_t *test) {
+//	FcmReadResult ( test);
+	ShowResult(test);
+	// SET JDUT 1 2 3
+	// RESET TNO
+	// RESET JDUT
+	setDutPass(test);
+
+}
+void    ShowDbm ( Test_t *test) {
+	ShowResult(test);
+	DbmReset( test);
+}
+void    ShowDm  ( Test_t *test) {
+
+	ShowResult(test);
+	// SET JDUT 1 2 3
+	// RESET TNO
+	// RESET JDUT
+	setDutPass(test);
+}
+
+void	setDutPass(Test_t *test)
+{
+	char *name;
+	asprintf( &name, "%d", test->test_no);
+#ifdef  SHOW_TEST_NAME
+	asprintf( &name, "%s", test->title);
+#endif
+	DutCursor	dut_cursor = UTL_GetDutCursor( UT_CDUT );
+	UT_DUT		dut;
+	while	(( dut = UTL_NextDut( dut_cursor )) != UT_NOMORE)
+	{
+		UTL_ResetTestResult ( dut, name, UT_RES_FUNC );
+	}
+	UTL_DeleteCursor( dut_cursor);
+	free(name);
+}
+
+
+
+void    ShowResult( Test_t *test) {
+	int     dut_count = UTL_GetDutCount( UT_DDUT);
+	int     result[ dut_count+1];
+	for ( int dut=1; dut<=dut_count; dut++) result[dut] = '-';
+
+	DutCursor dut_cursor;
+	UT_DUT    dut;
+	dut_cursor = UTL_GetDutCursor( UT_PDUT); while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) result[ dut-1] = 'P'; UTL_DeleteCursor( dut_cursor);
+	dut_cursor = UTL_GetDutCursor( UT_FDUT); while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) result[ dut-1] = 'f'; UTL_DeleteCursor( dut_cursor);
+
+	printf("%4d: %-64s:",test->test_no, test->title);
+	dut_cursor = UTL_GetDutCursor( UT_DDUT); while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) printf("%c%s",result[ dut-1],(dut%8)==0?" ":"" ); UTL_DeleteCursor( dut_cursor);
+	ShowTime();
+}
+
+char	*FormatValue( double var, const char *unit, char *buffer) {
+	if      ( (var >= 1.0e-0 ) || (var <= -1.0e-0 ) ) sprintf( buffer, "%6.3f[ %s]", var*1e+0 , unit);
+	else if ( (var >= 1.0e-3 ) || (var <= -1.0e-3 ) ) sprintf( buffer, "%6.3f[m%s]", var*1e+3 , unit);
+	else if ( (var >= 1.0e-6 ) || (var <= -1.0e-6 ) ) sprintf( buffer, "%6.3f[u%s]", var*1e+6 , unit);
+	else if ( (var >= 1.0e-9 ) || (var <= -1.0e-9 ) ) sprintf( buffer, "%6.3f[n%s]", var*1e+9 , unit);
+	else if ( (var >= 1.0e-12) || (var <= -1.0e-12) ) sprintf( buffer, "%6.3f[p%s]", var*1e+12, unit);
+	else                                              sprintf( buffer, "%6.3f[ %s]", 0.000    , unit);
+	return	buffer;
+}
+
+void	ShowDpsResult( Test_t *test) {
+	char	buffer[16];
+	ShowResult( test);
+	DctReadPinHandle	dct_read_pin	= UTL_GetDctReadPinHandle();
+	UTL_SetDctReadPinType  ( dct_read_pin, UT_PINTYPE_VS);
+	UTL_SetDctReadPinMode  ( dct_read_pin, UT_RES_OVERFLOW);
+	DutCursor	dut_cursor	= UTL_GetDutCursor( UT_CDUT);
+	int		dut;
+	while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) {
+		UTL_SetDctReadPinDut   ( dct_read_pin, dut);
+		PinCursor	pin_cursor	= UTL_GetPinCursor( test->target);
+		int		pin;
+		while( (pin = UTL_NextPin( pin_cursor)) != UT_NOMORE) {
+			UTL_SetDctReadPinNumber( dct_read_pin, pin);
+			char	*unit;
+			if      ( UTL_ReadDctPinMeasMode( dct_read_pin) == UT_DCT_VSIM ) unit = "A";
+			else                                                             unit = "V";
+			if ( UTL_ReadDctPin( dct_read_pin) == UT_ON ) printf("P%-4d: ---- \n", pin);
+			else                                          printf("P%-4d:%s\n"  , pin, FormatValue( UTL_ReadDctPinData( dct_read_pin), unit, buffer));
+		}
+		UTL_DeleteCursor( pin_cursor);
+	}
+	UTL_DeleteCursor( dut_cursor);
+	UTL_DeleteHandle( dct_read_pin);
+}
+
+void	ShowPmuResult( Test_t *test) {
+	char	buffer[16];
+	ShowResult( test);
+	DctReadPinHandle	dct_read_pin	= UTL_GetDctReadPinHandle();
+	UTL_SetDctReadPinType  ( dct_read_pin, UT_PINTYPE_PIN);
+	UTL_SetDctReadPinMode  ( dct_read_pin, UT_RES_OVERFLOW);
+	DutCursor	dut_cursor	= UTL_GetDutCursor( UT_CDUT);
+	int		dut;
+	while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) {
+		UTL_SetDctReadPinDut   ( dct_read_pin, dut);
+		PinCursor	pin_cursor	= UTL_GetPinCursor( test->target);
+		int		pin;
+		while( (pin = UTL_NextPin( pin_cursor)) != UT_NOMORE) {
+			UTL_SetDctReadPinNumber( dct_read_pin, pin);
+			char	*unit;
+			if      ( UTL_ReadDctPinMeasMode( dct_read_pin) == UT_DCT_VSIM ) unit = "A";
+			else                                                             unit = "V";
+			if ( UTL_ReadDctPin( dct_read_pin) == UT_ON ) printf("P%-4d: ---- \n", pin);
+			else                                          printf("P%-4d:%s\n"  , pin, FormatValue( UTL_ReadDctPinData( dct_read_pin), unit, buffer));
+		}
+		UTL_DeleteCursor( pin_cursor);
+	}
+	UTL_DeleteCursor( dut_cursor);
+	UTL_DeleteHandle( dct_read_pin);
+}
+
+void	FailReject( Test_t *test) {
+	ShowResult( test);
+	DutCursor dut_cursor;
+	UT_DUT    dut;
+	dut_cursor = UTL_GetDutCursor( UT_FDUT); while( (dut = UTL_NextDut( dut_cursor)) != UT_NOMORE) UTL_SetRejection( dut, UT_OFF)                                            ; UTL_DeleteCursor( dut_cursor);
+}

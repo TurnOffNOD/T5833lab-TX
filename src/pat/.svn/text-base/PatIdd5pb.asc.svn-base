@@ -1,0 +1,188 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatIdd5pb<4WAY>
+	MODE MUX TP2INV REFRESHB
+	RDX	10
+	REGISTER
+		ISP	= REF	; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,            ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                              T      ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		JSR IDD5PB                             ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		STPS
+	
+	
+;################################ IDD2P Idle Power-down Standby Current      ################################
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP     ,/D1,/D2,DM00,ODT  ,             ;
+IDD5PB:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;
+		                                   :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		                                   :    ,     ,    ,     ,   ,   ,      ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+LOOP:  		NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,BANK_XA,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ; 		<780>
+						   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	tREFI = 488nS = 780 CK    
+						   :    ,CYP8 ,    ,     ,   ,   ,REF2  ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;             
+						   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1
+   		NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R2    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2	
+						   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3
+   						   :    ,CYP7 ,    ,     ,   ,   ,R4    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4
+   						   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5
+		IDXI1 #5E       		 I :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6	14 ... 766
+						   :    ,CYP7 ,    ,     ,   ,   ,R7    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7	15 ... 767        
+						   :    ,CYP7 ,    ,     ,   ,   ,R8    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8	16 ... 768
+						   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 	17 ... 769
+		IDXI1 #5E                        I :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  10 	18 ... 770
+						   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  11 	19 ... 771
+						   :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  12 	20 ... 772
+						   :    ,CYP7 ,    ,     ,   ,   ,R5    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  13 	21 ... 773
+		NOP				 I :    ,CYP7 ,	   ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   	       774
+		                		   :    ,CYP7 ,	   ,     ,   ,   ,R7    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              775
+		                		   :    ,CYP7 ,	   ,     ,   ,   ,R8    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              776
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              777
+		NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              778
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              779
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R4	,BANK_XB,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              <780>
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		NOP		                 I :    ,CYP8 ,	   ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   	       
+		                                   :    ,CYP7 ,	   ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1           
+		                                   :    ,CYP7 ,	   ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2      
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3            
+		NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4            
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5            
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6            
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7 
+		IDXI2 #5E	                 I :	,CYP7 ,    ,	 ,   ,   ,R8	,	,X<XC,	      ,	    ,	    ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,	  ,		;  8 ... 768	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 ... 769	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R2    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  10... 770
+				                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  11... 771
+		IDXI2 #5E			 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  12... 772
+						   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  13... 773
+						   :    ,CYP7 ,    ,     ,   ,   ,R6    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  14... 774
+						   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  15... 775
+		NOP				 I :    ,CYP7 ,    ,	 ,   ,	 ,R8	,	,X<XC,	      ,     ,       ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,     ,             ;	 776
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 777
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 778
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 779
+		NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,BANK_XC,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 <780>
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP8 ,    ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1
+		IDXI1 #5F	                 I :	,CYP7 ,    ,	 ,   ,   ,R2	,	,X<XC,	      ,	    ,	    ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,	  ,		;  2 ... 770	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3 ... 771	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R4    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4 ... 772
+				                   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5 ... 773
+		IDXI1 #5F			 I :    ,CYP7 ,    ,     ,   ,   ,R6    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6 ... 774
+						   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7 ... 775
+						   :    ,CYP7 ,    ,     ,   ,   ,R8    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8 ... 776
+						   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 ... 777
+		NOP				 I :    ,CYP7 ,    ,	 ,   ,	 ,R2	,	,X<XC,	      ,     ,       ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,     ,             ;	 778
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 779
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R4    ,BANK_XD,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 <780>   
+		                		   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	      
+	        NOP				 I :    ,CYP8 ,    ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3
+		IDXI2 #5F	                 I :	,CYP7 ,    ,	 ,   ,   ,R4	,	,X<XC,	      ,	    ,	    ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,	  ,		;  4 ... 772	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5 ... 773	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R6    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6 ... 774
+				                   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7 ... 775
+		IDXI2 #5F			 I :    ,CYP7 ,    ,     ,   ,   ,R8    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8 ... 776
+						   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 ... 777
+						   :    ,CYP7 ,    ,     ,   ,   ,R2    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  10... 778
+						   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  11... 779
+		NOP				 I :    ,CYP7 ,    ,	 ,   ,	 ,R4	,BANK_XE,X<XC,	      ,     ,       ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,     ,             ;	 <780>
+		                		   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	   
+		                		   :    ,CYP8 ,    ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  	 
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1	   
+	        NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2      
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3      
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4 
+		                                   :    ,CYP8 ,    ,     ,   ,   ,R5    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5 
+		IDXI1 #5E                        I :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6	14 ... 766
+				                   :    ,CYP7 ,    ,     ,   ,   ,R7    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7	15 ... 767        
+				                   :    ,CYP7 ,    ,     ,   ,   ,R8    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8	16 ... 768
+				                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 	17 ... 769
+		IDXI1 #5E                        I :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  10 	18 ... 770
+						   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  11 	19 ... 771
+						   :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  12 	20 ... 772
+						   :    ,CYP7 ,    ,     ,   ,   ,R5    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  13 	21 ... 773
+		NOP				 I :    ,CYP7 ,	   ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   	       774
+		                		   :    ,CYP7 ,	   ,     ,   ,   ,R7    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              775
+		                		   :    ,CYP7 ,	   ,     ,   ,   ,R8    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              776
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              777
+	        NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              778
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              779
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R4	,BANK_XF,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;              <780>
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   
+		NOP		                 I :    ,CYP8 ,	   ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   	       
+		                                   :    ,CYP7 ,	   ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1           
+		                                   :    ,CYP7 ,	   ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2      
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3            
+	        NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4            
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5            
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6            
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7 
+		IDXI2 #5E	                 I :	,CYP7 ,    ,	 ,   ,   ,R8	,	,X<XC,	      ,	    ,	    ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,	  ,		;  8 ... 768	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 ... 769	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R2    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  10... 770
+				                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  11... 771
+		IDXI2 #5E			 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  12... 772
+						   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  13... 773
+						   :    ,CYP7 ,    ,     ,   ,   ,R6    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  14... 774
+						   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  15... 775
+		NOP				 I :    ,CYP7 ,    ,	 ,   ,	 ,R8	,	,X<XC,	      ,     ,       ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,     ,             ;	 776
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 777
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 778
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 779
+	        NOP				 I :    ,CYP7 ,    ,     ,   ,   ,R4    ,BANK_XG,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 <780>
+		                                   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;
+		                                   :    ,CYP8 ,    ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1
+		IDXI1 #5F	                 I :	,CYP7 ,    ,	 ,   ,   ,R2	,	,X<XC,	      ,	    ,	    ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,	  ,		;  2 ... 770	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3 ... 771	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R4    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  4 ... 772
+				                   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5 ... 773
+		IDXI1 #5F			 I :    ,CYP7 ,    ,     ,   ,   ,R6    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6 ... 774
+						   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7 ... 775
+						   :    ,CYP7 ,    ,     ,   ,   ,R8    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8 ... 776
+						   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 ... 777
+		NOP				 I :    ,CYP7 ,    ,	 ,   ,	 ,R2	,	,X<XC,	      ,     ,       ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,     ,             ;	 778
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 779
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R4    ,BANK_XH,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 <780>   
+		                		   :    ,CYP7 ,    ,     ,CS0,   ,REF1  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	      
+	        NOP				 I :    ,CYP8 ,    ,     ,   ,   ,REF2  ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R1    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  1
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  2
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  3
+		IDXI2 #5E	                 I :	,CYP7 ,    ,	 ,   ,   ,R4	,	,X<XC,	      ,	    ,	    ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,	  ,		;  4 ... 764	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R5    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  5 ... 765	
+				                   :    ,CYP7 ,    ,     ,   ,   ,R6    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  6 ... 766
+				                   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  7 ... 767
+		IDXI2 #5E			 I :    ,CYP7 ,    ,     ,   ,   ,R8    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  8 ... 768
+						   :    ,CYP7 ,    ,     ,   ,   ,R1    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  9 ... 769
+						   :    ,CYP7 ,    ,     ,   ,   ,R2    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  10... 770
+						   :    ,CYP7 ,    ,     ,   ,   ,R3    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  11... 771
+		NOP				 I :	,CYP7 ,    ,	 ,   ,	 ,R4	,	,X<XC,	      ,     ,       ,Y<YC,	  ,    ,     , ,       ,   ,   ,    ,     ,             ;	 772
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R5    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 773
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R6    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 774
+		                		   :    ,CYP7 ,    ,     ,   ,   ,R7    ,	,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 775
+	        JMP LOOP			 I :    ,CYP7 ,    ,     ,   ,   ,R8    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 776
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R1	,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;	 777
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R2    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;  	 778
+		                                   :    ,CYP7 ,    ,     ,   ,   ,R3    ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;        779
+	INSERT patPowerUp
+	INSERT patRefresh
+END

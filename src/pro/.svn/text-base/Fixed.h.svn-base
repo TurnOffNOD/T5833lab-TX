@@ -1,0 +1,35 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+
+//#if !defined(___FIXED_DELAY_EDGE_MODE_H_)
+//#define ___FIXED_DELAY_EDGE_MODE_H_
+#ifndef		___Fixed_H___
+#define		___Fixed_H___
+
+#ifdef		__cplusplus
+extern "C" {
+#endif	//	__cplusplus
+
+
+// Fixed Delay Edge Mode
+	int fixeddelay_config(void);
+
+//	int  fixeddelay_config_h(TgHandle tgh);
+//	int  fixeddelay_config_offset(DSlider offset);
+//	int  fixeddelay_config_offset_h(DSlider offset, TgHandle tgh);
+	void fixeddelay_reset(void);
+
+
+#ifdef __cplusplus
+};
+#endif	//	__cplusplus
+#endif	//	___Fixed_H___
+
+//#endif /* !defined(___FIXED_DELAY_EDGE_MODE_H_) */

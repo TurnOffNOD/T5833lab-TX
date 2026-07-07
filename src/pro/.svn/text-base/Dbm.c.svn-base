@@ -1,0 +1,131 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Dbm.h"
+void	setMemoryModuleDbm();
+void	setMemoryModuleDefault();
+void	DBM_Config();
+void	DBM_Reset();
+void	DBM_WriteData();
+
+//      ################################ Dbm    Setting   ################################
+void    DbmConfig( Test_t *test) {
+	setMemoryModuleDbm();
+	DBM_Reset();
+	DBM_Config();
+	DBM_WriteData()	;
+}
+
+void    DbmReset ( Test_t *test) {
+	DBM_Reset();
+	setMemoryModuleDefault();
+
+}
+// ####################DBM####################################
+void	setMemoryModuleDbm(){
+	MemoryModuleHandle h=UTL_GetMemoryModuleHandle();
+	UTL_AddMemoryModulePurpose(h, UT_MEM_FCM, 3);
+	UTL_AddMemoryModulePurpose(h, UT_MEM_DBM, 1);
+	UTL_SendMemoryModule(h);
+	UTL_DeleteHandle(h);
+}
+
+void	setMemoryModuleDefault(){
+	MemoryModuleHandle h=UTL_GetMemoryModuleHandle();
+	UTL_AddMemoryModulePurpose(h, UT_MEM_FCM, 3);
+	UTL_AddMemoryModulePurpose(h, UT_MEM_FBM, 1);
+	UTL_SendMemoryModule(h);
+	UTL_DeleteHandle(h);
+}
+
+
+void	DBM_Config(){
+	DbmConfigHandle	dbmconfigh = UTL_GetDbmConfigHandle();
+	UTL_SetDbmConfigBitSize    (dbmconfigh, 40);				
+	UTL_SetDbmConfigAccessMode (dbmconfigh, UT_DBM_ACCESS_AP);			
+	UTL_SendDbmConfig          (dbmconfigh);
+	UTL_DeleteHandle           (dbmconfigh);
+}
+
+void	DBM_Reset(){
+	DbmAccessHandle	dbmaccessh;
+	dbmaccessh = UTL_GetDbmAccessHandle();
+	UTL_ResetDbm                (dbmaccessh);
+	UTL_DeleteHandle            (dbmaccessh);
+}
+
+void	DBM_WriteData(){
+/*//Read random data from file
+	int i = 0;
+	FILE *fp;
+	unsigned int data[256*1024];
+	unsigned int dbm_data[256*1024]; // 256M *4, AP=256M, 
+	int data_byte;
+	fp=fopen("dbm_data.txt", "rb");
+	if(fp == NULL){
+		printf("ERROR: can not open the random data file!!!\n");
+	}
+	while(fscanf(fp,"%02x",&data_byte)!=EOF){
+		data[i++]=data_byte;
+		if(i<256){
+			printf("%d(%02x)\t",i,data_byte);
+			if(i%8==0)printf("\n");
+		}
+	}
+	printf("\n");
+	fclose(fp);
+//data process
+	for(i = 0; i<16*1024; i=i+2)
+	{
+		dbm_data[2*i]   = data[i]|(data[i]<<8);
+		dbm_data[2*i+1] = data[i]|(data[i]<<8);
+		dbm_data[2*i+2] = data[i+1]|(data[i+1]<<8);
+		dbm_data[2*i+3] = data[i+1]|(data[i+1]<<8);
+	}
+*/
+	int i;
+	unsigned int dbm_data[1024*4]; // 1row =1024bit
+	for(i=0;i<1024;i=i+1)
+	{
+		dbm_data[4*i]	= 0x000fffff;    //P33-52  port A   AP= 0 1 2
+		dbm_data[4*i+1]	= 0x00000000;    //P97-116 port A   AP= 0 1 2
+		dbm_data[4*i+2]	= 0x00000000;    //P33-52  port B   AP= 0 1 2
+		dbm_data[4*i+3]	= 0x000fffff;    //P97-116 port B   AP= 0 1 2
+
+	}
+		dbm_data[0]	= 0x000f0f0f;
+		dbm_data[1]	= 0x0000f0f0;
+		dbm_data[2]	= 0x000f0ff0;
+		dbm_data[3]	= 0x000ff0f0;
+	for(i=0;i<16;i++){
+		dbm_data[64+i*4]	= 0x00034567; 
+		dbm_data[65+i*4]	= 0x00089abc; 
+		dbm_data[66+i*4]	= 0x000def01; 
+		dbm_data[67+i*4]	= 0x00023456; 
+	}
+	DbmAccessHandle	dbm_access_handle	= UTL_GetDbmAccessHandle();
+	UTL_SetDbmAccessChildFlag  ( dbm_access_handle, 1               );
+	UTL_SetDbmAccessDataKind   ( dbm_access_handle, UT_DBM_PPAT      );
+	for(i = 1; i<5; i++)
+	{
+		if (i !=3)
+		{
+			UTL_SetDbmAccessBlockNumber( dbm_access_handle, i               );
+			UTL_SetDbmAccessStartAddr  ( dbm_access_handle, 0               );
+			UTL_SetDbmAccessStopAddr   ( dbm_access_handle, 1024-1     );
+
+			UTL_WriteDbm               ( dbm_access_handle, dbm_data, sizeof(dbm_data));
+			fflush(stdout);
+		}
+	}
+	UTL_DeleteHandle(dbm_access_handle);
+}

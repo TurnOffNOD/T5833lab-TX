@@ -1,0 +1,127 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+SOCKET	HF76144CN
+
+; 	CK_C_A	=PD7	=7                       				;;	CK_C_A		= PD0001	= 0001
+; 	CK_T_A	=PD8	=8                       				;;	CK_T_A		= PD0002	= 0002
+; 	CS0_A	=PD1	=1                       				;;	CS0_A		= PD0003 	= 0003
+; 	CS1_A	=PD2	=2                       				;;	CS1_A		= PD0004 	= 0004
+; 	CS2_A	=PD3	=3                         				;;	CS2_A		= PD0005 	= 0005
+; 	CKE0_A	=PD4	=4                        				;;	CKE0_A		= PD0006 	= 0006
+; 	CKE1_A	=PD5	=5                        				;;	CKE1_A		= PD0007 	= 0007
+; 	CKE2_A	=PD6	=6                       				;;	CKE2		= PD0008 	= 0008
+; 	CA0_A	=PD9	=9                        				;;	CA0_A		= PD0009	= 0009
+; 	CA1_A	=PD10	=10                      				;;	CA1_A		= PD0010	= 0010
+; 	CA2_A	=PD11	=11                      				;;	CA2_A		= PD0011	= 0011
+; 	CA3_A	=PD12	=12                      				;;	CA3_A		= PD0012 	= 0012
+; 	CA4_A	=PD13	=13                      				;;	CA4_A		= PD0013 	= 0013
+; 	CA5_A	=PD14	=14                     				;;	CA5_A		= PD0014 	= 0014
+; 	DQ0_A	=P33	=33                      				;;	ODTCA		= PD0015 	= 0015
+; 	DQ1_A	=P34	=34                      				;;	
+; 	DQ2_A	=P35	=35                        				;;	RST_N		= PD0016 	= 0016
+; 	DQ3_A	=P36	=36                       				;;	
+; 	DQ4_A	=P37	=37                       				;;	DQ0_A		= P0033 	= 0033
+; 	DQ5_A	=P38	=38                       				;;	DQ1_A		= P0034 	= 0034
+; 	DQ6_A	=P39	=39                       				;;	DQ2_A		= P0035 	= 0035
+; 	DQ7_A	=P40	=40                       				;;	DQ3_A		= P0036 	= 0036
+; 	DQ8_A	=P41	=41                       				;;	DQS0_C_A	= P0098 	= 0098
+; 	DQ9_A	=P42	=42                       				;;	DMI0_A		= P0051 	= 0051
+; 	DQ10_A	=P43	=43                      				;;	DQ4_A		= P0037 	= 0037
+; 	DQ11_A	=P44	=44                      				;;	DQ5_A		= P0038 	= 0038
+; 	DQ12_A	=P45	=45                      				;;	DQ6_A		= P0039 	= 0039
+; 	DQ13_A	=P46	=46                      				;;	DQ7_A		= P0040 	= 0040
+; 	DQ14_A	=P47	=47                       				;;	DQS0_T_A	= P0049 	= 0049
+; 	DQ15_A	=P48	=48                       				;;	
+; 	DMI0_A	=P289	=289                     				;;	DQ8_A		= P0041 	= 0041
+; 	DMI1_A	=P290	=290                     				;;	DQ9_A		= P0042 	= 0042
+; 	DQS0_C_A	=P51	=51                     				;;	DQ10_A		= P0043 	= 0043
+; 	DQS0_T_A	=P49	=49                     				;;	DQ11_A		= P0044 	= 0044
+; 	DQS1_C_A	=P52	=52                     				;;	DQS1_C_A	= P0097 	= 0097
+; 	DQS1_T_A	=P50	=50                     				;;	DMI1_A		= P0052 	= 0052
+; 	RST_N	=PD15	=15                     				;;	DQ12_A		= P0045 	= 0045
+; 	ODTCA_A	=P293	=293                   				;;	DQ13_A		= P0046 	= 0046
+; 	ODTCA_B	=P294	=294                  				;;	DQ14_A		= P0047 	= 0047
+; 	CK_C_B	=PD71	=71                     				;;	DQ15_A		= P0048 	= 0048
+; 	CK_T_B	=PD72	=72                     				;;	DQS1_T_A	= P0050 	= 0050
+; 	CS0_B	=PD65	=65                      				;;	
+; 	CS1_B	=PD66	=66                      				;;
+; 	CS2_B	=PD67	=67                      				;;;	CK_C_B		= PD0001	= 0001
+; 	CKE0_B	=PD68	=68                    				;;;	CK_T_B		= PD0002	= 0002
+; 	CKE1_B	=PD69	=69                    				;;;	CS0_B		= PD0003 	= 0003
+; 	CKE2_B	=PD70	=70                           				;;;	CS1_B		= PD0004 	= 0004
+; 	CA0_B	=PD73	=73                            				;;;	CS2_B		= PD0005 	= 0005
+; 	CA1_B	=PD74	=74                            				;;;	CKE0_B		= PD0006 	= 0006
+; 	CA2_B	=PD75	=75                            				;;;	CKE1_B		= PD0007 	= 0007
+; 	CA3_B	=PD76	=76                       				;;
+; 	CA4_B	=PD77	=77                       				;;;	CA0_B		= PD0009	= 0009
+; 	CA5_B	=PD78	=78                       				;;;	CA1_B		= PD0010	= 0010
+; 	DQ0_B	=P97	=97                       				;;;	CA2_B		= PD0011	= 0011
+; 	DQ1_B	=P98	=98                       				;;;	CA3_B		= PD0012 	= 0012
+; 	DQ2_B	=P99	=99                       				;;;	CA4_B		= PD0013 	= 0013
+; 	DQ3_B	=P100	=100                     				;;;	CA5_B		= PD0014 	= 0014
+; 	DQ4_B	=P101	=101                     				;;;	
+; 	DQ5_B	=P102	=102                     				;;;	
+; 	DQ6_B	=P103	=103                     				;;;	DQ0_B		= P0033 	= 0033
+; 	DQ7_B	=P104	=104                    				;;;	DQ1_B		= P0034 	= 0034
+; 	DQ8_B	=P105	=105                    				;;;	DQ2_B		= P0035 	= 0035
+; 	DQ9_B	=P106	=106                    				;;;	DQ3_B		= P0036 	= 0036
+; 	DQ10_B	=P107	=107                   				;;;	DQS0_C_B	= P0098 	= 0098
+; 	DQ11_B	=P108	=108                   				;;;	DMI0_B		= P0051 	= 0051
+; 	DQ12_B	=P109	=109                   				;;;	DQ4_B		= P0037 	= 0037
+; 	DQ13_B	=P110	=110                   				;;;	DQ5_B		= P0038 	= 0038
+; 	DQ14_B	=P111	=111                   				;;;	DQ6_B		= P0039 	= 0039
+; 	DQ15_B	=P112	=112                         				;;;	DQ7_B		= P0040 	= 0040
+; 	DMI0_B	=P291	=291                         				;;;	DQS0_T_B	= P0049 	= 0049
+; 	DMI1_B	=P292	=292                         				;;;	
+; 	DQS0_C_B	=P115	=115                       				;;;	DQ8_B		= P0041 	= 0041
+; 	DQS0_T_B	=P113	=113                        			;;;	DQ9_B		= P0042 	= 0042
+; 	DQS1_C_B	=P116	=116                       				;;;	DQ10_B		= P0043 	= 0043
+; 	DQS1_T_B	=P114	=114                       				;;;	DQ11_B		= P0044 	= 0044
+					;;;	DQS1_C_B	= P0097 	= 0097
+					;;;	DMI1_B		= P0052 	= 0052
+					;;;	DQ12_B		= P0045 	= 0045
+					;;;	DQ13_B		= P0046 	= 0046
+					;;;	DQ14_B		= P0047 	= 0047
+					;;;	DQ15_B		= P0048 	= 0048
+					;;;	DQS1_T_B	= P0050 	= 0050
+                          
+DEFINE SYMBOL             
+	VDD1	= VS1     
+	VDD2	= VS2     
+	VDDQ	= VS3
+
+DEFINE MULTIPLE 3DUT 1STN 4SITE 1CHAIN
+	BIT = 46
+	PPS =  3
+	PARALLEL VS1=1
+	PARALLEL VS2=4
+	PARALLEL VS3=3
+
+
+
+
+
+
+
+;;						J9	J8	P9	P8	H4	H3	K5	R4	R3	N5	J4	J5	K8	P4	P5	N8	H2	J2	H9	H10	H11	J11	R2	P2	R9	R10	R11	P11	B2	C2	E2	F2	F4	E4	C4	B4	B11	C11	E11	F11	F9	E9	C9	B9	C3	C10	E3		D3		E10		D10		AA2	Y2	V2	U2	U4	V4	Y4	AA4	AA11	Y11	V11	U11	U9	V9	Y9	AA9	Y3	Y10	V3	W3	V10	W10	T11	G2	T2			
+;;	VDD1	VDD2	VDDQ			CK_c_A	CK_t_A	CK_c_B	CK_t_B	CS0_A	CS1_A	CS2_A	CS0_B	CS1_B	CS2_B	CKE0_A	CKE1_A	CKE2_A	CKE0_B	CKE1_B	CKE2_B	CA0_A	CA1_A	CA2_A	CA3_A	CA4_A	CA5_A	CA0_B	CA1_B	CA2_B	CA3_B	CA4_B	CA5_B	DQ0_A	DQ1_A	DQ2_A	DQ3_A	DQ4_A	DQ5_A	DQ6_A	DQ7_A	DQ8_A	DQ9_A	DQ10_A	DQ11_A	DQ12_A	DQ13_A	DQ14_A	DQ15_A	DMI0_A	DMI1_A	DQS0_c_A	DQS0_t_A	DQS1_c_A	DQS1_t_A	DQ0_B	DQ1_B	DQ2_B	DQ3_B	DQ4_B	DQ5_B	DQ6_B	DQ7_B	DQ8_B	DQ9_B	DQ10_B	DQ11_B	DQ12_B	DQ13_B	DQ14_B	DQ15_B	DMI0_B	DMI1_B	DQS0_c_B	DQS0_t_B	
+;;	PS	PS	PS	      		DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	DR	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO		IO		IO		IO		IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	IO	DR	IO	IO	        
+;;	ind	ind	ind	   		ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind		ind		ind		ind		ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	ind	        
+DUT#=	VS1	VS2		VS3	 	PD7	PD8	PD71	PD72	PD1	PD2	PD3	PD65	PD66	PD67	PD4	PD5	PD6	PD68	PD69	PD70	PD9	PD10	PD11	PD12	PD13	PD14	PD73	PD74	PD75	PD76	PD77	PD78	P33	P34	P35	P36	P37	P38	P39	P40	P41	P42	P43	P44	P45	P46	P47	P48	P289	P290	P51		P49		P52		P50		P97	P98	P99	P100	P101	P102	P103	P104	P105	P106	P107	P108	P109	P110	P111	P112	P291	P292	P115	P113	P116	P114	PD15	P293	P294	        
+DUT1=	PPS25A	PPS1,2,3,4A	PPS9,10,11A 	PD7A	PD8A	PD71A	PD72A	PD1A	PD2A	PD3A	PD65A	PD66A	PD67A	PD4A	PD5A	PD6A	PD68A	PD69A	PD70A	PD9A	PD10A	PD11A	PD12A	PD13A	PD14A	PD73A	PD74A	PD75A	PD76A	PD77A	PD78A	P33A	P34A	P35A	P36A	P37A	P38A	P39A	P40A	P41A	P42A	P43A	P44A	P45A	P46A	P47A	P48A	P289A	P290A	P51A		P49A		P52A		P50A		P97A	P98A	P99A	P100A	P101A	P102A	P103A	P104A	P105A	P106A	P107A	P108A	P109A	P110A	P111A	P112A	P291A	P292A	P115A	P113A	P116A	P114A	PD15A	P293A	P294A	        
+DUT2=	PPS26A	PPS5,6,7,8A	PPS13,14,15A	PD135A	PD136A	PD199A	PD200A	PD129A	PD130A	PD131A	PD193A	PD194A	PD195A	PD132A	PD133A	PD134A	PD196A	PD197A	PD198A	PD137A	PD138A	PD139A	PD140A	PD141A	PD142A	PD201A	PD202A	PD203A	PD204A	PD205A	PD206A	P161A	P162A	P163A	P164A	P165A	P166A	P167A	P168A	P169A	P170A	P171A	P172A	P173A	P174A	P175A	P176A	P297A	P298A	P179A		P177A		P180A		P178A		P225A	P226A	P227A	P228A	P229A	P230A	P231A	P232A	P233A	P234A	P235A	P236A	P237A	P238A	P239A	P240A	P299A	P300A	P243A	P241A	P244A	P242A	PD143A	P301A	P302A	        
+DUT3=	PPS27A	PPS17,18,19,20A	PPS21,22,23A	PD391A	PD392A	PD455A	PD456A	PD385A	PD386A	PD387A	PD449A	PD450A	PD451A	PD388A	PD389A	PD390A	PD452A	PD453A	PD454A	PD393A	PD394A	PD395A	PD396A	PD397A	PD398A	PD457A	PD458A	PD459A	PD460A	PD461A	PD462A	P417A	P418A	P419A	P420A	P421A	P422A	P423A	P424A	P425A	P426A	P427A	P428A	P429A	P430A	P431A	P432A	P353A	P354A	P435A		P433A		P436A		P434A		P481A	P482A	P483A	P484A	P485A	P486A	P487A	P488A	P489A	P490A	P491A	P492A	P493A	P494A	P495A	P496A	P355A	P356A	P499A	P497A	P500A	P498A	PD399A	P357A	P358A	        
+
+END
+
+    
+	
+	
+

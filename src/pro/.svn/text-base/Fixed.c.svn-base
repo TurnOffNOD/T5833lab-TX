@@ -1,0 +1,251 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+
+#include "test.h"
+#include "Fixed.h"
+#include "string.h"
+
+	int  fixeddelay_config_h(TgHandle tgh);
+	int  fixeddelay_config_offset(DSlider offset);
+	int  fixeddelay_config_offset_h(DSlider offset, TgHandle tgh);
+
+static DSlider CLOCKRES = 0.0;
+static int FIXEDDELAYMIN = 0;
+static int FIXEDDELAYMAX = 0;
+
+#define PINTYPE {\
+		UT_SOCKET_PINTYPE_IO\
+		,UT_SOCKET_PINTYPE_DR\
+		}
+#define FIXEDDELAYWAV {\
+		UT_WAV_RZO\
+		,UT_WAV_IRZO\
+		,UT_WAV_RZZ\
+		,UT_WAV_IRZZ\
+		,UT_WAV_RZX\
+		,UT_WAV_IRZX\
+		,UT_WAV_DNRZ\
+		,UT_WAV_IDNRZ\
+		}
+#define TSMIN UTL_QueryTgTsMin()
+#define TSMAX UTL_QueryTgTsMax()
+
+static UT_Bool check_fixeddelay_wave(RadioButton wave){
+  const RadioButton wlst[] = FIXEDDELAYWAV;
+  const long wcnt = sizeof(wlst)/sizeof(wlst[0]);
+  long widx;
+
+  for(widx=0; widx<wcnt; widx++){
+    if(wlst[widx]==wave){
+      return UT_TRUE;
+    }
+  }
+
+  return UT_FALSE;
+}
+
+static long tgtol(DSlider tgval){
+  long n;
+  n = (long)((tgval/CLOCKRES)+0.5);
+  return n;
+}
+
+static DSlider roundtg(DSlider tgval){
+  long n;
+  DSlider val;
+
+  n = tgtol(tgval);
+  val = n*CLOCKRES;
+
+  if(n==FIXEDDELAYMIN){
+    val+=(CLOCKRES*0.1);
+  }else if(n==FIXEDDELAYMAX){
+    val-=(CLOCKRES*0.1);
+  }
+
+  return val;
+}
+
+int fixeddelay_config(){
+  return fixeddelay_config_offset(0.0);
+}
+
+int fixeddelay_config_h(TgHandle tgh){
+  return fixeddelay_config_offset_h(0.0, tgh);
+}
+
+int fixeddelay_config_offset(DSlider offset){
+  int ecode = 0;
+  TgHandle tgh;
+  tgh = UTL_GetTgHandle();
+//UTL_UpdateTg(tgh);
+  ecode = fixeddelay_config_offset_h(offset, tgh);
+  UTL_DeleteHandle(tgh);
+  return(ecode);
+}
+
+int fixeddelay_config_offset_h(DSlider offset, TgHandle tgh){
+  TgFixedDelayEdgeHandle fixeddelayh;
+  PinHandle pinh;
+  IlModeHandle ilh;
+  const long ptyp[] = PINTYPE;
+  const long ptypcnt = sizeof(ptyp)/sizeof(ptyp[0]);
+  long ptypidx;
+//  long *plst, pcnt, pidx;
+  int *plst, pcnt, pidx;
+  UT_PIN dpin;
+  DutCursor dutc;
+  UT_DUT dut;
+  USlider tsidx;
+  RadioButton ilmode, phaseb, phasec, wave;
+  CheckButton bclkoff, cclkoff;
+  DSlider bclk, cclk, clkbc,clkcb, fixeddelayval;
+  int ecode = 0;
+  int pincount = 0;
+
+  //Check Tester Environment variable
+  if((strncmp(getenv("ATFSTMODEL"),"T5833",5))==0){
+    CLOCKRES = 6.510416666666667e-12;
+    FIXEDDELAYMIN = 63;
+    FIXEDDELAYMAX = 128;
+  }
+  else if((strncmp(getenv("ATFSTMODEL"),"T5832",5))==0){
+    CLOCKRES = 5.580357142857142e-12;
+    FIXEDDELAYMIN = 64;
+    FIXEDDELAYMAX = 128;
+  }
+
+  if(CLOCKRES == 0.0) {
+    ecode = 100;
+    return(ecode);
+  }
+
+  //Check FixedDelayEdge
+  if(UTL_QueryTgFixedDelayEdgeIsAvailable()!=UT_ON){
+    ecode = 100;
+    return(ecode);
+  }
+  fixeddelay_reset();
+
+  //Check IlMode
+  ilh = UTL_GetIlModeHandle();
+  UTL_UpdateIlMode(ilh);
+  if(UTL_GetIlMode(ilh, &ilmode)!=1){
+    ecode = 200;
+    return(ecode);
+  }
+  if(ilmode!=4){
+    return(ecode);
+  }
+
+  //Get DUT for UTL_UpdatePin()
+  dutc = UTL_GetDutCursor(UT_CDUT);
+  dut = UTL_NextDut(dutc);
+  if(dut==UT_NOMORE){
+    return(ecode);
+  }
+
+  //Get handle
+  fixeddelayh = UTL_GetTgFixedDelayEdgeHandle();
+  pinh = UTL_GetPinHandle();
+
+  //Pin type loop (DR & IO)
+  for(ptypidx=0; ptypidx<ptypcnt; ptypidx++){
+    if(UTSOCK_Info_GetDutPinList(ptyp[ptypidx], &plst, &pcnt)!=UTSOCK_OK){
+      ecode = 201;
+      return(ecode);
+    }
+
+    //Pin loop (All DUT pin)
+    pincount += pcnt;
+    for(pidx=0; pidx<pcnt; pidx++){
+      dpin = plst[pidx];
+
+      UTL_UpdatePin(pinh, dpin, UT_PINTYPE_PIN, dut);
+      if(UTL_GetPinDrWaveform(pinh, &wave)!=1){
+        ecode = 202;
+        return(ecode);
+      }
+
+      //Check waveform
+      if(check_fixeddelay_wave(wave)==UT_TRUE){
+        fixeddelayval = 0.0;
+        UTL_ClearTgFixedDelayEdgeTargetTs(fixeddelayh);
+        if(UTL_GetPinDrClock(pinh, UT_PIN_BCLK, &phaseb)!=1){
+          ecode = 203;
+          return(ecode);
+        }
+        if(UTL_GetPinDrClock(pinh, UT_PIN_CCLK, &phasec)!=1){
+          ecode = 204;
+          return(ecode);
+        }
+
+        //TS loop
+        for(tsidx=TSMIN; tsidx<=TSMAX; tsidx++){
+
+          //Check TgXclkOff
+          bclkoff = UTL_ReadTgBclkOff(tsidx,phaseb,UT_TG_MAIN); 
+          cclkoff = UTL_ReadTgCclkOff(tsidx,phasec,UT_TG_MAIN); 
+
+          //Check clock OPEN
+          if(bclkoff==UT_ON && cclkoff==UT_ON){
+          
+            //Read TgXclk
+            bclk = UTL_ReadTgBclk(tsidx,phaseb,UT_TG_MAIN);
+            cclk = UTL_ReadTgCclk(tsidx,phasec,UT_TG_MAIN);
+
+            //Check bclk to cclk & Add target TS
+            clkbc = cclk-bclk+offset;
+            clkcb = (bclk-cclk+offset+UTL_ReadTgRate(tsidx,UT_TG_MAIN));
+            if(tgtol(clkbc)<=FIXEDDELAYMAX){
+              if(FIXEDDELAYMIN<=tgtol(clkbc) && FIXEDDELAYMIN<=tgtol(clkcb)){
+                if(fixeddelayval==0.0){
+                  fixeddelayval = roundtg(clkbc);
+                }
+                else if(abs(tgtol(fixeddelayval)-tgtol(clkbc))>1){
+                  ecode = 300;
+                  return(ecode);
+                }
+                UTL_AddTgFixedDelayEdgeTargetTs(fixeddelayh, tsidx);
+              }
+              else if(bclk!=0.0 || cclk!=0.0){
+                ecode = 301;
+                return(ecode);
+              }
+            }
+          }
+        }
+
+        //Send FixedDelayEdge
+        if(fixeddelayval!=0.0){
+          UTL_ClearTgFixedDelayEdgeTargetPin(fixeddelayh);
+          UTL_AddTgFixedDelayEdgeTargetPin(fixeddelayh, dpin);
+          UTL_SetTgFixedDelayEdgeValue(fixeddelayh, fixeddelayval);
+#ifdef _SKIP_SEND_FIXEDDELAY
+          printf("Fixed Delay Edge Mode: SKIP UTL_SendTgFixedDelayEdge()!!!\n");
+#else
+          UTL_SendTgFixedDelayEdge(fixeddelayh);
+#endif
+        }
+      }
+    }
+  }
+
+  UTL_DeleteHandle(pinh);
+  UTL_DeleteHandle(fixeddelayh);
+  UTL_DeleteHandle(ilh);
+
+  return(ecode);
+}
+
+void fixeddelay_reset(){
+  UTL_ResetTgFixedDelayEdge();
+  return;
+}

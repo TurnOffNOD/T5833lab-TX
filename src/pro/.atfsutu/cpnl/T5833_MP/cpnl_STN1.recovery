@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<cpnl_recovery_file>
+<revision>1.02</revision>
+<geometry>1078,398,518,448</geometry>
+<viewmenu>
+<flowmodearea>1</flowmodearea>
+<siteinfoarea>1</siteinfoarea>
+<funckeyarea>0</funckeyarea>
+<messagearea>1</messagearea>
+</viewmenu>
+<visiblecurrenttestname>0</visiblecurrenttestname>
+<forciblyupdatesocket>0</forciblyupdatesocket>
+<displaysystemdutcount>160</displaysystemdutcount>
+</cpnl_recovery_file>

@@ -1,0 +1,73 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef ___dps_H
+#define ___dps_H
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+#include <test.h>
+#include <math.h>
+
+typedef struct dps {
+	VsHandle	handle;
+	const char	*name ;
+}dps_t;
+#define DPS(n,...)                        \
+(							\
+	{						\
+		dps_t *vs   = (dps_t *)malloc(sizeof(dps_t));	\
+		vs->name   = #n;			\
+		vs->handle = UTL_GetVsHandle();		\
+		__VA_ARGS__;				\
+		vs;					\
+	}						\
+)
+#define	VSIM(s)			(UTL_SetVsMode              ( vs->handle, UT_DCT_VSIM),                 \
+                                 UTL_SetVsSource            ( vs->handle, s          )                   )
+#define	ISVM(s)			(UTL_SetVsMode              ( vs->handle, UT_DCT_ISVM),                 \
+                                 UTL_SetVsSource            ( vs->handle, s          )                   )
+#define	VSVM(s)			(UTL_SetVsMode              ( vs->handle, UT_DCT_VSVM),                 \
+                                 UTL_SetVsSource            ( vs->handle, s          )                   )
+#define	MVM			(UTL_SetVsMode              ( vs->handle, UT_DCT_MVM )                   )
+#define OPEN                    (UTL_SetVsMode              ( vs->handle, UT_DCT_OPEN)  ,               \
+                                 UTL_SetVsLimitHigh         ( vs->handle, 0.000, UT_OFF),               \
+                                 UTL_SetVsLimitLow          ( vs->handle, 0.000, UT_OFF)                )
+#define R(r)                    (UTL_SetVsSrange            ( vs->handle, r, 0)                          )
+#define M(m)                    (UTL_SetVsMrange            ( vs->handle, m,-m)                          )
+
+#define	FLT1			(UTL_SetVsFilter            ( vs->handle, UT_DCT_FLT1)                   )
+#define	FLT2			(UTL_SetVsFilter            ( vs->handle, UT_DCT_FLT2)                   )
+#define	FLT3			(UTL_SetVsFilter            ( vs->handle, UT_DCT_FLT3)                   )
+#define Clamp(p,m)              (UTL_SetVsPclamp            ( vs->handle, p),                           \
+                                 UTL_SetVsMclamp            ( vs->handle, m)                             )
+#define	C0			(UTL_SetVsPhaseCompensation ( vs->handle, UT_DCT_NONE)                   )
+#define	C1			(UTL_SetVsPhaseCompensation ( vs->handle, UT_DCT_C1  )                   )
+#define	C2			(UTL_SetVsPhaseCompensation ( vs->handle, UT_DCT_C2  )                   )
+#define	C3			(UTL_SetVsPhaseCompensation ( vs->handle, UT_DCT_C3  )                   )
+#define	C4			(UTL_SetVsPhaseCompensation ( vs->handle, UT_DCT_C4  )                   )
+
+inline void	dpsSend( dps_t *vs) {
+	PinCursor pin_cursor = UTL_GetPinCursor( (char *)vs->name);
+	UT_PIN pin = UTL_NextPin( pin_cursor);
+	UTL_DeleteCursor( pin_cursor);
+	UTL_SendVs( vs->handle, pin);
+}
+void	PCON( char *name, CheckButton onoff) {
+	static	PinHandle	pin	= -1;
+	if ( pin < 0 ) pin = UTL_GetPinHandle();
+	UTL_SetPinVsBypassCapacitor( pin, onoff);
+	UTL_SendPin( pin, name);
+}
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+#endif // ___dps_H

@@ -1,0 +1,22 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#include <test.h>
+#include <math.h>
+#include "Def.h"
+#include "Pmu.h"
+#include "pmu.h"
+
+void	PmuContL( Test_t *test) { ISVM(       -100.0 uA , R800uA, Mi20V , Clamp( 600.0 mV, -1.200  V) ); }
+void	PmuContH( Test_t *test) { ISVM(        100.0 uA , R800uA, M20V  , Clamp( 1.200  V, -600.0 mV) ); }
+void	PmuLeakH( Test_t *test) { VSIM(        1.100  V , R20V  , M80uA , Clamp( 20.00 uA, -20.00 uA) ); }
+void	PmuLeakL( Test_t *test) { VSIM(        0.000  V , R20V  , M80uA , Clamp( 20.00 uA, -20.00 uA) ); }
+void	PmuOdtI ( Test_t *test) { VSIM( test->VDDQ*0.330, R20V  , M128mA, Clamp( 48.00 mA, -48.00 mA) ); }
+void	PmuOdtZ ( Test_t *test) { VSIM(        0.000  V , R20V  , M128mA, Clamp( 48.00 mA, -48.00 mA) ); }
+void	PmuOdtV ( Test_t *test) { MVM (                           M20V                                ); }

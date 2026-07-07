@@ -1,0 +1,95 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef		___Test_H___
+#define		___Test_H___
+#ifdef		__cplusplus
+extern "C" {
+#endif	//	__cplusplus
+#include <test.h>
+#include <stdint.h>
+#include <stdbool.h>
+
+
+	typedef	struct	Test Test_t;
+	void	PmuTest      ( Test_t *test);
+	void	DpsTest      ( Test_t *test);
+	void	PatTest      ( Test_t *test);
+	void	ShowDpsResult( Test_t *test);
+	void	ShowPmuResult( Test_t *test);
+	void	ShowResult   ( Test_t *test);
+	void	ShowId       ( Test_t *test);
+	void	ShowFcm1     ( Test_t *test);
+	void	ShowFcm4     ( Test_t *test);
+	void	ShowDbm      ( Test_t *test);
+	void	ShowDm       ( Test_t *test);
+	void	FailReject   ( Test_t *test);
+	void	setDutPass   ( Test_t *test);
+	void	TestStart(void);
+	void	TestMain ( Test_t *test_flow, int test_count);
+	void	TestEnd  (void);
+
+	struct	Test {
+		void		(*type)(Test_t*);
+		int		test_no         ;   // %1   %1 
+		char      	*title          ;   // %2   %2
+		int		pass_category   ;   // %3   %3
+		int		fail_category   ;   // %4   %4
+		uint32_t	ilway           ;   // %5   %9
+		char      	*pattern_name   ;   // %6   %5
+		char	        *prescram_name  ;   // %7   %6
+		char	        *scram_name     ;   // %8   %7
+		int		start_pc        ;   // %8
+		uint32_t	data1           ;   // %10  %10
+		uint32_t	data2           ;   // %11  %11
+		double		tCK             ;   // %12  %12
+		double		tDQSDQI         ;   // %13  
+		double		tDQSDQO         ;   // %14  
+		double		VDD1            ;   // %15  
+		double		VDD2            ;   // %16  
+		double		VDDQ            ;   // %17  %13
+		int		BL              ;   // %18  %18
+		int		WL              ;   // %19  %16
+		int		RL              ;   // %20  %14
+		int		WR              ;   // %21  %17
+		int		RTP             ;   // %22  %15
+		double		WR_PST          ;   // %23  %21
+		double		RD_PST          ;   // %24  %22
+		double		WR_PRE          ;   // %25  %23
+//		double		RD_PRE          ;   // %26  %24
+		char*		RD_PRE          ;   // %26  %24
+		double		REF_RATE        ;   // %27  %25
+		double		PU_CAL          ;   // %28  %26
+		double		PDDS            ;   // %29  %27
+		double		ODT_CA          ;   // %30  %28
+		double		ODT_DQ          ;   // %31  %29
+		double		ODT_SOC         ;   // %32  %30
+		double		VREF_CA         ;   // %33  %31
+		double		VREF_DQ         ;   // %34  %32
+		bool		WDBI            ;   // %35  %19
+		bool		RDBI            ;   // %36  %20
+		void		(*tim)(Test_t *);   // %37  %33
+		void		(*lev)(Test_t *);   // %38  %34
+		void		(*dps)(Test_t *);   // %39
+		void		(*pmu)(Test_t *);   // %40  
+		void		(*pin)(Test_t *);   // %41  %35
+		void		(*reg)(Test_t *);   // %42  %36
+		void		(*afm)(Test_t *);   // %43  %37 
+		void		(*ubm)(Test_t *);   // %44  %38
+		void		(*pre)(Test_t *);   // %45  %39
+		void		(*pst)(Test_t *);   // %46  %40
+		double		upper           ;   // %47  %41
+		double		lower           ;   // %48  %42
+		char	        *target         ;   // %49  %43
+	};
+
+#ifdef		__cplusplus
+};
+#endif	//	__cplusplus
+#endif	//	___Test_H___

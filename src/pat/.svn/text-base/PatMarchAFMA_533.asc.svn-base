@@ -1,0 +1,347 @@
+;################################################################################
+;# NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+;# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+;# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+;# IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+;# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+;# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+;# DEALINGS IN THE SOFTWARE.                                                    #
+;################################################################################
+MPAT	PatMarchAFMA_533<1WAY>
+	MODE MUX TP2INV REFRESHB
+	REGISTER
+		DRE1	= W             ; 
+		DRE2	= C20           ; 
+		CPE1	= R             ; 
+		CPE2	= C21           ; 
+		D4B	= #0010         ; #10 Y ADDRESS INC  
+		ISP	= REF           ; Refresh
+	INSERT patSdef
+START	#0
+;		                                    TSn  CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP       ,/D1,/D2,DM00,ODT  ,             ;
+		JSR POWERUP                             ,     ,CKEL,     ,   ,   ,RESET ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+		NOP                              T      ,     ,    ,     ,   ,   ,      ,       ,    ,        ,     ,       ,    ,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+LOOP:		JSR WR                                  ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,D4<D4B    , ,TP1<TPH1 ,TP2<TPH2    ,     ,             ; write 0
+;;		JSR RTW                                 ,     ,    ,     ,   ,   ,      ,BANK_XC,    ,XC<0    ,     ,BANK_YC,    ,YC<0    ,D4<D4B    , ,TP1<TPH1 ,TP2<TPH2    ,     ,             ; read 0 write 1
+;;		JSR RD                                  ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,D4<D4B    , ,TP1</TP1 ,TP2</TP2    ,     ,             ; read 1
+;;		JSR WTR                                 ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,D4<D4B    , ,TP1<TPH1 ,TP2<TPH2    ,     ,             ; write 0 read 0
+		JSR RD                                  ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,D4<D4B    , ,TP1<TPH1 ,TP2<TPH2    ,     ,             ; read 0
+;;		JZD LOOP
+		STPS
+
+
+
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP       ,/D1,/D2,DM00,ODT  ,             ;
+WR:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,TPH<#69  ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,TPH2<#38 ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,TP<TPH   ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,TP2<TPH2 ,   ,   ,    ,     ,             ;   
+WR_1:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;    
+		NOP                              I      ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;     
+		NOP                              I      ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;       
+		NOP                              I      ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;   0   nRCD = 5 nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;   1   
+WR_2:		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WR_L1,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,BST  ,             ;   2   
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WR_L2,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,/D2,    ,     ,             ;   3   
+		NOP                              I      ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,   ,    ,     ,             ;   4   
+		NOP                              I      ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,/D2,    ,     ,             ;   0 :WL WR TO Precharge
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   1     WL+BL/2+1+tWR
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   2    =4 + 16 +1+ 5 =26
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,         ,   ,   ,    ,     ,             ;   4 :BL/2=16
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,BST  ,             ;   5
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,/D2,    ,     ,             ;   6
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,   ,    ,     ,             ;   7
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,/D2,    ,     ,             ;   9
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  10 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  11 
+		JNI5 WR_2                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;  12
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;  13
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  14   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  15 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  16 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  17
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  18
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  19
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  20 :1nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  21 :tWR
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  22
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  23 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  24
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,PRE_1 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  25
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,PRE_2 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   0 PRE TO ACT 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   1 tRPpb=5nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   4 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		JNI4 WR_1                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<XC+1 ,     ,       ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   ROW++       
+		JNI1 WR_1                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<0    ,N<N+1,B<B+1  ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   BANK++                 
+		RTN                                     ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+
+
+
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP       ,/D1,/D2,DM00,ODT  ,             ;
+RD:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,TPH2<#F569  ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,TPH<#5085   ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,TP1<TPH,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,TP2<TPH2    ,     ,             ;   
+RD_1:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;    
+		NOP                              I      ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;     
+		NOP                              I      ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;       
+		NOP                              I      ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSLL, ,         ,   ,   ,    ,     ,             ;   0   nRCD = 5 nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL, ,         ,   ,   ,    ,     ,             ;   1   
+;RD_2:		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RD_L1,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,BST  ,             ;   2   
+RD_2:		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RD_L1,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D1,    ,BST  ,             ;   2   
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RD_L2,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   3   
+		NOP                              I      ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   4   
+		NOP                              I      ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   0 :RL RD TO Precharge
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   1       tRTP+8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   2      =8   +8 =16
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   4
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,BST  ,             ;   5
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   6
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   7
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   9
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  10 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  11 
+;;		JNI5 RD_2                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;  12
+		JNI5 RD_2                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<XC+1 ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  12
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL, ,         ,   ,   ,    ,     ,             ;  13
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  14   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  15 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;16 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;17
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;18
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;19
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;20 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;21 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;22
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;23 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;24
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,PRE_1 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  ;25
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,PRE_2 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   0 PRE TO ACT 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   1 tRPpb=5nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   4 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+;;		JNI4 RD_1                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<XC+1 ,     ,       ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   ROW++       
+;;		JNI1 RD_1                        I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<0    ,N<N+1,B<B+1  ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   BANK++                 
+		RTN                                     ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+
+
+;Read original date, Write invertional data
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP       ,/D1,/D2,DM00,ODT  ,             ;
+RTW:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+RTW_1:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;    
+		NOP                              I      ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;     
+		NOP                              I      ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;       
+		NOP                              I      ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   0   nRCD = 5 nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   1  SET to 9 
+RTW_2:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSLL, ,         ,   ,   ,    ,     ,             ;   4 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL, ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RD_L1,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,BST  ,             ;      
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RD_L2,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;      
+		NOP                              I      ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;      
+		NOP                              I      ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   0     RD to Write
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   1       RL+RU(tDQSCK/tCK)+BL/2+tRPST+tWPRE-WL 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   2      = 6+            1 +  16+    2+ 2   -4=23
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   3      tDQSCK = 1500~3500PS
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   4
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,BST  ,             ;   5
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   6
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   7
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   9
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  10 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  11 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC-D4,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;  12
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL, ,         ,   ,   ,    ,     ,             ;  13
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  14   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  15 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  16 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  17
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;  18
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;  19
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WR_L1,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,BST  ,             ;  20 
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,      ,BANK02 ,X<XC,        ,WR_L2,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  21 
+		NOP                              I      ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  22
+		NOP                              I      ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   0: WR TO Precharge 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   1   WL+BL/2+1+tWR
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   2  =4 +  16+1+5=26
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   4
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,BST  ,             ;   5
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   6
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   7
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   9
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;  10
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;  11
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  12 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;  13 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  14
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  15
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  16 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  17 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  18
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  19
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  20 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  21 
+		IDXI8 20                         I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  18
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  19
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  20 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  21 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  22
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  23
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  24  
+		JNI5 RTW_2                       I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  25 
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,PRE_1 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,PRE_2 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   0 PRE TO ACT 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   1 tRPpb=5nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   4 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                                     ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;    for refresh
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		JNI4 RTW_1                       I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<XC+1 ,     ,       ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   ROW++       
+		JNI1 RTW_1                       I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,N<N+1,B<B+1  ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   BANK++                 
+		RTN                                     ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+
+
+;Write original date, Read original data
+;		                                    TSn ,CYPn ,CKEL,CKOFF,CS0,CS1,CMD   ,BANK   ,X   ,XC<XC+1 ,CMD  ,BANK   ,Y   ,YC<YC+D4,DQSR,DQSHL,R,TP       ,/D1,/D2,DM00,ODT  ,             ;
+WTR:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+WTR_1:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;    
+		NOP                              I      ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;     
+		NOP                              I      ,CYP4 ,    ,     ,   ,   ,ACT12 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;       
+		NOP                              I      ,CYP5 ,    ,     ,CS0,   ,ACT21 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                              I      ,CYP6 ,    ,     ,   ,   ,ACT22 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   0   nRCD = 5 nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   1  SET to 9 
+WTR_2:		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;   4 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,WR_L1,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,BST  ,             ;      
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,WR_L2,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;      
+		NOP                              I      ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;      
+		NOP                              I      ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   0     Write to Read
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   1       WL+1+BL/2+tWTR
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   2      =4 + 1+16+8=29
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   3      
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   4
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,BST  ,             ;   5
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   6
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   7
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;   8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;   9
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  10 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL,W,         ,/D1,   ,    ,     ,             ;  11 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC-D4,DQSW,DQSHL,W,         ,   ,/D2,    ,     ,             ;  12
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSW,DQSHL, ,         ,   ,   ,    ,     ,             ;  13
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  14   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  15 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  16 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  17
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  18
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  19 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  20 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  21
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  22
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  23 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSLL, ,         ,   ,   ,    ,     ,             ;  24 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL, ,         ,   ,   ,    ,     ,             ;  25
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,      ,       ,X<XC,        ,RD_L1,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,BST  ,             ;  26
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,      ,       ,X<XC,        ,RD_L2,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;  27
+		NOP                              I      ,CYP10,    ,     ,CS0,   ,      ,       ,X<XC,        ,CAS21,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;  28 
+		NOP                              I      ,CYP11,    ,     ,   ,   ,      ,       ,X<XC,        ,CAS22,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   0:  Read to Prechare  
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   1    BL/2-8+tRTP 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   2   =  16-8+8=16
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   3   Read To Write
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   4     RL+RU(tDQSCK/tCK)+BL/2+tRPST+tWPRE-WL 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,BST  ,             ;   5    = 6+            1 +  16+    2+ 2   -4=23
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   6    tDQSCK = 1500~3500PS
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   7
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;   8
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;   9
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  10
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL,R,         ,/D1,   ,    ,     ,             ;  11
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,YC<YC+D4,DQSR,DQSHL,R,         ,   ,/D2,    ,     ,             ;  12
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,DQSR,DQSHL, ,         ,   ,   ,    ,     ,             ;  13
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  14 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  15 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  16
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  17
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  18 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  19 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  20
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  21
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  22  
+		JNI5 WTR_2                       I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  23 
+;;		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  24
+;;		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  25
+;;		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  26 
+;;		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  27 
+		NOP                              I      ,CYP7 ,    ,     ,CS0,   ,PRE_1 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;  28
+		NOP                              I      ,CYP9 ,    ,     ,   ,   ,PRE_2 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   0 PRE TO ACT 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   1 tRPpb=5nCK
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   2
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   3
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   4 
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+		NOP                                     ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;    for refresh
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		NOP                              I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;   
+		JNI4 WTR_1                       I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<XC+1 ,     ,       ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   ROW++       
+		JNI1 WTR_1                       I      ,     ,    ,     ,   ,   ,      ,       ,X<XC,XC<0    ,N<N+1,B<B+1  ,Y<YC,YC<0    ,    ,     , ,         ,   ,   ,    ,     ,             ;   BANK++                 
+		RTN                                     ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;      
+
+
+
+
+
+
+
+						  
+						   
+						   
+	INSERT patPowerUp1
+	INSERT patRefresh1
+END

@@ -1,0 +1,29 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef		___Dbm_H___
+#define		___Dbm_H___
+#ifdef		__cplusplus
+extern "C" {
+#endif	//	__cplusplus
+
+#include "Test.h"
+
+	void	DbmConfig		( Test_t *test);
+	void	DbmReset 		( Test_t *test);
+//	void	setMemoryModuleDbm	();
+//	void	setMemoryModuleDefault	();
+//	void	DBM_Reset		();
+//	void	DBM_Config		();
+//	void	DBM_WriteData		();
+
+#ifdef		__cplusplus
+};
+#endif	//	__cplusplus
+#endif	//	___Dbm_H___

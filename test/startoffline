@@ -1,0 +1,8 @@
+#!/bin/bash -v
+
+ATFSTESIM_ALPG_SIMULATION=jump_once
+export ATFSTESIM_ALPG_SIMULATION
+source env_set.sh
+starttesim
+utu_cpnl &
+utu_tt &

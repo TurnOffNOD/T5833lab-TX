@@ -1,0 +1,222 @@
+// ################################################################################
+// # NOTICE: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,      #
+// # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF           #
+// # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.       #
+// # IN NO EVENT SHALL ADVANTEST BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER        #
+// # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      #
+// # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER          #
+// # DEALINGS IN THE SOFTWARE.                                                    #
+// ################################################################################
+#ifndef ___Tim_H
+#define ___Tim_H
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+#include <test.h>
+#include "Tim.h"
+typedef	struct Tim {
+	double		tCK    ;
+	double		tDQSDQI;
+	double		tDQSDQO;
+	TgHandle	handle ;
+}Tim_t;
+
+inline static void RATE_( Tim_t *tim, int ts, ...)
+{
+  va_list va;
+  double  var;
+
+  va_start(va,ts);
+  while(ts > 0) {
+    var = va_arg(va, double);
+    UTL_AddTgRate( tim->handle, ts, var);
+    ts  = va_arg(va, int   );
+  }
+  va_end(va);
+}
+
+inline static void BCLK_( Tim_t *tim, int ts, int n,...)
+{
+  va_list va;
+  double  var;
+
+  va_start(va, n);
+  while(ts > 0) {
+    var = va_arg(va, double);
+    if ( var >= 0.0 ) UTL_AddTgBclk   ( tim->handle, ts, n, var);
+    else              UTL_AddTgBclkOff( tim->handle, ts, n     );
+    ts  = va_arg(va, int   );
+  }
+  va_end(va);
+}
+
+inline static void CCLK_( Tim_t *tim, int ts, int n,...)
+{
+  va_list va;
+  double  var;
+
+  va_start(va, n);
+  while(ts > 0) {
+    var = va_arg(va, double);
+    if ( var >= 0.0 ) UTL_AddTgCclk   ( tim->handle, ts, n, var);
+    else              UTL_AddTgCclkOff( tim->handle, ts, n     );
+    ts  = va_arg(va, int   );
+  }
+  va_end(va);
+}
+
+inline static void DREL_( Tim_t *tim, int ts, int n,...)
+{
+  va_list va;
+  double  var;
+
+  va_start(va, n);
+  while(ts > 0) {
+    var = va_arg(va, double);
+    if ( var >= 0.0 ) UTL_AddTgDreL   ( tim->handle, ts, n, var);
+    else              UTL_AddTgDreLOff( tim->handle, ts, n     );
+    ts  = va_arg(va, int   );
+  }
+  va_end(va);
+}
+
+inline static void DRET_( Tim_t *tim, int ts, int n,...)
+{
+  va_list va;
+  double  var;
+
+  va_start(va, n);
+  while(ts > 0) {
+    var = va_arg(va, double);
+    if ( var >= 0.0 ) UTL_AddTgDreT   ( tim->handle, ts, n, var);
+    else              UTL_AddTgDreTOff( tim->handle, ts, n     );
+    ts  = va_arg(va, int   );
+  }
+  va_end(va);
+}
+
+inline static void STRB_( Tim_t *tim, int ts, int n,...)
+{
+  va_list va;
+  double  var;
+
+  va_start(va, n);
+  while(ts > 0) {
+    var = va_arg(va, double);
+    if ( var >= 0.0 ) UTL_AddTgStrb   ( tim->handle, ts, n, var);
+    else              UTL_AddTgStrbOff( tim->handle, ts, n     );
+    ts  = va_arg(va, int   );
+  }
+  va_end(va);
+}
+
+#define RATE(tim,ts,var,...)	(RATE_( tim, ts,    var,##__VA_ARGS__,-1))
+#define BCLK(tim,n,ts,var,...)	(BCLK_( tim, ts, n, var,##__VA_ARGS__,-1))
+#define CCLK(tim,n,ts,var,...)	(CCLK_( tim, ts, n, var,##__VA_ARGS__,-1))
+#define DREL(tim,n,ts,var,...)	(DREL_( tim, ts, n, var,##__VA_ARGS__,-1))
+#define DRET(tim,n,ts,var,...)	(DRET_( tim, ts, n, var,##__VA_ARGS__,-1))
+#define STRB(tim,n,ts,var,...)	(STRB_( tim, ts, n, var,##__VA_ARGS__,-1))
+#define	BCLK1(tim,...)		(BCLK(tim,  1, __VA_ARGS__))
+#define	BCLK2(tim,...)		(BCLK(tim,  2, __VA_ARGS__))
+#define	BCLK3(tim,...)		(BCLK(tim,  3, __VA_ARGS__))
+#define	BCLK4(tim,...)		(BCLK(tim,  4, __VA_ARGS__))
+#define	BCLK5(tim,...)		(BCLK(tim,  5, __VA_ARGS__))
+#define	BCLK6(tim,...)		(BCLK(tim,  6, __VA_ARGS__))
+#define	BCLK7(tim,...)		(BCLK(tim,  7, __VA_ARGS__))
+#define	BCLK8(tim,...)		(BCLK(tim,  8, __VA_ARGS__))
+#define	BCLK9(tim,...)		(BCLK(tim,  9, __VA_ARGS__))
+#define	BCLK10(tim,...)		(BCLK(tim, 10, __VA_ARGS__))
+#define	BCLK11(tim,...)		(BCLK(tim, 11, __VA_ARGS__))
+#define	BCLK12(tim,...)		(BCLK(tim, 12, __VA_ARGS__))
+#define	BCLK13(tim,...)		(BCLK(tim, 13, __VA_ARGS__))
+#define	BCLK14(tim,...)		(BCLK(tim, 14, __VA_ARGS__))
+#define	BCLK15(tim,...)		(BCLK(tim, 15, __VA_ARGS__))
+#define	BCLK16(tim,...)		(BCLK(tim, 16, __VA_ARGS__))
+#define	CCLK1(tim,...)		(CCLK(tim,  1, __VA_ARGS__))
+#define	CCLK2(tim,...)		(CCLK(tim,  2, __VA_ARGS__))
+#define	CCLK3(tim,...)		(CCLK(tim,  3, __VA_ARGS__))
+#define	CCLK4(tim,...)		(CCLK(tim,  4, __VA_ARGS__))
+#define	CCLK5(tim,...)		(CCLK(tim,  5, __VA_ARGS__))
+#define	CCLK6(tim,...)		(CCLK(tim,  6, __VA_ARGS__))
+#define	CCLK7(tim,...)		(CCLK(tim,  7, __VA_ARGS__))
+#define	CCLK8(tim,...)		(CCLK(tim,  8, __VA_ARGS__))
+#define	CCLK9(tim,...)		(CCLK(tim,  9, __VA_ARGS__))
+#define	CCLK10(tim,...)		(CCLK(tim, 10, __VA_ARGS__))
+#define	CCLK11(tim,...)		(CCLK(tim, 11, __VA_ARGS__))
+#define	CCLK12(tim,...)		(CCLK(tim, 12, __VA_ARGS__))
+#define	CCLK13(tim,...)		(CCLK(tim, 13, __VA_ARGS__))
+#define	CCLK14(tim,...)		(CCLK(tim, 14, __VA_ARGS__))
+#define	CCLK15(tim,...)		(CCLK(tim, 15, __VA_ARGS__))
+#define	CCLK16(tim,...)		(CCLK(tim, 16, __VA_ARGS__))
+#define	DREL1(tim,...)		(DREL(tim,  1, __VA_ARGS__))
+#define	DREL2(tim,...)		(DREL(tim,  2, __VA_ARGS__))
+#define	DREL3(tim,...)		(DREL(tim,  3, __VA_ARGS__))
+#define	DREL4(tim,...)		(DREL(tim,  4, __VA_ARGS__))
+#define	DREL5(tim,...)		(DREL(tim,  5, __VA_ARGS__))
+#define	DREL6(tim,...)		(DREL(tim,  6, __VA_ARGS__))
+#define	DREL7(tim,...)		(DREL(tim,  7, __VA_ARGS__))
+#define	DREL8(tim,...)		(DREL(tim,  8, __VA_ARGS__))
+#define	DREL9(tim,...)		(DREL(tim,  9, __VA_ARGS__))
+#define	DREL10(tim,...)		(DREL(tim, 10, __VA_ARGS__))
+#define	DREL11(tim,...)		(DREL(tim, 11, __VA_ARGS__))
+#define	DREL12(tim,...)		(DREL(tim, 12, __VA_ARGS__))
+#define	DREL13(tim,...)		(DREL(tim, 13, __VA_ARGS__))
+#define	DREL14(tim,...)		(DREL(tim, 14, __VA_ARGS__))
+#define	DREL15(tim,...)		(DREL(tim, 15, __VA_ARGS__))
+#define	DREL16(tim,...)		(DREL(tim, 16, __VA_ARGS__))
+#define	DRET1(tim,...)		(DRET(tim,  1, __VA_ARGS__))
+#define	DRET2(tim,...)		(DRET(tim,  2, __VA_ARGS__))
+#define	DRET3(tim,...)		(DRET(tim,  3, __VA_ARGS__))
+#define	DRET4(tim,...)		(DRET(tim,  4, __VA_ARGS__))
+#define	DRET5(tim,...)		(DRET(tim,  5, __VA_ARGS__))
+#define	DRET6(tim,...)		(DRET(tim,  6, __VA_ARGS__))
+#define	DRET7(tim,...)		(DRET(tim,  7, __VA_ARGS__))
+#define	DRET8(tim,...)		(DRET(tim,  8, __VA_ARGS__))
+#define	DRET9(tim,...)		(DRET(tim,  9, __VA_ARGS__))
+#define	DRET10(tim,...)		(DRET(tim, 10, __VA_ARGS__))
+#define	DRET11(tim,...)		(DRET(tim, 11, __VA_ARGS__))
+#define	DRET12(tim,...)		(DRET(tim, 12, __VA_ARGS__))
+#define	DRET13(tim,...)		(DRET(tim, 13, __VA_ARGS__))
+#define	DRET14(tim,...)		(DRET(tim, 14, __VA_ARGS__))
+#define	DRET15(tim,...)		(DRET(tim, 15, __VA_ARGS__))
+#define	DRET16(tim,...)		(DRET(tim, 16, __VA_ARGS__))
+#define	STRB1(tim,...)		(STRB(tim,  1, __VA_ARGS__))
+#define	STRB2(tim,...)		(STRB(tim,  2, __VA_ARGS__))
+#define	STRB3(tim,...)		(STRB(tim,  3, __VA_ARGS__))
+#define	STRB4(tim,...)		(STRB(tim,  4, __VA_ARGS__))
+#define	STRB5(tim,...)		(STRB(tim,  5, __VA_ARGS__))
+#define	STRB6(tim,...)		(STRB(tim,  6, __VA_ARGS__))
+#define	STRB7(tim,...)		(STRB(tim,  7, __VA_ARGS__))
+#define	STRB8(tim,...)		(STRB(tim,  8, __VA_ARGS__))
+#define	STRB9(tim,...)		(STRB(tim,  9, __VA_ARGS__))
+#define	STRB10(tim,...)		(STRB(tim, 10, __VA_ARGS__))
+#define	STRB11(tim,...)		(STRB(tim, 11, __VA_ARGS__))
+#define	STRB12(tim,...)		(STRB(tim, 12, __VA_ARGS__))
+#define	STRB13(tim,...)		(STRB(tim, 13, __VA_ARGS__))
+#define	STRB14(tim,...)		(STRB(tim, 14, __VA_ARGS__))
+#define	STRB15(tim,...)		(STRB(tim, 15, __VA_ARGS__))
+#define	STRB16(tim,...)		(STRB(tim, 16, __VA_ARGS__))
+#define	STRB129(tim,...)	(STRB(tim,129, __VA_ARGS__))
+#define	STRB130(tim,...)	(STRB(tim,130, __VA_ARGS__))
+#define	STRB131(tim,...)	(STRB(tim,131, __VA_ARGS__))
+#define	STRB132(tim,...)	(STRB(tim,132, __VA_ARGS__))
+#define	STRB133(tim,...)	(STRB(tim,133, __VA_ARGS__))
+#define	STRB134(tim,...)	(STRB(tim,134, __VA_ARGS__))
+#define	STRB135(tim,...)	(STRB(tim,135, __VA_ARGS__))
+#define	STRB136(tim,...)	(STRB(tim,136, __VA_ARGS__))
+#define	STRB137(tim,...)	(STRB(tim,137, __VA_ARGS__))
+#define	STRB138(tim,...)	(STRB(tim,138, __VA_ARGS__))
+#define	STRB139(tim,...)	(STRB(tim,139, __VA_ARGS__))
+#define	STRB140(tim,...)	(STRB(tim,140, __VA_ARGS__))
+#define	STRB141(tim,...)	(STRB(tim,141, __VA_ARGS__))
+#define	STRB142(tim,...)	(STRB(tim,142, __VA_ARGS__))
+#define	STRB143(tim,...)	(STRB(tim,143, __VA_ARGS__))
+#define	STRB144(tim,...)	(STRB(tim,144, __VA_ARGS__))
+#define OPEN			(-1.0)
+
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
+#endif // ___Tim_H

@@ -1,37 +1,37 @@
 #include "pinlist.h"
 
-/*
+
 static void ulCreatePinListWithNumber(char *plst, int type, int num)
 {
-                                                //create pinlist name
-                                                //set pin type
-                                                //add pin number
+    UTL_CreatePinList(plst);                    //create pinlist name
+    UTL_SetPinType(plst, type);                 //set pin type
+    UTL_AddPinNumber(plst, num);                //add pin number
 }
-*/
 
-/*
+
+
 static void ulCreatePinListWithList(char *plst, int type, ...)
 {
 	va_list va;
 	char   *ap;
 
 	va_start(va, type);
-                                                //create pinlist group name
-                                                //set pin type      
+    UTL_CreatePinList(plst);                    //create pinlist group name
+    UTL_SetPinType(plst, type);                 //set pin type      
 	while((ap = va_arg(va, char *))!= NULL)
 	{
-                                                //append pinlist to a pinlist group
+        UTL_AppendPinList(plst, ap);            //append pinlist to a pinlist group
 	}
 	va_end(va);
 }
-*/
+
 
 void DefinePinList()
-{/*
+{
 	//---------------------define VS pins-------------------------------//
 	ulCreatePinListWithNumber("VDD1", UT_PINTYPE_VS, 1 );
-        ulCreatePinListWithNumber("VDD2", UT_PINTYPE_VS,   );         //create VS pin ¨VDD2¨ 	
-                                                                      //create VS pin ¨VDDQ¨ 	
+	ulCreatePinListWithNumber("VDD2", UT_PINTYPE_VS, 2 );         //create VS pin ¨VDD2¨
+	ulCreatePinListWithNumber("VDDQ", UT_PINTYPE_VS, 3 );                                                                  //create VS pin ¨VDDQ¨ 	
 	
 	
 	
@@ -43,12 +43,12 @@ void DefinePinList()
 	ulCreatePinListWithList("CK_c",	UT_PINTYPE_PIN,	"CK_c_A","CK_c_B",NULL);	
 	ulCreatePinListWithList("CK_t",	UT_PINTYPE_PIN,	"CK_t_A","CK_t_B",NULL);
 		
-	ulCreatePinListWithNumber("CS0_A", UT_PINTYPE_PIN,     );     //create DR pin ¨CS0-2_A&B¨	
-	ulCreatePinListWithNumber("CS1_A", UT_PINTYPE_PIN,     );     //	
-	ulCreatePinListWithNumber("CS2_A", UT_PINTYPE_PIN,     );     //	
-	ulCreatePinListWithNumber("CS0_B", UT_PINTYPE_PIN,     );     //	
-	ulCreatePinListWithNumber("CS1_B", UT_PINTYPE_PIN,     );     //	
-	ulCreatePinListWithNumber("CS2_B", UT_PINTYPE_PIN,     );     //	
+	ulCreatePinListWithNumber("CS0_A", UT_PINTYPE_PIN, 1);     //create DR pin ¨CS0-2_A&B¨	
+	ulCreatePinListWithNumber("CS1_A", UT_PINTYPE_PIN, 2);     //	
+	ulCreatePinListWithNumber("CS2_A", UT_PINTYPE_PIN, 3);     //	
+	ulCreatePinListWithNumber("CS0_B", UT_PINTYPE_PIN, 65);     //	
+	ulCreatePinListWithNumber("CS1_B", UT_PINTYPE_PIN, 66);     //	
+	ulCreatePinListWithNumber("CS2_B", UT_PINTYPE_PIN, 67);     //	
 	ulCreatePinListWithList("CS0", UT_PINTYPE_PIN, "CS0_A","CS0_B",NULL);
 	ulCreatePinListWithList("CS1", UT_PINTYPE_PIN, "CS1_A","CS1_B",NULL);
 	ulCreatePinListWithList("CS2", UT_PINTYPE_PIN, "CS2_A","CS2_B",NULL);
@@ -93,14 +93,14 @@ void DefinePinList()
 	ulCreatePinListWithList("DQS0_t", UT_PINTYPE_PIN, "DQS0_t_A","DQS0_t_B",NULL);
 	ulCreatePinListWithList("DQS0_c", UT_PINTYPE_PIN, "DQS0_c_A","DQS0_c_B",NULL);
 
-	ulCreatePinListWithNumber("DQ0_A", UT_PINTYPE_PIN,     );      //create IO pin ¨DQ0_7A¨
-	ulCreatePinListWithNumber("DQ1_A", UT_PINTYPE_PIN,     );      //	
-	ulCreatePinListWithNumber("DQ2_A", UT_PINTYPE_PIN,     );      //	
-	ulCreatePinListWithNumber("DQ3_A", UT_PINTYPE_PIN,     );      //
-	ulCreatePinListWithNumber("DQ4_A", UT_PINTYPE_PIN,     );      //	
-	ulCreatePinListWithNumber("DQ5_A", UT_PINTYPE_PIN,     );      //	
-	ulCreatePinListWithNumber("DQ6_A", UT_PINTYPE_PIN,     );      //
-	ulCreatePinListWithNumber("DQ7_A", UT_PINTYPE_PIN,     );      //	
+	ulCreatePinListWithNumber("DQ0_A", UT_PINTYPE_PIN, 33);      //create IO pin ¨DQ0_7A¨
+	ulCreatePinListWithNumber("DQ1_A", UT_PINTYPE_PIN, 34);      //	
+	ulCreatePinListWithNumber("DQ2_A", UT_PINTYPE_PIN, 35);      //	
+	ulCreatePinListWithNumber("DQ3_A", UT_PINTYPE_PIN, 36);      //
+	ulCreatePinListWithNumber("DQ4_A", UT_PINTYPE_PIN, 37);      //	
+	ulCreatePinListWithNumber("DQ5_A", UT_PINTYPE_PIN, 38);      //	
+	ulCreatePinListWithNumber("DQ6_A", UT_PINTYPE_PIN, 39);      //
+	ulCreatePinListWithNumber("DQ7_A", UT_PINTYPE_PIN, 40);      //	
 	ulCreatePinListWithNumber("DQ0_B", UT_PINTYPE_PIN, 97  );	
 	ulCreatePinListWithNumber("DQ1_B", UT_PINTYPE_PIN, 98  );
 	ulCreatePinListWithNumber("DQ2_B", UT_PINTYPE_PIN, 99  );
@@ -173,5 +173,4 @@ void DefinePinList()
                                                                              //append all IO pins into ¨OUTPIN¨ pinlist group(include DQ,DMI,DQS_t,DQS_c)
                                                                              //append all pins into ¨ALLPIN¨ pinlist group(include DINPIN,OUTPIN)
 	
-*/
 }

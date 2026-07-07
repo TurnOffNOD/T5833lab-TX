@@ -135,7 +135,7 @@ SRX1	../pat/patSdef.asc	/^	SDEF SRX1   =    ,   ,CA2,   ,CA4,   ,   ,        ; S
 SRX2	../pat/patSdef.asc	/^	SDEF SRX2   =    ,   ,   ,   ,   ,   ,   ,        ; Self Refresh Exit/
 SetRegValue	Reg.c	/^void	SetRegValue(RadioButton reg, USlider value)$/;"	f
 TC	../pat/patSdef.asc	/^	SDEF TC =		\/D2	C23/
-TFUNC	timing.c	/^void TFUNC(double rate, double tDQSCK, double tDQSQ)$/;"	f
+TFUNC	timing.c	/^void TFUNC(double rate, double tDQS2DQ, double tDQSCK)$/;"	f
 TT	../pat/patSdef.asc	/^	SDEF TT =			C23	C24/
 UBMAP0	../pat/patSdef.asc	/^	SDEF UBMAP0 = C26/
 UBMAP1	../pat/patSdef.asc	/^	SDEF UBMAP1 = C27/
@@ -175,3 +175,5 @@ t_533Mbps_BurstWR	testitem.c	/^void t_533Mbps_BurstWR()$/;"	f
 t_Contact	testitem.c	/^void t_Contact()$/;"	f
 t_IDD3P1	testitem.c	/^void t_IDD3P1()$/;"	f
 t_Leakage	testitem.c	/^void t_Leakage()$/;"	f
+ulCreatePinListWithList	pinlist.c	/^static void ulCreatePinListWithList(char *plst, int type, ...)$/;"	f	file:
+ulCreatePinListWithNumber	pinlist.c	/^static void ulCreatePinListWithNumber(char *plst, int type, int num)$/;"	f	file:

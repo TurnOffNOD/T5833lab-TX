@@ -3,3 +3,8 @@
 *.mpa
 *.exe
 *.o
+
+# ignore the tesim generated file and folder
+.atfsutu/
+.fsrecover_T5833_MP
+

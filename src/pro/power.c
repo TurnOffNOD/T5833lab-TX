@@ -45,15 +45,13 @@ void PowerSequence()
 
 void PowerOn() 
 {
-    
-	
+    UTL_OnPowerSeq();	
 }
 
 
 void PowerOff()
 {
-
-
+    UTL_OffPowerSeq();
 }
 
 

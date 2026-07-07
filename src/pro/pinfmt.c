@@ -12,14 +12,13 @@ void Pinfmt_AllHigh()
 
 }
 void Pinfmt_AllLow()
-{/*
+{
     PinHandle hPin=UTL_GetPinHandle();
     UTL_InitializePinHandle(hPin);
-                                 //set target vi number that should be used
-                                 //set FIXL waveform
-    //UTL_SendPin(hPin,     );   //send above setting to ¨ALLPIN¨ 
+    UTL_SetPinViNumber(hPin, 1); //set target vi number that should be used
+    UTL_SetPinDrWaveform(hPin, UT_WAV_FIXL); //set FIXL waveform
+    UTL_SendPin(hPin, "ALLPIN");   //send above setting to ¨ALLPIN¨ 
     UTL_DeleteHandle(hPin);
-*/
 }
 
 void PFUNC(double wl, double rl)

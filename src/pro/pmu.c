@@ -74,12 +74,11 @@ void DC_ISVM(double DCSource,
 
 
 void MeasPin(char *pinlist, double wait_time)
-{/*    
+{   
     DctHandle h = UTL_GetDctHandle();
     UTL_SetDctPinList(h, pinlist);
-                                       //set waiting time before measuring 
-                                       //executing DC test according to the settings in the Dct Handle
+    UTL_WaitTime(wait_time);           //set waiting time before measuring 
+    UTL_MeasDct(h);                    //executing DC test according to the settings in the Dct Handle
     UTL_DeleteHandle(h);
-*/
 } 
 

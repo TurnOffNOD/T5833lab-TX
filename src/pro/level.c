@@ -2,13 +2,13 @@
 #include "testitem.h"
 
 void VIN_Set(double vihigh, double vilow, int vino)
-{/*
+{
     ViHandle h = UTL_GetViHandle();
-                                       //set vih
-                                       //set vil
-                                       //send above voltage setting to vi number
+    UTL_SetViHigh(h, vihigh);          //set vih
+    UTL_SetViLow (h, vilow);           //set vil
+    UTL_SendVi   (h, vino);            //send above voltage setting to vi number
     UTL_DeleteHandle(h);
-*/}
+}
 
 void VOUT_Set(double vohigh, double volow, int vono)
 {/*

@@ -20,7 +20,7 @@ void t_Contact()
     //--------------------------excute DC test---------------------------------------------//
     MeasPin( "ALLPIN", 1 MS);      //measure target:ALLPIN
     //-----------------------set DC test condition(OS_LOW)---------------------------------//
-    DC_ISVM(-100 UA, 200 UA, -200 UA, 0.3 V, -2 V, -1.2 V, 0.6 V, -0.2 V, -1.0 V, UT_ON, 1); //force -100UA, upper limit=-0.2V,lower limit=-1.0V
+    DC_ISVM(-100 UA, 200 UA, -200 UA, 0.3 V, -2 V, 0.6 V, -1.2 V, -0.2 V, -1.0 V, UT_ON, 1); //force -100UA, upper limit=-0.2V,lower limit=-1.0V
     //--------------------------excute DC test---------------------------------------------//
     MeasPin( "ALLPIN", 1 MS);      //measure target:ALLPIN 
     //--------------------------power off--------------------------------------------------//

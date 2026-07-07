@@ -54,9 +54,9 @@ void DefinePinList()
 	ulCreatePinListWithList("CS2", UT_PINTYPE_PIN, "CS2_A","CS2_B",NULL);
 	ulCreatePinListWithList("CS" , UT_PINTYPE_PIN, "CS0",NULL);
 
-                                                                      //create DR pin ¨CKE0_A¨
+        ulCreatePinListWithNumber("CKE0_A", UT_PINTYPE_PIN, 4 );    //create DR pin ¨CKE0_A¨
 	ulCreatePinListWithNumber("CKE1_A", UT_PINTYPE_PIN, 5  );	
-	ulCreatePinListWithNumber("CKE2_A", UT_PINTYPE_PIN, 6  );	
+	ulCreatePinListWithNumber("CKE2_A", UT_PINTYPE_PIN, 6  );
 	ulCreatePinListWithNumber("CKE0_B", UT_PINTYPE_PIN, 68 );	
 	ulCreatePinListWithNumber("CKE1_B", UT_PINTYPE_PIN, 69 );	
 	ulCreatePinListWithNumber("CKE2_B", UT_PINTYPE_PIN, 70 );	
@@ -118,7 +118,7 @@ void DefinePinList()
 	ulCreatePinListWithList("DQ6", UT_PINTYPE_PIN, "DQ6_A","DQ6_B",NULL);
 	ulCreatePinListWithList("DQ7", UT_PINTYPE_PIN, "DQ7_A","DQ7_B",NULL);
 
-                                                                        //create IO pin ¨DMI0_A¨
+        ulCreatePinListWithNumber("DMI0_A", UT_PINTYPE_PIN, 289 );        //create IO pin ¨DMI0_A¨
 	ulCreatePinListWithNumber("DMI0_B", UT_PINTYPE_PIN, 291 );
 	ulCreatePinListWithList("DMI0", UT_PINTYPE_PIN, "DMI0_A","DMI0_B",NULL);
 
@@ -169,8 +169,8 @@ void DefinePinList()
 	
 	ulCreatePinListWithList("DQ",    UT_PINTYPE_PIN, "DQ0","DQ1","DQ2","DQ3","DQ4","DQ5","DQ6","DQ7","DQ8","DQ9","DQ10","DQ11","DQ12","DQ13","DQ14","DQ15",NULL);
 	ulCreatePinListWithList("DQID" , UT_PINTYPE_PIN, "DQ0_A","DQ1_A","DQ2_A","DQ3_A","DQ4_A","DQ5_A","DQ6_A","DQ7_A",NULL);
-    ulCreatePinListWithList("INPIN", UT_PINTYPE_PIN, "RST_n", "CK_t", "CK_c", "CS", "CKE", "CA", "ODTCA");		//append all DR pins into ¨INPIN¨ pinlist group(include RST_n,CK_t,CK_c,CS,CKE,CA,ODTCA)
-    ulCreatePinListWithList("OUTPIN", UT_PINTYPE_PIN, "DQ", "DMI", "DQS_t", "DQS_c");							//append all IO pins into ;¨OUTPIN¨ pinlist group(include DQ,DMI,DQS_t,DQS_c)
-    ulCreatePinListWithList("ALLPIN", UT_PINTYPE_PIN, "INPIN", "OUTPIN");				//append all pins into ¨ALLPIN¨ pinlist group(include DINPIN,OUTPIN)
+    ulCreatePinListWithList("INPIN", UT_PINTYPE_PIN, "RST_n", "CK_t", "CK_c", "CS", "CKE", "CA", "ODTCA", NULL);		//append all DR pins into ¨INPIN¨ pinlist group(include RST_n,CK_t,CK_c,CS,CKE,CA,ODTCA)
+    ulCreatePinListWithList("OUTPIN", UT_PINTYPE_PIN, "DQ", "DMI", "DQS_t", "DQS_c", NULL);							//append all IO pins into ;¨OUTPIN¨ pinlist group(include DQ,DMI,DQS_t,DQS_c)
+    ulCreatePinListWithList("ALLPIN", UT_PINTYPE_PIN, "INPIN", "OUTPIN", NULL);		//append all pins into ¨ALLPIN¨ pinlist group(include DINPIN,OUTPIN)
 	
 }

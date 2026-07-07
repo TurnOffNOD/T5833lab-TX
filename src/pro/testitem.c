@@ -3,28 +3,28 @@
 
 
 void t_Contact()
-{/*
+{
     //------------------------set VS condition---------------------------------------------//
-    VS_VSIM(1,   , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD1=0V
-    VS_VSIM(2,   , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD2=0V
-    VS_VSIM(3,   , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDDQ=0V
+    VS_VSIM(1, 0 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD1=0V
+    VS_VSIM(2, 0 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD2=0V
+    VS_VSIM(3, 0 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDDQ=0V
+    
     //--------------------------set VI-----------------------------------------------------//
-    VIN_Set(     ,   ,  );        //VIH1=1.1V VIL1=0V
+    VIN_Set(1.1 V, 0 V, 1);        //VIH1=1.1V VIL1=0V
     //-----------------------set all input FIXL--------------------------------------------//
     Pinfmt_AllLow();
     //-----------------------set DC test condition(OS_HIGH)--------------------------------//
-    DC_ISVM(      , 200 UA, -200 UA, 2 V, -0.3 V, 1.2 V, -0.6 V,      ,       , UT_ON, 1);    //force 100UA, upper limit=1.0V,lower limit=0.2V
+    DC_ISVM( 100 UA, 200 UA, -200 UA, 2 V, -0.3 V, 1.2 V, -0.6 V, 1.0 V, 0.2 V, UT_ON, 1);  //force 100UA, upper limit=1.0V,lower limit=0.2V
     //--------------------------power on---------------------------------------------------//
     PowerOn();
     //--------------------------excute DC test---------------------------------------------//
-    MeasPin(       , 1 MS);      //measure target:ALLPIN
+    MeasPin( "ALLPIN", 1 MS);      //measure target:ALLPIN
     //-----------------------set DC test condition(OS_LOW)---------------------------------//
-                                                                                              //force -100UA, upper limit=-0.2V,lower limit=-1.0V
+    DC_ISVM(-100 UA, 200 UA, -200 UA, 0.3 V, -2 V, -1.2 V, 0.6 V, -0.2 V, -1.0 V, UT_ON, 1); //force -100UA, upper limit=-0.2V,lower limit=-1.0V
     //--------------------------excute DC test---------------------------------------------//
-                                 //measure target:ALLPIN 
+    MeasPin( "ALLPIN", 1 MS);      //measure target:ALLPIN 
     //--------------------------power off--------------------------------------------------//
     PowerOff();
-*/
 }
 
 void t_Leakage()

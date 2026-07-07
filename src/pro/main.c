@@ -34,9 +34,9 @@ int main(int argc, char **argv)
 {
 	UTL_InitTest(argc, argv);
 
-	                                                    //define pinlist
+	DefinePinList();                                    //define pinlist
 
-                                                            //define power sequence
+    PowerSequence();                                    //define power sequence
 	
 	//setIlMode( );                                     //set interleave mode:4
 	
@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 
 	TestHandle h = UTL_GetTestHandle();
 
-	//UTL_SetTestAction(       );                       //set test action:t_Contact
-        //UTL_Test(          );                             //specify test name:0_OpenShort
+	UTL_SetTestAction(h, t_Contact);                       //set test action:t_Contact
+    UTL_Test(h, "0_OpenShort");                             //specify test name:0_OpenShort
                                                             //set test action:t_Leakage                          
 	                                                    //specify test name:1_Leakage
 	                                                    //set test action:t_IDD3P1                          

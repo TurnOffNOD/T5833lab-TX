@@ -28,30 +28,31 @@ void t_Contact()
 }
 
 void t_Leakage()
-{/*
+{
     //------------------------set VS condition---------------------------------------------//
-    VS_VSIM(   ,    , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD1=1.8V
-    VS_VSIM(   ,    , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD2=1.1V
-    VS_VSIM(   ,    , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDDQ=1.1V
+    VS_VSIM(1, 1.8 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD1=1.8V
+    VS_VSIM(2, 1.1 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDD2=1.1V
+    VS_VSIM(3, 1.1 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0, 0);      //VDDQ=1.1V
     //--------------------------set VI-----------------------------------------------------//
-    VIN_Set(     ,   ,  );             //VIH1=1.1V VIL1=0V
+    VIN_Set(1.1 V, 0 V, 1);             //VIH1=1.1V VIL1=0V
     //-----------------------set all input FIXL--------------------------------------------//
+    Pinfmt_AllLow();
     
     //-----------------------set DC test condition(IIH)------------------------------------//
-    DC_VSIM(      ,     ,      ,      ,      ,      ,      ,     ,     ,       , 10);  //force 1.1V; measure limit:-4uA-4uA
+    DC_VSIM(1.1 V, 7 V, -7 V, 5 UA, -5 UA, 4.5 UA, -4.5 UA, 4 UA, -1 UA, UT_ON, 10);  //force 1.1V; measure limit:-4uA-4uA
     //--------------------------power on---------------------------------------------------//
+    PowerOn();
     
     //--------------------------excute DC test---------------------------------------------//
-    MeasPin(        , 1 MS);     //measure target:INPIN
+    MeasPin("INPIN", 1 MS);     //measure target:INPIN
     //-----------------------set all input FIXH--------------------------------------------//
     Pinfmt_AllHigh();
     //-----------------------set DC test condition(IIL)------------------------------------//
-    DC_VSIM(      ,     ,      ,      ,      ,      ,      ,     ,     ,       , 10);  //force 0V; measure limit:-4uA-4uA
+    DC_VSIM(0 V, 7 V, -7 V, 5 UA, -5 UA, 4.5 UA, -4.5 UA, 1 UA, -4 UA, UT_ON, 10);  //force 0V; measure limit:-4uA-4uA
     //--------------------------excute DC test---------------------------------------------//
-    MeasPin(        , 1 MS);     //measure target:INPIN   
+    MeasPin("INPIN", 1 MS);     //measure target:INPIN   
     //--------------------------power off--------------------------------------------------//
-
-*/
+    PowerOff();
 }
 
 

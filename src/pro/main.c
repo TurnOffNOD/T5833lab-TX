@@ -44,10 +44,10 @@ int main(int argc, char **argv)
 
 	TestHandle h = UTL_GetTestHandle();
 
-	UTL_SetTestAction(h, t_Contact);                       //set test action:t_Contact
-    UTL_Test(h, "0_OpenShort");                             //specify test name:0_OpenShort
-                                                            //set test action:t_Leakage                          
-	                                                    //specify test name:1_Leakage
+	UTL_SetTestAction(h, t_Contact);	//set test action:t_Contact
+	UTL_Test(h, "0_OpenShort");		//specify test name:0_OpenShort
+        UTL_SetTestAction(h, t_Leakage);	//set test action:t_Leakage                          
+	UTL_Test(h, "1_Leakage");		//specify test name:1_Leakage
 	                                                    //set test action:t_IDD3P1                          
 	                                                    //specify test name:2_Active_power-down_Standby
 	                                                    //set test action:t_533Mbps_BurstWR                          

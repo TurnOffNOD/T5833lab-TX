@@ -9,7 +9,12 @@ void Pinfmt_AllOpen()
 }
 void Pinfmt_AllHigh()
 {
-
+    PinHandle lPin = UTL_GetPinHandle();
+    UTL_InitializePinHandle(lPin);
+    UTL_SetPinViNumber(lPin, 1);
+    UTL_SetPinDrWaveform(lPin, UT_WAV_FIXH);
+    UTL_SendPin(lPin, "ALLPIN");
+    UTL_DeleteHandle(lPin);
 }
 void Pinfmt_AllLow()
 {

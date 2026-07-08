@@ -1,13 +1,13 @@
 #include "main.h"
+#include <stdio.h>
 
-/*
+
 static void setIlMode(int il_mode){
 	IlModeHandle h = UTL_GetIlModeHandle();
-	                               //set interleave mode
-                                       //send to tester
+	UTL_SetIlMode(h, il_mode);     //set interleave mode
+        UTL_SendIlMode(h);                               //send to tester
         UTL_DeleteHandle(h);
 }
-*/
 
 /*
 static void BurstScram()
@@ -36,20 +36,21 @@ int main(int argc, char **argv)
 
 	DefinePinList();                                    //define pinlist
 
-    PowerSequence();                                    //define power sequence
+    	PowerSequence();                                    //define power sequence
 	
-	//setIlMode( );                                     //set interleave mode:4
+	setIlMode(4);                                     //set interleave mode:4
 	
 	UTL_SetWet();
 
 	TestHandle h = UTL_GetTestHandle();
 
-	UTL_SetTestAction(h, t_Contact);	//set test action:t_Contact
-	UTL_Test(h, "0_OpenShort");		//specify test name:0_OpenShort
-        UTL_SetTestAction(h, t_Leakage);	//set test action:t_Leakage                          
-	UTL_Test(h, "1_Leakage");		//specify test name:1_Leakage
-	                                                    //set test action:t_IDD3P1                          
-	                                                    //specify test name:2_Active_power-down_Standby
+	//UTL_SetTestAction(h, t_Contact);	//set test action:t_Contact
+	//UTL_Test(h, "0_OpenShort");		//specify test name:0_OpenShort
+        //UTL_SetTestAction(h, t_Leakage);	//set test action:t_Leakage                          
+	//UTL_Test(h, "1_Leakage");		//specify test name:1_Leakage
+	//printf("HW!\n");
+	UTL_SetTestAction(h, t_IDD3P1);         //set test action:t_IDD3P1                          
+	UTL_Test(h, "2_Active_power-down_Standby"); //specify test name:2_Active_power-down_Standby
 	                                                    //set test action:t_533Mbps_BurstWR                          
 	                                                    //specify test name:3_533Mbps_BurstWR
 

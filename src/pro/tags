@@ -169,6 +169,7 @@ patPowerUp	../pat/patPowerUp.asc	/^;############################################
 patRefresh	../pat/patRefresh.asc	/^;################################################################################/
 patSdef	../pat/patSdef.asc	/^;################################################################################/
 runtest_pattern	common.c	/^void runtest_pattern( char *patfile)$/;"	f
+setIlMode	main.c	/^static void setIlMode(int il_mode){$/;"	f	file:
 start_pattern	common.c	/^void start_pattern( char *patfile)$/;"	f
 start_pattern_nowait	common.c	/^void start_pattern_nowait(char *patfile)$/;"	f
 t_533Mbps_BurstWR	testitem.c	/^void t_533Mbps_BurstWR()$/;"	f

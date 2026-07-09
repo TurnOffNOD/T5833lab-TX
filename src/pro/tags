@@ -63,11 +63,11 @@ DQSW	../pat/patSdef.asc	/^	SDEF DQSW   = C20/
 DefinePinList	pinlist.c	/^void DefinePinList()$/;"	f
 ENSIG1	../pat/patSdef.asc	/^	SDEF ENSIG1 = C30/
 ENSIG2	../pat/patSdef.asc	/^	SDEF ENSIG2 = C31/
-IDD3P	../pat/PatIdd3p.asc	/^IDD3P:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,               ,    ,     ,             ;/
+IDD3P	../pat/PatIdd3p.asc	/^IDD3P:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,   ,             ;/
 IDD3PS	../pat/PatIdd3ps.asc	/^IDD3PS:		NOP                                :    ,     ,	   ,     ,   ,   ,      ,       ,X<XC,XC<0    ,     ,       ,Y<YC,YC<0    ,    ,     , ,TP<TPH TP2<TPH2,    ,     ,             ;/
 LOOP	../pat/PatMarch_533.asc	/^LOOP:		JSR WR                             :    ,     ,    ,     ,   ,   ,      ,B<0    ,    ,XC<0    ,     ,N<0    ,    ,YC<0    ,    ,     , ,TP1<TPH1 ,   ,   ,    ,     ,             ; write 0/
 LOOP1	../pat/PatMarch_533.asc	/^LOOP1:		NOP                              I :    ,CYP2 ,    ,     ,CS0,   ,ACT11 ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   0  /
-LP0	../pat/PatIdd3p.asc	/^LP0:		NOP				 I :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   /
+LP0	../pat/PatIdd3p.asc	/^LP0:		NOP				 I :    ,CYP7 ,CKEL,     ,   ,   ,R1    ,       ,X<XC,XC<0    ,     ,       ,Y<YC,        ,    ,     , ,       ,   ,   ,    ,     ,             ;   /
 LevFunc	level.c	/^void LevFunc(double VDD1, double VDD2, double VDDQ)$/;"	f
 MPC1	../pat/patSdef.asc	/^	SDEF MPC1   =    ,   ,   ,   ,   ,   ,   ,        ; Multi Purpose Command/
 MPC2	../pat/patSdef.asc	/^	SDEF MPC2   =    ,   ,   ,   ,   ,   ,   ,        ; Multi Purpose Command/
@@ -100,14 +100,14 @@ Pinfmt_AllOpen	pinfmt.c	/^void Pinfmt_AllOpen()$/;"	f
 PowerOff	power.c	/^void PowerOff()$/;"	f
 PowerOn	power.c	/^void PowerOn() $/;"	f
 PowerSequence	power.c	/^void PowerSequence()$/;"	f
-R1	../pat/patSdef.asc	/^	SDEF R1	=	/
-R2	../pat/patSdef.asc	/^	SDEF R2	=	/
-R3	../pat/patSdef.asc	/^	SDEF R3 =	/
+R1	../pat/patSdef.asc	/^	SDEF R1	=	CA0	CA1	CA2	CA3	CA4	CA5/
+R2	../pat/patSdef.asc	/^	SDEF R2	=		CA1		CA3		CA5/
+R3	../pat/patSdef.asc	/^	SDEF R3 =		CA1		CA3		CA5/
 R4	../pat/patSdef.asc	/^	SDEF R4 =/
 R5	../pat/patSdef.asc	/^	SDEF R5 =/
-R6	../pat/patSdef.asc	/^	SDEF R6 =	/
-R7	../pat/patSdef.asc	/^	SDEF R7 = 	/
-R8	../pat/patSdef.asc	/^	SDEF R8 =	/
+R6	../pat/patSdef.asc	/^	SDEF R6 =	CA0		CA2		CA4	/
+R7	../pat/patSdef.asc	/^	SDEF R7 = 	CA0		CA2		CA4/
+R8	../pat/patSdef.asc	/^	SDEF R8 =	CA0	CA1	CA2	CA3	CA4	CA5/
 RD	../pat/PatMarch_533.asc	/^RD:		NOP                                :    ,     ,    ,     ,   ,   ,      ,       ,X<XC,        ,     ,       ,Y<YC,        ,    ,     , ,         ,   ,   ,    ,     ,             ;/
 RDAL1	../pat/patSdef.asc	/^	SDEF RDAL1  =    ,CA1,   ,   ,   ,CA5,   ,;;XALD(16); Read(BL32) + Auto Precharge/
 RDAL2	../pat/patSdef.asc	/^	SDEF RDAL2  =    ,   ,   ,   ,   ,CA5,   ,        ; Read(BL32) + Auto Precharge/

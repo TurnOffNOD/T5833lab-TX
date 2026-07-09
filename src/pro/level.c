@@ -54,9 +54,9 @@ void LevFunc(double VDD1, double VDD2, double VDDQ)
     double	Vih_DQS	  = VDDQ                 ;
     double	Vil_DQS	  = 0.0 V                ;
     double	Voh_DQ 	  = VDDQ * 0.2           ;
-    double	Vol_DQ 	  = 0.0 V                ;
-    double	Voh_DQS	  = VDDQ                 ;
-    double	Vol_DQS	  = 0.0 V                ;
+    double	Vol_DQ 	  = VDDQ * 0.2           ;
+    double	Voh_DQS	  = VDDQ * 0.2           ;
+    double	Vol_DQS	  = VDDQ * 0.2           ;
     double	Vtt_DQ 	  = VDDQ                 ;
     double	Vtt_DQS	  = VDDQ                 ;
     //--------------------------VIH/VIL----------------------------------//

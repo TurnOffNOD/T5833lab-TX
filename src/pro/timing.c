@@ -24,7 +24,7 @@ void TFUNC(double rate, double tDQS2DQ, double tDQSCK)
     UTL_AddTgStrb(h, 1, 1, rate * 0.75 + tDQSCK );         // DQ
     UTL_AddTgStrb(h, 1, 2, rate * 1.25 + tDQSCK );         // DQ
     UTL_AddTgStrb(h, 1, 3, rate * 0.75 + tDQSCK );         // DQS
-    UTL_AddTgStrb(h, 1, 4, rate * 0.75 + tDQSCK );         // DQS
+    UTL_AddTgStrb(h, 1, 4, rate * 1.25 + tDQSCK );         // DQS
 
     UTL_SendTg(h);
     UTL_DeleteHandle(h);

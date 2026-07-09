@@ -44,8 +44,8 @@ int main(int argc, char **argv)
 
 	TestHandle h = UTL_GetTestHandle();
 
-	//UTL_SetTestAction(h, t_Contact);	//set test action:t_Contact
-	//UTL_Test(h, "0_OpenShort");		//specify test name:0_OpenShort
+	UTL_SetTestAction(h, t_Contact);	//set test action:t_Contact
+	UTL_Test(h, "0_OpenShort");		//specify test name:0_OpenShort
         //UTL_SetTestAction(h, t_Leakage);	//set test action:t_Leakage                          
 	//UTL_Test(h, "1_Leakage");		//specify test name:1_Leakage
 	//printf("HW!\n");

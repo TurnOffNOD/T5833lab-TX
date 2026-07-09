@@ -59,28 +59,26 @@ void t_Leakage()
 
 
 void t_IDD3P1()
-{/*
+{
     //void LevFunc(double VDD1, double VDD2, double VDDQ)
-                                                                                 //VDD1=1.8V VDD2=1.1V VDDQ=1.1V
-    //void VS_VSIM(int vsno, double voltage, double Smax, double Smin, double Mmax, double Mmin, double Cmax, double Cmin, double hlimit, double llimit)
-    VS_VSIM(1,     , 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA,     ,     );//set VDD1 measure condition
+//void VS_VSIM(int vsno, double voltage, double Smax, double Smin, double Mmax, double Mmin, double Cmax, double Cmin, double hlimit, double llimit)
+    VS_VSIM(1, 1.8 V, 3.3 V, 0.0 V, 400 MA, -400 MA, 400 MA, -200 MA, 0.9 MA, 0 MA);//set VDD1 measure condition
     //void TFUNC(double rate, double tDQSCK, double tDQSQ)
-                                                                                 //rate=3.5ns tDQSCK=0.4ns  tDQSQ=2.2ns
+    TFUNC(3.5 NS, 400 PS, 2.2 NS);                                                                             //rate=3.5ns tDQSCK=0.4ns  tDQSQ=2.2ns
     //void PFUNC(double wl, double rl)
-                                                                                 //wl=4  rl=6
+    PFUNC(4, 6);                                                                             //wl=4  rl=6
     //void RegFunc(int MR01,int MR02,int MR03,int MR04, int MR11,int MR12,int MR14,int MR22, double rate)
     RegFunc(0x8d,0x00,0x32,0x03,0x02,0x1e,0x1e,0x00,3.5 NS); 
     //power on in sequence
-    
+    PowerOn();
     //run pattern under background
-    
+    start_pattern_nowait("./test/PatIdd3p.mpa");
     //excute DC measure
-    
+    MeasPin("VDD1", 1 MS);
     //stop pattern
-    
+    UTL_StopFct();
     //power off in sequence
-
-*/
+    PowerOff();
 }
 
 

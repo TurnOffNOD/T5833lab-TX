@@ -51,8 +51,8 @@ int main(int argc, char **argv)
 	//printf("HW!\n");
 	UTL_SetTestAction(h, t_IDD3P1);         //set test action:t_IDD3P1                          
 	UTL_Test(h, "2_Active_power-down_Standby"); //specify test name:2_Active_power-down_Standby
-	                                                    //set test action:t_533Mbps_BurstWR                          
-	                                                    //specify test name:3_533Mbps_BurstWR
+	UTL_SetTestAction(h, t_533Mbps_BurstWR);            //set test action:t_533Mbps_BurstWR                          
+	UTL_Test(h, "3_533Mbps_BurstWR");                   //specify test name:3_533Mbps_BurstWR
 
 	UTL_DeleteHandle (h);
 	return 0;

@@ -83,24 +83,25 @@ void t_IDD3P1()
 
 
 void t_533Mbps_BurstWR()
-{/*
+{
     //void LevFunc(double VDD1, double VDD2, double VDDQ)
-                                                                                                         //VDD1=1.8V VDD2=1.1V VDDQ=1.1V
+    LevFunc(1.8 V, 1.1 V, 1.1 V);                            //VDD1=1.8V VDD2=1.1V VDDQ=1.1V
     //void TFUNC(double rate, double tDQSCK, double tDQSQ)      
-                                                                                                         //rate=3.75ns tDQSCK=0.4ns  tDQSQ=2.2ns
+    TFUNC(3.75 NS, 400 PS, 2.2 NS);                          //rate=3.75ns tDQSCK=0.4ns  tDQSQ=2.2ns
     //void PFUNC(double wl, double rl)
-                                                                                                         //wl=4  rl=6
+    PFUNC(4, 6);                                             //wl=4  rl=6
     //void RegFunc(int MR01,int MR02,int MR03,int MR04, int MR11,int MR12,int MR14,int MR22, double rate)
     RegFunc(0x8d,0x00,0x32,0x03,0x00,0x2b,0x2b,0x00,3.75 NS); 
     //power on in sequence
-   
+    PowerOn();   
     //set Register value 
-                                                //TPH=0
-                                                //TPH2=0
+    SetRegValue(UT_REG_TPH, 0x00);               //TPH=0
+    SetRegValue(UT_REG_TPH2, 0x00);              //TPH2=0
     //run pattern and judge P/F
+    runtest_pattern("./test/PatBurstWR.mpa");
 
     //power off in sequence
-*/
+    PowerOff();
 }
 
 

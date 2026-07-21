@@ -15,7 +15,7 @@ onm:
 srconm:
 	cd src/pro; make status=online; cd ../../
 srcofm:
-	cd src/pro; make status=offline; cd ../../
+	cd src/pro; $(MAKE) status=offline; cd ../../
 patonm:
 	cd src/pat; make status=online; cd ../../
 patofm:

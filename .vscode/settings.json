@@ -1,0 +1,14 @@
+{
+    "makefile.makefilePath": "${workspaceFolder}/Makefile",
+    "makefile.preConfigureScript":
+        "${workspaceFolder}/bash-env-necessary.sh",
+    "makefile.alwaysPreConfigure": true,
+    "makefile.configurations": [
+        {
+            "name": "Offline",
+            "makeArgs": [
+                "srcofm"
+            ]
+        }
+    ]
+}

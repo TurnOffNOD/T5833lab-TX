@@ -30,8 +30,8 @@
    * :large_blue_circle:（可选） vim插件，VSCode安装了vim插件之后操作变为vim模式，可以实现与线下培训课上讲解的vim快捷键相同操作。
         * 插件ID：`vscodevim.vim`；
         * url链接：<https://marketplace.visualstudio.com/items?itemName=vscodevim.vim> 。
-      > [!Note]
-      > 考虑到vim模式下的操作学习曲线过于陡峭，此次搭建试验不使用vim插件。 这里列举出来纯粹是因为线下培训用的vim1。
+  > [!Note]
+  > 考虑到vim模式下的操作学习曲线过于陡峭，此次搭建试验不使用vim插件。 这里列举出来纯粹是因为线下培训用的vim。
 
    * :red_circle:（如果只进行本地开发则不需要，如果要进行后半部分详述的**远程开发**，则是**必须**） remote开发系列插件，使用`remote extensoin pack`关键字搜索，安装扩展包；并且安装`Remote - SSH: Editing Configuration Files`单独插件，截图示例：  
       ![remote插件截图](Docs/remote_extensions_microsoft-2026-07-22_130459.png)  
@@ -47,11 +47,13 @@
 
 1. 机台开发环境搭建：C的系列include文件夹，解压复制（:warning:没有offline license，因此特意避开了“安装”这个术语）到一个指定目录。压缩包从`<ftp_server>/3.培训教程资料/T5833培训-202607/opt_ATFS_archive_fromVM.tar.xz`下载。解压之后，将子目录`ATFS`放入一个位置，记为`<ATFS_root_dir>`。本次搭建试验的ATFS根目录为`/opt/ATFS`。
 2. bash环境变量：所有ATFS相关的环境变量放在了该repo的`bash-env-necessary.sh`文件中。该文件设计使用方式为`source bash-env-necessary.sh`。本次搭建试验，该文件配置的环境变量取`<ATFS_root_dir> = /opt/ATFS`。
-   > [!Note]
-   > :notebook: 本次搭建试验是C代码阅读、C语言跳转等“只读”功能，因此在VSCode的环境下，这个文件无需进行source，但如果是需要进行命令行操作，则需要保证文件内出现的环境变量在bash下都已经有定义。
-   > :notebook: 待机台设备进来、厂家给安装配置好linux开发环境之后，这些环境变量在机台的linux电脑上大概率是都已经配置好的无需自行解决，如果厂商未搭建好这个小概率事件发生，才需要对这个文件进行source；这个文件是自行搭建offline和VSCode环境使用的。
-3. `ctags`命令安装：使用安装的linux发行版的包管理器进行安装，本次搭建试验安装的是`universal-ctags`这个软件包，程序的命令行调用是`ctags`命令。
-4. C/C++开发系列软件安装：包括`gcc`、`make`等命令。
+
+  > [!Note]
+  > :notebook: 本次搭建试验是C代码阅读、C语言跳转等“只读”功能，因此在VSCode的环境下，这个文件无需进行source，但如果是需要进行命令行操作，则需要保证文件内出现的环境变量在bash下都已经有定义。  
+  > :notebook: 待机台设备进来、厂家给安装配置好linux开发环境之后，这些环境变量在机台的linux电脑上大概率是都已经配置好的无需自行解决，如果厂商未搭建好这个小概率事件发生，才需要对这个文件进行source；这个文件是自行搭建offline和VSCode环境使用的。
+
+4. `ctags`命令安装：使用安装的linux发行版的包管理器进行安装，本次搭建试验安装的是`universal-ctags`这个软件包，程序的命令行调用是`ctags`命令。
+5. C/C++开发系列软件安装：包括`gcc`、`make`等命令。
 
 ---
 
@@ -87,11 +89,11 @@
       }
       ```
 
-      > [!Note]
-      > 注意，这里是用例程的`Makefile`里面的`srcofm`这个target做的试验，其余的target这次未作试验，但同理。
+  > [!Note]
+  > 注意，这里是用例程的`Makefile`里面的`srcofm`这个target做的试验，其余的target这次未作试验，但同理。
 
-      > [!Warning]
-      > `bash-env-necessary.sh`这个文件，虽然不需要source，但是在这里还是需要用到的。
+  > [!Warning]
+  > `bash-env-necessary.sh`这个文件，虽然不需要source，但是在这里还是需要用到的。
 
    2. 点开Makefile Tools左边栏的按钮，看各个配置是否与截图中左半部分一致，如果一致则不要动，否则使用下拉菜单选择为一致：  
       ![MakefileTools Dropdown](Docs/MakefileTools_drop_down-2026-07-22_152522.png)
@@ -104,8 +106,8 @@
 
    4. :bangbang: 代码的`Makefile`文件：该例程是线下培训给出的，代码根目录的`Makefile`有点不规范需要修改一下：  
       :reminder_ribbon: 把`Makefile`中，使用的裸`make`命令，都换成`$(MAKE)`这个内置变量。
-      > [!Caution]
-      > 从本repo已有代码中可以看出来，这里只替换了`srcofm`这个目标下的命令，其余的未作修改，因此在上面才有强调说“是用例程的`Makefile`里面的`srcofm`这个target做的试验”。
+  > [!Caution]
+  > 从本repo已有代码中可以看出来，这里只替换了`srcofm`这个目标下的命令，其余的未作修改，因此在上面才有强调说“是用例程的`Makefile`里面的`srcofm`这个target做的试验”。
 
    5. 至此，可以在`F1`下拉菜单中执行`Makefile: Configure`命令，完成配置：
       ![Makefile Configure](Docs/F1_dropdown-2026-07-22_154212.png)

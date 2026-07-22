@@ -15,14 +15,14 @@
 
 1. VSCode版本：本次搭建试验，使用VSCode的微软版而非开源版VSCodium，使用最新版本`VSCode 1.129.1`进行的试验；
 2. VSCode插件准备：需要安装如下插件：
-   * :large_orange_diamond:**（必须）** `C/C++`插件，VSCode的`extensions: marketplace`中使用`C/C++`关键字搜索，选择`Microsoft`出品的插件即可，截图示例：
-      ![ms-vscode.cpptools截图](Docs/C_Cpp_extension_microsoft-2026-07-22_120410.png)
+   * :large_orange_diamond:**（必须）** `C/C++`插件，VSCode的`extensions: marketplace`中使用`C/C++`关键字搜索，选择`Microsoft`出品的插件即可，截图示例：  
+      ![ms-vscode.cpptools截图](Docs/C_Cpp_extension_microsoft-2026-07-22_120410.png)  
       安装插件的时候可以核对如下信息：
         * 插件ID：`ms-vscode.cpptools`，这里给出作为核对信息使用，也可以使用作为搜索关键字；
         * url链接（注意，这是给出是为了方便核对信息的，不建议从链接下载文件安装，而是应该从VSCode里面搜索安装）：<https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools> 。
 
-   * :large_orange_diamond:**（必须）** `Makefile Tools`插件，使用`Makefile Tools`作为关键字搜索w，选择`Microsoft`出品的插件即可，截图示例：
-      ![ms-vscode.makefile-tools截图](Docs/MakefileTools_extension_microsoft-2026-07-22_123016.png)
+   * :large_orange_diamond:**（必须）** `Makefile Tools`插件，使用`Makefile Tools`作为关键字搜索w，选择`Microsoft`出品的插件即可，截图示例：  
+      ![ms-vscode.makefile-tools截图](Docs/MakefileTools_extension_microsoft-2026-07-22_123016.png)  
       安装插件的时候可以核对如下信息：
         * 插件ID：`ms-vscode.makefile-tools`；
         * url链接：<https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools> 。
@@ -33,8 +33,8 @@
       > [!Note]
       > 考虑到vim模式下的操作学习曲线过于陡峭，此次搭建试验不使用vim插件。 这里列举出来纯粹是因为线下培训用的vim1。
 
-   * :red_circle:（如果只进行本地开发则不需要，如果要进行后半部分详述的**远程开发**，则是**必须**） remote开发系列插件，使用`remote extensoin pack`关键字搜索，安装扩展包；并且安装`Remote - SSH: Editing Configuration Files`单独插件，截图示例：
-      ![remote插件截图](Docs/remote_extensions_microsoft-2026-07-22_130459.png)
+   * :red_circle:（如果只进行本地开发则不需要，如果要进行后半部分详述的**远程开发**，则是**必须**） remote开发系列插件，使用`remote extensoin pack`关键字搜索，安装扩展包；并且安装`Remote - SSH: Editing Configuration Files`单独插件，截图示例：  
+      ![remote插件截图](Docs/remote_extensions_microsoft-2026-07-22_130459.png)  
         * 扩展包ID：`ms-vscode-remote.vscode-remote-extensionpack`；
         * url链接：<https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack> 。
         * 插件ID：`ms-vscode-remote.remote-ssh-edit`
@@ -60,11 +60,11 @@
 > [!Note]
 > 以下步骤使用该repo为例进行试验，搭建是成功的。
 
-1. 在VSCode中，使用`open folder`打开代码目录到workspace中：
-   ![VSCode openfolder button](Docs/VSCode_openfolder-2026-07-22_150524.png)
+1. 在VSCode中，使用`open folder`打开代码目录到workspace中：  
+   ![VSCode openfolder button](Docs/VSCode_openfolder-2026-07-22_150524.png)  
    代码目录在根目录下应该包含1个`Makefile`文件。  
-   此时，安装的`ms-vscode.makefile-tools`插件应该能自动激活，并且出现在左侧边栏：
-   ![Makefile Tools menu button](Docs/Makefile_menu-2026-07-22_150954.png)
+   此时，安装的`ms-vscode.makefile-tools`插件应该能自动激活，并且出现在左侧边栏：  
+   ![Makefile Tools menu button](Docs/Makefile_menu-2026-07-22_150954.png)  
    `ms-vscode.cpptools`激活时不会出现在左侧边栏，因此暂时不用看。
 
 2. 配置Makefile Tools:
@@ -93,13 +93,13 @@
       > [!Warning]
       > `bash-env-necessary.sh`这个文件，虽然不需要source，但是在这里还是需要用到的。
 
-   2. 点开Makefile Tools左边栏的按钮，看各个配置是否与截图中左半部分一致，如果一致则不要动，否则使用下拉菜单选择为一致：
+   2. 点开Makefile Tools左边栏的按钮，看各个配置是否与截图中左半部分一致，如果一致则不要动，否则使用下拉菜单选择为一致：  
       ![MakefileTools Dropdown](Docs/MakefileTools_drop_down-2026-07-22_152522.png)
 
-   3. 从右下角点开C/C++ configuration：
-      ![C_Cpp conf entering](Docs/C_Cpp_conf-2026-07-22_153057.png)
-      在配置界面，`Advanced Setting`下，`Configuration provider`填写`ms-vscode.makefile-tools`：
-      ![conf provider](Docs/C_Cpp_confprovider-2026-07-22_153223.png)
+   3. 从右下角点开C/C++ configuration：  
+      ![C_Cpp conf entering](Docs/C_Cpp_conf-2026-07-22_153057.png)  
+      在配置界面，`Advanced Setting`下，`Configuration provider`填写`ms-vscode.makefile-tools`：  
+      ![conf provider](Docs/C_Cpp_confprovider-2026-07-22_153223.png)  
       等待1秒左右，插件配置自动保存。保存之后应该自动生成`.vscode\c_cpp_properties.json`文件。
 
    4. :bangbang: 代码的`Makefile`文件：该例程是线下培训给出的，代码根目录的`Makefile`有点不规范需要修改一下：  
